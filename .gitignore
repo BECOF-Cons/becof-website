@@ -39,3 +39,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+client_secret_479355554912-1ln7gr45gtk41aqvvr11cj5cgrgg2m5m.apps.googleusercontent.com.json
+get-refresh-token.js

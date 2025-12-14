@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 // NextAuth.js models
@@ -17,12 +17,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -76,16 +76,16 @@ model BlogPost {
   titleFr     String
   slugEn      String   @unique
   slugFr      String   @unique
-  excerptEn   String   @db.Text
-  excerptFr   String   @db.Text
-  contentEn   String   @db.Text
-  contentFr   String   @db.Text
+  excerptEn   String
+  excerptFr   String
+  contentEn   String
+  contentFr   String
   coverImage  String?
   published   Boolean  @default(false)
   featured    Boolean  @default(false)
   authorId    String
   categoryId  String?
-  tags        String[]
+  tags        String   @default("")
   viewCount   Int      @default(0)
   publishedAt DateTime?
   createdAt   DateTime @default(now())
@@ -116,7 +116,7 @@ model BlogPostSEO {
   metaDescFr      String?
   ogImageEn       String?
   ogImageFr       String?
-  keywords        String[]
+  keywords        String   @default("")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -128,16 +128,17 @@ model Appointment {
   id               String            @id @default(cuid())
   userId           String
   serviceType      ServiceType
+  price            Float             @default(150.0)
   studentName      String
   studentEmail     String
   studentPhone     String
   preferredDate    DateTime
   alternateDate    DateTime?
   status           AppointmentStatus @default(PENDING)
-  notes            String?           @db.Text
+  notes            String?
   googleEventId    String?
   meetingLink      String?
-  cancellationNote String?           @db.Text
+  cancellationNote String?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 
@@ -150,6 +151,8 @@ enum ServiceType {
   UNIVERSITY_SELECTION
   APPLICATION_HELP
   CAREER_COUNSELING
+  CAREER_COACHING
+  GROUP_WORKSHOP
   FOLLOW_UP_SESSION
 }
 
@@ -172,7 +175,7 @@ model Payment {
   status          PaymentStatus @default(PENDING)
   transactionId   String?
   paymentGateway  String?
-  gatewayResponse String?       @db.Text
+  gatewayResponse String?
   paidAt          DateTime?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -202,8 +205,8 @@ model PageContent {
   slug      String   @unique
   titleEn   String
   titleFr   String
-  contentEn String   @db.Text
-  contentFr String   @db.Text
+  contentEn String
+  contentFr String
   published Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -213,7 +216,7 @@ model PageContent {
 model SiteSettings {
   id                    String   @id @default(cuid())
   key                   String   @unique
-  value                 String   @db.Text
+  value                 String
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }

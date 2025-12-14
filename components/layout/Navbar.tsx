@@ -22,7 +22,20 @@ export default function Navbar() {
 
   const switchLocale = () => {
     const newLocale = locale === 'fr' ? 'en' : 'fr';
-    const newPathname = pathname.replace(`/${locale}`, `/${newLocale}`);
+    
+    // Handle both with and without locale prefix in pathname
+    let newPathname;
+    if (pathname.startsWith(`/${locale}`)) {
+      // Replace existing locale
+      newPathname = pathname.replace(`/${locale}`, `/${newLocale}`);
+    } else if (pathname === '/' || pathname === '') {
+      // Root path - add locale
+      newPathname = `/${newLocale}`;
+    } else {
+      // Path without locale - prepend new locale
+      newPathname = `/${newLocale}${pathname}`;
+    }
+    
     window.location.href = newPathname;
   };
 

@@ -4,13 +4,48 @@ import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+interface BlogPost {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  excerptEn: string;
+  excerptFr: string;
+  slugEn: string;
+  slugFr: string;
+  coverImage: string | null;
+  createdAt: string;
+  author: {
+    name: string | null;
+  };
+  category: {
+    nameEn: string;
+    nameFr: string;
+  } | null;
+}
 
 export default function LatestBlog() {
   const t = useTranslations('blog');
   const locale = useLocale();
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock blog posts - will be replaced with actual data
-  const posts = [
+  useEffect(() => {
+    fetch('/api/blog/latest')
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching blog posts:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Mock blog posts as fallback
+  const mockPosts = [
     {
       id: 1,
       title: locale === 'fr' 
@@ -77,7 +112,18 @@ export default function LatestBlog() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {posts.map((post, index) => (
+          {(posts.length > 0 ? posts : mockPosts).slice(0, 3).map((post, index) => {
+            const isFrench = locale === 'fr';
+            const isRealPost = 'slugEn' in post;
+            const title = isRealPost ? (isFrench ? post.titleFr : post.titleEn) : post.title;
+            const excerpt = isRealPost ? (isFrench ? post.excerptFr : post.excerptEn) : post.excerpt;
+            const slug = isRealPost ? (isFrench ? post.slugFr : post.slugEn) : `post-${post.id}`;
+            const image = isRealPost ? post.coverImage : post.image;
+            const category = isRealPost && post.category ? (isFrench ? post.category.nameFr : post.category.nameEn) : (isRealPost ? 'Blog' : post.category);
+            const author = isRealPost ? (post.author?.name || 'BECOF Team') : post.author;
+            const date = isRealPost ? new Date(post.createdAt).toLocaleDateString(isFrench ? 'fr-FR' : 'en-US') : post.date;
+
+            return (
             <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 20 }}
@@ -86,37 +132,40 @@ export default function LatestBlog() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group relative rounded-2xl bg-white overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
             >
-              {/* Image placeholder */}
+              {/* Image */}
               <div className="aspect-video bg-gradient-to-br from-indigo-400 to-purple-400 relative overflow-hidden">
+                {image && (
+                  <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
+                )}
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
                 <div className="absolute top-4 left-4">
                   <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-indigo-600">
-                    {post.category}
+                    {category}
                   </span>
                 </div>
               </div>
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2">
-                  {post.title}
+                  {title}
                 </h3>
                 <p className="mt-3 text-gray-600 line-clamp-3">
-                  {post.excerpt}
+                  {excerpt}
                 </p>
 
                 <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
                   <div className="flex items-center space-x-2">
                     <User className="h-4 w-4" />
-                    <span>{post.author}</span>
+                    <span>{author}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4" />
-                    <span>{new Date(post.date).toLocaleDateString(locale)}</span>
+                    <span>{date}</span>
                   </div>
                 </div>
 
                 <Link
-                  href={`/${locale}/blog/${post.id}`}
+                  href={`/${locale}/blog/${slug}`}
                   className="mt-6 inline-flex items-center text-sm font-semibold text-indigo-600 group-hover:text-indigo-700"
                 >
                   {t('readMore')}
@@ -124,7 +173,8 @@ export default function LatestBlog() {
                 </Link>
               </div>
             </motion.article>
-          ))}
+          );
+          })}
         </div>
 
         <div className="mt-12 text-center">
