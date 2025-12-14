@@ -1,0 +1,131 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "blog": "Blog",
+    "services": "Services",
+    "about": "À Propos",
+    "contact": "Contact",
+    "bookAppointment": "Réserver un RDV"
+  },
+  "home": {
+    "hero": {
+      "title": "Votre Avenir Universitaire Commence Ici",
+      "subtitle": "Orientation personnalisée pour les bacheliers tunisiens. Choisissez la bonne université et tracez votre chemin vers le succès.",
+      "cta": "Réserver une Consultation",
+      "secondaryCta": "Explorer le Blog"
+    },
+    "features": {
+      "title": "Comment Nous Vous Aidons",
+      "counseling": {
+        "title": "Conseil en Orientation",
+        "description": "Des séances personnalisées pour comprendre vos intérêts et vos objectifs de carrière"
+      },
+      "universities": {
+        "title": "Sélection d'Universités",
+        "description": "Trouvez les meilleures universités qui correspondent à votre profil et vos ambitions"
+      },
+      "application": {
+        "title": "Aide aux Candidatures",
+        "description": "Assistance complète pour vos dossiers et démarches administratives"
+      }
+    },
+    "stats": {
+      "students": "Étudiants Accompagnés",
+      "universities": "Universités Partenaires",
+      "successRate": "Taux de Réussite"
+    }
+  },
+  "blog": {
+    "title": "Blog & Actualités",
+    "subtitle": "Conseils, guides et actualités sur l'orientation universitaire",
+    "readMore": "Lire la suite",
+    "categories": "Catégories",
+    "allPosts": "Tous les Articles",
+    "relatedPosts": "Articles Similaires",
+    "sharePost": "Partager",
+    "backToBlog": "Retour au Blog"
+  },
+  "services": {
+    "title": "Nos Services",
+    "subtitle": "Des solutions complètes pour votre orientation universitaire",
+    "orientation": {
+      "title": "Séance d'Orientation",
+      "description": "Consultation individuelle pour identifier vos talents et vos objectifs",
+      "duration": "Durée: 1h30",
+      "price": "Prix: 150 TND"
+    },
+    "university": {
+      "title": "Sélection d'Université",
+      "description": "Analyse approfondie et recommandations personnalisées",
+      "duration": "Durée: 2h",
+      "price": "Prix: 200 TND"
+    },
+    "application": {
+      "title": "Aide aux Candidatures",
+      "description": "Support complet pour vos dossiers d'admission",
+      "duration": "Durée: 3 séances",
+      "price": "Prix: 400 TND"
+    },
+    "followUp": {
+      "title": "Suivi Personnalisé",
+      "description": "Accompagnement continu pendant votre parcours",
+      "duration": "Durée: 6 mois",
+      "price": "Prix: 800 TND"
+    }
+  },
+  "appointment": {
+    "title": "Réserver un Rendez-vous",
+    "subtitle": "Choisissez le service et la date qui vous conviennent",
+    "form": {
+      "serviceType": "Type de Service",
+      "studentName": "Nom Complet",
+      "email": "Email",
+      "phone": "Téléphone",
+      "preferredDate": "Date Préférée",
+      "alternateDate": "Date Alternative",
+      "notes": "Notes (optionnel)",
+      "submit": "Confirmer le Rendez-vous",
+      "submitting": "Envoi en cours..."
+    },
+    "success": "Rendez-vous réservé avec succès! Vous recevrez une confirmation par email.",
+    "error": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "payment": {
+    "title": "Paiement",
+    "chooseMethod": "Choisissez votre méthode de paiement",
+    "methods": {
+      "bankTransfer": "Virement Bancaire",
+      "konnect": "Konnect",
+      "flouci": "Flouci",
+      "d17": "D17"
+    },
+    "amount": "Montant",
+    "currency": "TND",
+    "payNow": "Payer Maintenant",
+    "processing": "Traitement en cours...",
+    "success": "Paiement réussi!",
+    "failed": "Échec du paiement. Veuillez réessayer."
+  },
+  "footer": {
+    "description": "Votre partenaire de confiance pour l'orientation universitaire en Tunisie",
+    "quickLinks": "Liens Rapides",
+    "contact": "Contact",
+    "followUs": "Suivez-nous",
+    "rights": "Tous droits réservés"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "noResults": "Aucun résultat trouvé"
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "bookAppointment": "Book Appointment"
+  },
+  "home": {
+    "hero": {
+      "title": "Your University Future Starts Here",
+      "subtitle": "Personalized guidance for Tunisian high school graduates. Choose the right university and pave your path to success.",
+      "cta": "Book a Consultation",
+      "secondaryCta": "Explore Blog"
+    },
+    "features": {
+      "title": "How We Help You",
+      "counseling": {
+        "title": "Career Counseling",
+        "description": "Personalized sessions to understand your interests and career goals"
+      },
+      "universities": {
+        "title": "University Selection",
+        "description": "Find the best universities that match your profile and ambitions"
+      },
+      "application": {
+        "title": "Application Help",
+        "description": "Complete assistance with your applications and administrative procedures"
+      }
+    },
+    "stats": {
+      "students": "Students Helped",
+      "universities": "Partner Universities",
+      "successRate": "Success Rate"
+    }
+  },
+  "blog": {
+    "title": "Blog & News",
+    "subtitle": "Tips, guides and news about university orientation",
+    "readMore": "Read more",
+    "categories": "Categories",
+    "allPosts": "All Posts",
+    "relatedPosts": "Related Posts",
+    "sharePost": "Share",
+    "backToBlog": "Back to Blog"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Complete solutions for your university orientation",
+    "orientation": {
+      "title": "Orientation Session",
+      "description": "Individual consultation to identify your talents and goals",
+      "duration": "Duration: 1h30",
+      "price": "Price: 150 TND"
+    },
+    "university": {
+      "title": "University Selection",
+      "description": "In-depth analysis and personalized recommendations",
+      "duration": "Duration: 2h",
+      "price": "Price: 200 TND"
+    },
+    "application": {
+      "title": "Application Help",
+      "description": "Complete support for your admission files",
+      "duration": "Duration: 3 sessions",
+      "price": "Price: 400 TND"
+    },
+    "followUp": {
+      "title": "Personalized Follow-up",
+      "description": "Continuous support during your journey",
+      "duration": "Duration: 6 months",
+      "price": "Price: 800 TND"
+    }
+  },
+  "appointment": {
+    "title": "Book an Appointment",
+    "subtitle": "Choose the service and date that suits you",
+    "form": {
+      "serviceType": "Service Type",
+      "studentName": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "preferredDate": "Preferred Date",
+      "alternateDate": "Alternate Date",
+      "notes": "Notes (optional)",
+      "submit": "Confirm Appointment",
+      "submitting": "Submitting..."
+    },
+    "success": "Appointment booked successfully! You will receive a confirmation email.",
+    "error": "An error occurred. Please try again."
+  },
+  "payment": {
+    "title": "Payment",
+    "chooseMethod": "Choose your payment method",
+    "methods": {
+      "bankTransfer": "Bank Transfer",
+      "konnect": "Konnect",
+      "flouci": "Flouci",
+      "d17": "D17"
+    },
+    "amount": "Amount",
+    "currency": "TND",
+    "payNow": "Pay Now",
+    "processing": "Processing...",
+    "success": "Payment successful!",
+    "failed": "Payment failed. Please try again."
+  },
+  "footer": {
+    "description": "Your trusted partner for university orientation in Tunisia",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "followUs": "Follow Us",
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "noResults": "No results found"
+  }
+}
