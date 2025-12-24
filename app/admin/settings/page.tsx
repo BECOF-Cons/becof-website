@@ -15,6 +15,19 @@ export default async function AdminSettingsPage() {
     redirect('/');
   }
 
+  // Check environment variables
+  const hasGoogleCalendar = !!(
+    process.env.GOOGLE_CLIENT_ID &&
+    process.env.GOOGLE_CLIENT_SECRET &&
+    process.env.GOOGLE_REFRESH_TOKEN
+  );
+  
+  const hasEmailConfig = !!(
+    process.env.SMTP_HOST &&
+    process.env.SMTP_USER &&
+    process.env.SMTP_PASSWORD
+  );
+
   const settingsSections = [
     {
       icon: CreditCard,
@@ -121,11 +134,19 @@ export default async function AdminSettingsPage() {
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b border-gray-200">
               <span className="text-sm text-gray-600">Email Service</span>
-              <span className="text-sm font-medium text-green-600">✓ Gmail SMTP</span>
+              {hasEmailConfig ? (
+                <span className="text-sm font-medium text-green-600">✓ Gmail SMTP</span>
+              ) : (
+                <span className="text-sm font-medium text-yellow-600">⚠ Not Configured</span>
+              )}
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-200">
               <span className="text-sm text-gray-600">Google Calendar</span>
-              <span className="text-sm font-medium text-yellow-600">⚠ Refresh Token Required</span>
+              {hasGoogleCalendar ? (
+                <span className="text-sm font-medium text-green-600">✓ Configured</span>
+              ) : (
+                <span className="text-sm font-medium text-yellow-600">⚠ Refresh Token Required</span>
+              )}
             </div>
             <div className="flex items-center justify-between py-2 border-b border-gray-200">
               <span className="text-sm text-gray-600">Payment Gateways</span>

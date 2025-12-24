@@ -1,109 +1,199 @@
-# BECOF - Orientation Consulting Website
+# BECOF Website
 
-A modern, bilingual (French/English) orientation consulting platform for Tunisian Baccalauréat students. Built with Next.js 14, TypeScript, and Tailwind CSS.
+A modern, bilingual (French/English) website for BECOF consulting services, featuring appointment booking, blog management, and payment integration.
 
-## 🚀 Features Implemented
+## 🚀 Quick Start
 
-### Phase 1 ✅ Complete
-- **Bilingual Support** - French (default) and English with next-intl
-- **Modern Homepage** - Hero, Features, Stats, Blog preview, CTA sections
-- **Responsive Design** - Mobile-first with Tailwind CSS
-- **Navigation** - Fixed navbar with language switcher
-- **Animations** - Framer Motion for smooth interactions
+### Local Development
 
-### Phase 2 ✅ Complete
-- **Admin Dashboard** - Full authentication system with NextAuth.js
-- **Blog Management** - Complete CRUD operations for blog posts
-- **Rich Text Editor** - Tiptap with formatting toolbar
-- **Image Uploads** - UploadThing integration (optional, can use URLs)
-- **Public Blog Pages** - Dynamic blog listing and individual post pages
-- **Categories & Tags** - Organized content structure
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-### Phase 3 ✅ Complete
-- **Appointment Booking** - Full booking system with form validation
-- **Payment Gateway** - Support for Konnect, Flouci, D17, and Bank Transfer
-- **Contact Page** - Contact form with email notifications
-- **Admin Appointments** - View and manage all appointments
-- **Payment Tracking** - Payment status and transaction management
+2. **Set up environment variables**
+   ```bash
+   cp .env.local.example .env.local
+   # Edit .env.local with your values
+   ```
 
-### Phase 4 🚧 Pending
-- Google Calendar integration (optional)
-- Email notifications (nodemailer configured, needs SMTP setup)
-- Services/About pages
-- Payment gateway API integration (Konnect, Flouci, D17)
+3. **Set up database**
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
 
-## 🧪 Testing Instructions
+4. **Create admin user**
+   ```bash
+   npx tsx scripts/create-admin.ts admin@becof.tn password123 "Admin User"
+   ```
 
-### 1. Frontend (Public Pages)
-```bash
-npm run dev
+5. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Access the application**
+   - Website: http://localhost:3000
+   - Admin: http://localhost:3000/admin
+
+## 📦 Production Deployment
+
+See [QUICKSTART.md](./QUICKSTART.md) for fastest deployment to Vercel, or [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment guide with all options.
+
+## ✨ Features
+- **Bilingual Support**: Full French/English translation
+- **Admin Dashboard**: Manage appointments, blog, payments, and settings
+- **Blog System**: Rich text editor with bilingual content
+- **Appointment Booking**: Dynamic pricing based on service type
+- **Payment Integration**: Support for Konnect, Flouci, D17, and bank transfer
+- **Email Notifications**: Contact form and appointment notifications
+- **Google Calendar**: Automatic event creation for appointments
+- **SEO Optimized**: Meta tags, sitemaps, structured data
+- **Error Boundaries**: Graceful error handling throughout the app
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+
+## 🛠 Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js with Google OAuth
+- **Styling**: Tailwind CSS
+- **Email**: Nodemailer
+- **Forms**: React Hook Form + Zod validation
+- **Rich Text**: TipTap editor
+- **Icons**: Lucide React
+
+## 📁 Project Structure
+
 ```
-- **Homepage**: http://localhost:3000 (French) or http://localhost:3000/en (English)
-- **Blog Listing**: http://localhost:3000/blog
-- **Language Switcher**: Click globe icon in navbar
+becof-website/
+├── app/                    # Next.js app directory
+│   ├── [locale]/          # Localized routes (en/fr)
+│   │   ├── page.tsx       # Homepage
+│   │   ├── about/         # About page
+│   │   ├── services/      # Services page
+│   │   ├── blog/          # Blog pages
+│   │   ├── appointment/   # Booking page
+│   │   ├── payment/       # Payment flow
+│   │   └── contact/       # Contact form
+│   ├── admin/             # Admin dashboard
+│   │   ├── page.tsx       # Dashboard home
+│   │   ├── appointments/  # Manage appointments
+│   │   ├── payments/      # Manage payments
+│   │   ├── blog/          # Blog management
+│   │   ├── pricing/       # Pricing settings
+│   │   └── settings/      # Site settings
+│   └── api/               # API routes
+│       ├── appointments/  # Booking API
+│       ├── payments/      # Payment API
+│       ├── contact/       # Contact form API
+│       └── blog/          # Blog API
+├── components/            # React components
+│   ├── admin/            # Admin-specific components
+│   ├── home/             # Homepage components
+│   └── ui/               # Reusable UI components
+├── lib/                  # Utility functions
+│   ├── prisma.ts         # Prisma client
+│   ├── email.ts          # Email utilities
+│   └── google-calendar.ts # Calendar integration
+├── prisma/               # Database schema and migrations
+│   ├── schema.prisma     # Database schema
+│   └── migrations/       # Migration history
+├── scripts/              # Utility scripts
+│   ├── create-admin.ts   # Create admin user
+│   ├── create-dummy-blogs.ts # Seed blog data
+│   └── setup-production.sh # Production setup script
+├── messages/             # Translations
+│   ├── en.json           # English translations
+│   └── fr.json           # French translations
+└── public/               # Static assets
+```
 
-### 2. Admin Dashboard
-1. Go to http://localhost:3000/admin
-2. Login with:
-   - Email: `admin@becof.tn`
-   - Password: `admin123`
-3. You'll see the dashboard with sidebar navigation
-
-### 3. Blog Management
-**Create a Post:**
-1. In admin dashboard, click "Blog Posts" in sidebar
-2. Click "New Post" button
-3. Fill in both French and English fields:
-   - Title (auto-generates URL slug)
-   - Excerpt (short summary)
-   - Content (use rich text editor)
-   - Select category
-   - Add featured image (paste URL or upload via UploadThing)
-4. Click "Save Draft" or "Publish"
-
-**View Published Posts:**
-- Admin blog list: http://localhost:3000/admin/blog
-- Public blog: http://localhost:3000/blog
-- Individual post: http://localhost:3000/blog/[slug]
-
-### 6. Database
-- **Location**: `prisma/dev.db` (SQLite file in project root)
-- **Admin User**: Already seeded (admin@becof.tn / admin123)
-- **Categories**: 3 default categories created (Orientation, Career, Studies)
-- **View Data**: Use Prisma Studio: `npx prisma studio`
-- **Models**: User, BlogPost, BlogCategory, Appointment, Payment, etc.
-   - Select service type
-   - Choose date and time
-   - Add optional message
-3. Click "Continue to Payment"
-4. Select payment method (Konnect, Flouci, D17, or Bank Transfer)
-5. Complete payment
-
-**Admin View:**
-- View all appointments: http://localhost:3000/admin/appointments
-- See appointment status, payment status, and client details
-
-### 5. Contact Page
-- Contact form: http://localhost:3000/contact
-- Bilingual support (FR/EN)
-- Form validation with Zod
-
-### 4. Database
-- **Location**: `prisma/dev.db` (SQLite file in project root)
-- **Admin User**: Already seeded (admin@becof.tn)
-- **Categories**: 3 default categories created (Orientation, Career, Studies)
-- **View Data**: Use Prisma Studio: `npx prisma studio`
-
-## 🔧 Setup (Already Done)
-
-The project is ready to run. If you need to reset:
+## 🔧 Available Scripts
 
 ```bash
-# Install dependencies
-npm install
+npm run dev              # Start development server
+npm run build            # Build for production
+npm run start            # Start production server
+npm run lint             # Run ESLint
+npm run type-check       # TypeScript type checking
+npm run prisma:generate  # Generate Prisma client
+npm run prisma:migrate   # Run database migrations (production)
+npm run prisma:studio    # Open Prisma Studio
+```
 
-# Database is already created (dev.db)
-# If you need to reset it:
+## 🌐 Environment Variables
+
+See [ENV_GUIDE.md](./ENV_GUIDE.md) for comprehensive environment variable documentation.
+
+### Required Variables
+- `DATABASE_URL` - PostgreSQL connection string
+- `NEXTAUTH_SECRET` - Secret for session encryption
+- `NEXTAUTH_URL` - Application URL
+
+### Optional Variables
+- Email: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`
+- Google OAuth: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+- Calendar: `GOOGLE_CALENDAR_ID`, `GOOGLE_REFRESH_TOKEN`
+- Payment gateways: `KONNECT_*`, `FLOUCI_*`, `D17_*`
+
+## 📚 Documentation
+
+- [QUICKSTART.md](./QUICKSTART.md) - Fast deployment guide
+- [DEPLOYMENT.md](./DEPLOYMENT.md) - Comprehensive deployment guide
+- [ENV_GUIDE.md](./ENV_GUIDE.md) - Environment variables reference
+
+## 🔐 Admin Access
+
+Default admin credentials (change after first login):
+- Email: `admin@becof.tn`
+- Password: `password123`
+
+## 🎨 Customization
+
+### Branding
+- Update colors in `tailwind.config.ts`
+- Replace logo in `public/`
+- Modify translations in `messages/`
+
+### Services & Pricing
+- Update via admin panel: `/admin/pricing`
+- Or modify directly in database `SiteSettings` table
+
+### Email Templates
+- Located in `lib/email.ts`
+- Customize HTML templates for notifications
+
+## 🧪 Testing
+
+Before deploying:
+```bash
+# Build locally
+npm run build
+
+# Start production build
+npm run start
+
+# Test all features:
+# - Admin login
+# - Blog posts
+# - Appointment booking
+# - Payment flow
+# - Contact form
+```
+
+## 📄 License
+
+Private - © 2025 BECOF Consulting
+
+## 🤝 Support
+
+For deployment or technical issues, refer to the documentation or check the deployment platform's logs.
+
+---
+
+**Built with ❤️ for BECOF Consulting**
 rm prisma/dev.db
 npx prisma migrate dev --name init
 ```

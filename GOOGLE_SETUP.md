@@ -241,6 +241,42 @@ GOOGLE_REFRESH_TOKEN="..."
 - Check spam folder
 - Make sure `sendUpdates: 'all'` is in the code
 
+### Admin Shows "⚠ Refresh Token Required" But It's Set:
+- The admin UI now checks if `GOOGLE_REFRESH_TOKEN` exists in `.env.local`
+- Restart your dev server after adding/changing environment variables
+- If it still shows as required, verify the token is actually in `.env.local`
+
+---
+
+## 🔑 About Refresh Tokens
+
+**Important:** Google refresh tokens **DO NOT expire** under normal circumstances!
+
+### When You Need to Regenerate:
+- ❌ You revoked the app's access in your Google Account settings
+- ❌ You significantly changed OAuth consent screen settings
+- ❌ You're seeing actual API errors like `invalid_grant` (this means the token is invalid)
+- ❌ More than 6 months passed without using the token (rare)
+- ❌ You changed the redirect URI in Google Cloud Console
+
+### When You DON'T Need to Regenerate:
+- ✅ Server restarts
+- ✅ Code deployments
+- ✅ Environment variable reloads
+- ✅ Time passing (tokens don't expire by time)
+- ✅ UI showing warnings (check if token is actually set)
+
+### If You Get `invalid_grant` Error:
+This error means your refresh token is no longer valid. You need to regenerate it:
+1. Run `node get-refresh-token.js`
+2. Visit the URL shown in your browser
+3. Authorize the app
+4. Copy the new refresh token
+5. Update `GOOGLE_REFRESH_TOKEN` in `.env.local`
+6. Restart your dev server
+
+**Bottom line:** Generate the refresh token **once** and use it until you see an `invalid_grant` error, then regenerate.
+
 ---
 
 ## 📝 Notes

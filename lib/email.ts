@@ -446,6 +446,7 @@ export async function sendBankTransferInstructions(appointment: {
   clientEmail: string;
   date: Date;
   service: string;
+  price: number;
 }) {
   const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
     weekday: 'long',
@@ -495,7 +496,7 @@ export async function sendBankTransferInstructions(appointment: {
               <h3 style="margin-top: 0; color: #14B8A6;">Détails du rendez-vous</h3>
               <p><strong>📅 Date :</strong> ${formattedDate}</p>
               <p><strong>💼 Service :</strong> ${appointment.service}</p>
-              <p><strong>💰 Montant :</strong> 50 TND</p>
+              <p><strong>💰 Montant :</strong> ${appointment.price} TND</p>
             </div>
 
             <div class="payment-box">
@@ -517,7 +518,7 @@ export async function sendBankTransferInstructions(appointment: {
             <div class="steps">
               <h3 style="margin-top: 0; color: #14B8A6;">📋 Prochaines étapes</h3>
               <div class="step">
-                <strong>1.</strong> Effectuez le virement bancaire de 50 TND avec la référence ci-dessus
+                <strong>1.</strong> Effectuez le virement bancaire de ${appointment.price} TND avec la référence ci-dessus
               </div>
               <div class="step">
                 <strong>2.</strong> Prenez une capture d'écran de la preuve de paiement (reçu bancaire)

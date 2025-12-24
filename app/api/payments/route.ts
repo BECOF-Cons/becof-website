@@ -86,6 +86,7 @@ export async function POST(req: NextRequest) {
             clientEmail: appointment.studentEmail,
             date: appointment.preferredDate,
             service: appointment.serviceType,
+            price: appointment.price,
           }).catch((err) => console.error('Error sending bank transfer instructions:', err));
         }
         
