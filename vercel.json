@@ -2,11 +2,5 @@
   "buildCommand": "prisma generate && next build",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "env": {
-    "NEXTAUTH_URL": {
-      "type": "string",
-      "description": "Full URL of your application (e.g., https://yourdomain.com)"
-    }
-  },
   "regions": ["cdg1"]
 }
