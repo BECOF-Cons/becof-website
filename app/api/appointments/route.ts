@@ -71,26 +71,23 @@ export async function POST(req: NextRequest) {
     // Map service type to database enum
     const mappedServiceType = serviceTypeMap[validatedData.service] || validatedData.service;
 
-    // Fetch pricing to store with appointment
-    const pricingSettings = await prisma.siteSettings.findMany({
+    // Fetch pricing from Service table
+    const service = await prisma.service.findFirst({
       where: {
-        key: {
-          in: ['price_orientation', 'price_career_counseling', 'price_career_coaching', 'price_group_workshop'],
-        },
+        serviceType: mappedServiceType,
+        active: true,
       },
     });
 
-    const priceMap: Record<string, number> = {
-      'ORIENTATION_SESSION': parseFloat(pricingSettings.find((s) => s.key === 'price_orientation')?.value || '150'),
-      'CAREER_COUNSELING': parseFloat(pricingSettings.find((s) => s.key === 'price_career_counseling')?.value || '150'),
-      'CAREER_COACHING': parseFloat(pricingSettings.find((s) => s.key === 'price_career_coaching')?.value || '150'),
-      'GROUP_WORKSHOP': parseFloat(pricingSettings.find((s) => s.key === 'price_group_workshop')?.value || '150'),
-      'UNIVERSITY_SELECTION': 150,
-      'APPLICATION_HELP': 150,
-      'FOLLOW_UP_SESSION': 150,
-    };
-
-    const servicePrice = priceMap[mappedServiceType] || 150;
+    // Parse price from service (remove 'TND' and convert to number)
+    let servicePrice = 150; // Default fallback
+    if (service) {
+      const priceString = service.price.replace(/\s*TND\s*/i, '').trim();
+      const parsedPrice = parseFloat(priceString);
+      if (!isNaN(parsedPrice)) {
+        servicePrice = parsedPrice;
+      }
+    }
 
     const appointment = await prisma.appointment.create({
       data: {
