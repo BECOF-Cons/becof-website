@@ -38,15 +38,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 px-4">
-      <div className="max-w-md w-full">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            BECOF
-          </h1>
-          <p className="mt-2 text-gray-600">Admin Dashboard</p>
-        </div>
+    <div className="max-w-md w-full">
+      {/* Logo */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          BECOF
+        </h1>
+        <p className="mt-2 text-gray-600">Admin Dashboard</p>
+      </div>
 
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -119,6 +118,5 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

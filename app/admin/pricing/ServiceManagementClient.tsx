@@ -22,11 +22,20 @@ interface ServiceManagementClientProps {
 
 export default function ServiceManagementClient({ initialServices }: ServiceManagementClientProps) {
   const router = useRouter();
-  const [services, setServices] = useState(initialServices);
+  // Sort services by displayOrder
+  const sortedInitialServices = [...initialServices].sort((a, b) => a.displayOrder - b.displayOrder);
+  const [services, setServices] = useState(sortedInitialServices);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editForm, setEditForm] = useState<Partial<Service>>({});
+
+  // Get the next available display order
+  const getNextDisplayOrder = () => {
+    if (services.length === 0) return 1;
+    const maxOrder = Math.max(...services.map(s => s.displayOrder), 0);
+    return Math.max(maxOrder + 1, 1);
+  };
 
   const handleEdit = (service: Service) => {
     setEditingId(service.id);
@@ -43,12 +52,19 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
     setLoading(true);
 
     try {
+      // Ensure displayOrder is a number
+      const dataToSend = {
+        ...editForm,
+        id: editingId,
+        displayOrder: editForm.displayOrder ? parseInt(String(editForm.displayOrder)) : undefined,
+      };
+
       const response = await fetch('/api/admin/services', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...editForm, id: editingId }),
+        body: JSON.stringify(dataToSend),
       });
 
       if (!response.ok) {
@@ -56,10 +72,10 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
         throw new Error(data.error || 'Failed to update service');
       }
 
-      const updatedService = await response.json();
+      const data = await response.json();
       
-      // Update local state immediately
-      setServices(services.map(s => s.id === editingId ? updatedService : s));
+      // Update local state with all services from server (properly ordered)
+      setServices(data.allServices || [data.service]);
       setEditingId(null);
       setEditForm({});
     } catch (error: any) {
@@ -121,10 +137,10 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
         throw new Error(result.error || 'Failed to create service');
       }
 
-      const newService = await response.json();
+      const responseData = await response.json();
       
-      // Update local state immediately
-      setServices([...services, newService]);
+      // Update local state with all services from server (properly ordered)
+      setServices(responseData.allServices || [responseData.service]);
       setShowAddModal(false);
       (e.target as HTMLFormElement).reset();
     } catch (error: any) {
@@ -150,8 +166,9 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
 
       const updatedService = await response.json();
       
-      // Update local state immediately
-      setServices(services.map(s => s.id === id ? updatedService : s));
+      // Update local state immediately and re-sort
+      const updatedServices = services.map(s => s.id === id ? updatedService : s);
+      setServices(updatedServices.sort((a, b) => a.displayOrder - b.displayOrder));
     } catch (error: any) {
       alert(error.message || 'Failed to toggle service status');
     }
@@ -180,7 +197,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
 
       {/* Services List */}
       <div className="space-y-4">
-        {services.map((service) => {
+        {services.map((service, index) => {
           const isEditing = editingId === service.id;
 
           return (
@@ -263,7 +280,11 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                         value={editForm.displayOrder || 0}
                         onChange={(e) => setEditForm({ ...editForm, displayOrder: parseInt(e.target.value) })}
                         className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        min="1"
                       />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Enter the position where this service should appear (currently at position {index + 1})
+                      </p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -325,8 +346,8 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                           <DollarSign className="h-5 w-5" />
                           <span className="font-semibold">{service.price} TND</span>
                         </div>
-                        <span className="text-xs text-gray-500">
-                          Order: {service.displayOrder}
+                        <span className="text-sm text-gray-600">
+                          Position: {index + 1}
                         </span>
                         <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                           {service.serviceType}
@@ -453,9 +474,13 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                   <input
                     type="number"
                     name="displayOrder"
-                    defaultValue={0}
+                    defaultValue={getNextDisplayOrder()}
+                    min="1"
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter the position where this service should appear (1 = first, 2 = second, etc.). Services at this position and after will be shifted down.
+                  </p>
                 </div>
               </div>
 

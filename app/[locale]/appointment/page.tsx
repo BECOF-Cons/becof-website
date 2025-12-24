@@ -2,19 +2,29 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { Calendar, Clock, User, Mail, Phone, MessageSquare, CheckCircle } from 'lucide-react';
+
+interface Service {
+  id: string;
+  serviceType: string;
+  nameFr: string;
+  nameEn: string;
+  descriptionFr: string;
+  descriptionEn: string;
+  price: string;
+  displayOrder: number;
+  active: boolean;
+}
 
 export default function AppointmentPage() {
   const t = useTranslations('appointment');
   const locale = useLocale();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [prices, setPrices] = useState({
-    orientation: '150',
-    careerCounseling: '150',
-    careerCoaching: '150',
-    groupWorkshop: '150',
-  });
+  const [services, setServices] = useState<Service[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,23 +36,36 @@ export default function AppointmentPage() {
   });
 
   useEffect(() => {
-    // Fetch prices from API
-    fetch('/api/admin/pricing')
+    // Fetch services from API
+    fetch('/api/admin/services')
       .then((res) => res.json())
-      .then((data) => setPrices(data))
-      .catch((err) => console.error('Error fetching prices:', err));
-  }, []);
-
-  const services = [
-    { id: 'ORIENTATION_SESSION', labelFr: 'Séance d\'orientation', labelEn: 'Orientation Session', price: prices.orientation },
-    { id: 'CAREER_COUNSELING', labelFr: 'Conseil de carrière', labelEn: 'Career Counseling', price: prices.careerCounseling },
-    { id: 'CAREER_COACHING', labelFr: 'Coaching de carrière', labelEn: 'Career Coaching', price: prices.careerCoaching },
-    { id: 'GROUP_WORKSHOP', labelFr: 'Atelier de groupe', labelEn: 'Group Workshop', price: prices.groupWorkshop },
-  ];
+      .then((data) => {
+        const activeServices = data.filter((s: Service) => s.active);
+        setServices(activeServices);
+        setLoadingServices(false);
+        
+        // Check if there's a preselected service from URL
+        const preselectedService = searchParams.get('service');
+        if (preselectedService) {
+          const matchingService = activeServices.find((s: Service) => s.serviceType === preselectedService);
+          if (matchingService) {
+            setFormData(prev => ({ ...prev, service: matchingService.serviceType }));
+          }
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching services:', err);
+        setLoadingServices(false);
+      });
+  }, [searchParams]);
 
   const getSelectedServicePrice = () => {
-    const selected = services.find(s => s.id === formData.service);
-    return selected ? selected.price : '150';
+    const selected = services.find(s => s.serviceType === formData.service);
+    if (selected) {
+      // Remove 'TND' suffix if present and return just the number
+      return selected.price.replace(/\s*TND\s*/i, '');
+    }
+    return '150';
   };
 
   const timeSlots = [
@@ -211,21 +234,27 @@ export default function AppointmentPage() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {locale === 'fr' ? 'Type de service' : 'Service Type'} *
             </label>
-            <select
-              required
-              value={formData.service}
-              onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-            >
-              <option value="">
-                {locale === 'fr' ? 'Sélectionnez un service' : 'Select a service'}
-              </option>
-              {services.map((service) => (
-                <option key={service.id} value={service.id}>
-                  {locale === 'fr' ? service.labelFr : service.labelEn} - {service.price} TND
+            {loadingServices ? (
+              <div className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-500">
+                {locale === 'fr' ? 'Chargement des services...' : 'Loading services...'}
+              </div>
+            ) : (
+              <select
+                required
+                value={formData.service}
+                onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              >
+                <option value="">
+                  {locale === 'fr' ? 'Sélectionnez un service' : 'Select a service'}
                 </option>
-              ))}
-            </select>
+                {services.map((service) => (
+                  <option key={service.id} value={service.serviceType}>
+                    {locale === 'fr' ? service.nameFr : service.nameEn} - {service.price.includes('TND') ? service.price : `${service.price} TND`}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
           {/* Date & Time */}

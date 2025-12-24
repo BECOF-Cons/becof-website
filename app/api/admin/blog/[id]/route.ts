@@ -17,35 +17,30 @@ const blogPostSchema = z.object({
   published: z.boolean(),
 });
 
-export async function POST(req: NextRequest) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const session = await auth();
 
-    if (!session || (session.user as any)?.role !== 'ADMIN') {
+    if (!session || !['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const userId = (session.user as any)?.id;
-    if (!userId) {
-      console.error('User ID not found in session:', session);
-      return NextResponse.json(
-        { error: 'User ID not found. Please log out and log in again.' },
-        { status: 400 }
-      );
-    }
-
     const body = await req.json();
     const validatedData = blogPostSchema.parse(body);
 
-    const post = await prisma.blogPost.create({
+    const post = await prisma.blogPost.update({
+      where: { id },
       data: {
         ...validatedData,
         categoryId: validatedData.categoryId || null,
         coverImage: validatedData.coverImage || null,
-        authorId: userId,
       },
     });
 
@@ -58,9 +53,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.error('Error creating blog post:', error);
+    console.error('Error updating blog post:', error);
     return NextResponse.json(
-      { error: 'Failed to create blog post' },
+      { error: 'Failed to update blog post' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const session = await auth();
+
+    if (!session || !['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    await prisma.blogPost.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting blog post:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete blog post' },
       { status: 500 }
     );
   }

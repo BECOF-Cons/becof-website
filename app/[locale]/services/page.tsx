@@ -89,7 +89,7 @@ export default async function ServicesPage({
                 <p className="text-gray-600 mb-6 line-clamp-4">{service.description}</p>
 
                 <Link
-                  href={`/${locale}/appointment`}
+                  href={`/${locale}/appointment?service=${encodeURIComponent(service.serviceType)}`}
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
                 >
                   {locale === 'fr' ? 'Réserver maintenant' : 'Book Now'}

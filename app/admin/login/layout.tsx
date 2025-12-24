@@ -4,5 +4,10 @@ export default function AdminLoginLayout({
   children: React.ReactNode;
 }) {
   // No auth check for login page - just passes through to parent layout
-  return <>{children}</>;
+  // Add centering wrapper for the login page
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 px-4">
+      {children}
+    </div>
+  );
 }
