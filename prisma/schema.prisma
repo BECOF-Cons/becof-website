@@ -67,6 +67,7 @@ model VerificationToken {
 enum UserRole {
   USER
   ADMIN
+  SUPER_ADMIN
 }
 
 // Blog Post model
@@ -127,7 +128,7 @@ model BlogPostSEO {
 model Appointment {
   id               String            @id @default(cuid())
   userId           String
-  serviceType      ServiceType
+  serviceType      String
   price            Float             @default(150.0)
   studentName      String
   studentEmail     String
@@ -144,16 +145,6 @@ model Appointment {
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   payment Payment?
-}
-
-enum ServiceType {
-  ORIENTATION_SESSION
-  UNIVERSITY_SELECTION
-  APPLICATION_HELP
-  CAREER_COUNSELING
-  CAREER_COACHING
-  GROUP_WORKSHOP
-  FOLLOW_UP_SESSION
 }
 
 enum AppointmentStatus {
@@ -219,4 +210,31 @@ model SiteSettings {
   value                 String
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
+}
+
+// Admin Invitation model
+model AdminInvitation {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  role      UserRole
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Service model for managing services
+model Service {
+  id             String      @id @default(cuid())
+  nameEn         String
+  nameFr         String
+  descriptionEn  String
+  descriptionFr  String
+  price          String // Can be numeric or text like "Sur devis"
+  serviceType    String      // Free text for flexibility
+  active         Boolean     @default(true)
+  displayOrder   Int         @default(0)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }

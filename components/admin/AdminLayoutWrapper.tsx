@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   DollarSign,
+  Users,
 } from 'lucide-react';
 
 interface AdminLayoutWrapperProps {
@@ -34,6 +35,12 @@ export default function AdminLayoutWrapper({ children, user, title }: AdminLayou
     { name: 'Service Pricing', href: '/admin/pricing', icon: DollarSign },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
+
+  // Add admin management for super admins
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+  if (isSuperAdmin) {
+    navigation.splice(5, 0, { name: 'Admin Management', href: '/admin/users', icon: Users });
+  }
 
   // Get page title from pathname if not provided
   const pageTitle = title || navigation.find(item => item.href === pathname)?.name || 'Dashboard';

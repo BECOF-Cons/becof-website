@@ -1,37 +1,35 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import { Compass, Briefcase, TrendingUp, Users, CheckCircle, ArrowRight } from 'lucide-react';
+import { Compass, Briefcase, TrendingUp, Users, CheckCircle, ArrowRight, Lightbulb } from 'lucide-react';
 
-async function getPrices() {
+async function getServices() {
   try {
-    const prices = await prisma.siteSettings.findMany({
+    const services = await prisma.service.findMany({
       where: {
-        key: {
-          in: [
-            'price_orientation',
-            'price_career_counseling',
-            'price_career_coaching',
-            'price_group_workshop',
-          ],
-        },
+        active: true,
+      },
+      orderBy: {
+        displayOrder: 'asc',
       },
     });
-
-    return {
-      orientation: prices.find((p) => p.key === 'price_orientation')?.value || '150',
-      careerCounseling: prices.find((p) => p.key === 'price_career_counseling')?.value || '200',
-      careerCoaching: prices.find((p) => p.key === 'price_career_coaching')?.value || 'Sur devis',
-      groupWorkshop: prices.find((p) => p.key === 'price_group_workshop')?.value || '80',
-    };
+    return services;
   } catch (error) {
-    // Return defaults if database query fails
-    return {
-      orientation: '150',
-      careerCounseling: '200',
-      careerCoaching: 'Sur devis',
-      groupWorkshop: '80',
-    };
+    console.error('Error fetching services:', error);
+    return [];
   }
+}
+
+// Icon mapping for common service types
+const iconMap: { [key: string]: any } = {
+  ORIENTATION_SESSION: Compass,
+  CAREER_COUNSELING: Briefcase,
+  CAREER_COACHING: TrendingUp,
+  GROUP_WORKSHOP: Users,
+  default: Lightbulb,
+};
+
+function getIconForService(serviceType: string) {
+  return iconMap[serviceType] || iconMap.default;
 }
 
 export default async function ServicesPage({
@@ -40,100 +38,15 @@ export default async function ServicesPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const prices = await getPrices();
+  const dbServices = await getServices();
 
-  const services = [
-    {
-      icon: Compass,
-      title: locale === 'fr' ? 'Séance d\'orientation' : 'Orientation Session',
-      description: locale === 'fr' 
-        ? 'Une séance personnalisée pour vous aider à clarifier vos objectifs académiques et professionnels. Nous analysons vos forces, intérêts et aspirations pour créer un plan d\'action adapté.'
-        : 'A personalized session to help you clarify your academic and professional goals. We analyze your strengths, interests and aspirations to create a tailored action plan.',
-      features: locale === 'fr'
-        ? [
-            'Évaluation complète de votre profil',
-            'Identification de vos points forts',
-            'Exploration des options de carrière',
-            'Plan d\'action personnalisé',
-          ]
-        : [
-            'Complete profile assessment',
-            'Identification of your strengths',
-            'Career options exploration',
-            'Personalized action plan',
-          ],
-      duration: locale === 'fr' ? '1 heure' : '1 hour',
-      price: `${prices.orientation} TND`,
-    },
-    {
-      icon: Briefcase,
-      title: locale === 'fr' ? 'Conseil en carrière' : 'Career Counseling',
-      description: locale === 'fr'
-        ? 'Un accompagnement approfondi pour développer votre carrière. Nous vous aidons à prendre des décisions éclairées concernant votre parcours professionnel et à surmonter les obstacles.'
-        : 'In-depth support to develop your career. We help you make informed decisions about your professional path and overcome obstacles.',
-      features: locale === 'fr'
-        ? [
-            'Analyse de carrière approfondie',
-            'Stratégies de développement professionnel',
-            'Préparation aux entretiens',
-            'Optimisation du CV et LinkedIn',
-          ]
-        : [
-            'In-depth career analysis',
-            'Professional development strategies',
-            'Interview preparation',
-            'CV and LinkedIn optimization',
-          ],
-      duration: locale === 'fr' ? '1h30' : '1.5 hours',
-      price: `${prices.careerCounseling} TND`,
-    },
-    {
-      icon: TrendingUp,
-      title: locale === 'fr' ? 'Coaching de carrière' : 'Career Coaching',
-      description: locale === 'fr'
-        ? 'Un programme de coaching sur mesure pour accélérer votre progression professionnelle. Développez vos compétences de leadership et atteignez vos objectifs de carrière.'
-        : 'A tailored coaching program to accelerate your professional growth. Develop your leadership skills and achieve your career goals.',
-      features: locale === 'fr'
-        ? [
-            'Sessions de coaching régulières',
-            'Développement des soft skills',
-            'Stratégies de networking',
-            'Suivi personnalisé continu',
-          ]
-        : [
-            'Regular coaching sessions',
-            'Soft skills development',
-            'Networking strategies',
-            'Continuous personalized follow-up',
-          ],
-      duration: locale === 'fr' ? 'Programme sur mesure' : 'Custom program',
-      price: prices.careerCoaching.includes('devis') || prices.careerCoaching.toLowerCase().includes('quote') 
-        ? prices.careerCoaching 
-        : `${prices.careerCoaching} TND`,
-    },
-    {
-      icon: Users,
-      title: locale === 'fr' ? 'Ateliers de groupe' : 'Group Workshops',
-      description: locale === 'fr'
-        ? 'Des ateliers interactifs en groupe pour développer des compétences professionnelles essentielles. Apprenez en réseau et partagez des expériences avec d\'autres professionnels.'
-        : 'Interactive group workshops to develop essential professional skills. Learn by networking and share experiences with other professionals.',
-      features: locale === 'fr'
-        ? [
-            'Sessions thématiques mensuelles',
-            'Exercices pratiques en groupe',
-            'Partage d\'expériences',
-            'Networking professionnel',
-          ]
-        : [
-            'Monthly thematic sessions',
-            'Practical group exercises',
-            'Experience sharing',
-            'Professional networking',
-          ],
-      duration: locale === 'fr' ? '2-3 heures' : '2-3 hours',
-      price: `${prices.groupWorkshop} TND`,
-    },
-  ];
+  const services = dbServices.map((service) => ({
+    icon: getIconForService(service.serviceType),
+    title: locale === 'fr' ? service.nameFr : service.nameEn,
+    description: locale === 'fr' ? service.descriptionFr : service.descriptionEn,
+    price: service.price.includes('TND') ? service.price : `${service.price} TND`,
+    serviceType: service.serviceType,
+  }));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -165,27 +78,15 @@ export default async function ServicesPage({
                   <div className="bg-gradient-to-br from-teal-100 to-purple-100 p-3 rounded-lg">
                     <Icon className="h-8 w-8 text-teal-600" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       {service.title}
                     </h3>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      <span>{service.duration}</span>
-                      <span className="font-semibold text-teal-600">{service.price}</span>
-                    </div>
+                    <span className="font-semibold text-teal-600 text-lg">{service.price}</span>
                   </div>
                 </div>
 
-                <p className="text-gray-600 mb-6">{service.description}</p>
-
-                <div className="space-y-3 mb-6">
-                  {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{feature}</span>
-                    </div>
-                  ))}
-                </div>
+                <p className="text-gray-600 mb-6 line-clamp-4">{service.description}</p>
 
                 <Link
                   href={`/${locale}/appointment`}

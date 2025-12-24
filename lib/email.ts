@@ -555,3 +555,95 @@ export async function sendBankTransferInstructions(appointment: {
     console.error('Error sending bank transfer instructions:', error);
   }
 }
+
+// Send admin invitation email
+export async function sendAdminInvitation(invitation: {
+  email: string;
+  role: string;
+  token: string;
+  invitedBy: string;
+}) {
+  const setupUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/admin/setup?token=${invitation.token}`;
+  
+  const roleDisplay = invitation.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin';
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
+    to: invitation.email,
+    subject: 'Invitation to join BECOF Admin Team',
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #14B8A6, #9333EA); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+          .info-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #14B8A6; }
+          .button { display: inline-block; background: #14B8A6; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+          .footer { text-align: center; color: #666; font-size: 14px; margin-top: 30px; }
+          .warning { background: #fef3c7; padding: 15px; border-radius: 6px; border-left: 4px solid #f59e0b; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>BECOF</h1>
+            <p>Admin Team Invitation</p>
+          </div>
+          <div class="content">
+            <p>Hello,</p>
+            <p>You have been invited by <strong>${invitation.invitedBy}</strong> to join the BECOF admin team as a <strong>${roleDisplay}</strong>.</p>
+            
+            <div class="info-box">
+              <h3 style="margin-top: 0; color: #14B8A6;">Your Role</h3>
+              <p><strong>📧 Email:</strong> ${invitation.email}</p>
+              <p><strong>👤 Role:</strong> ${roleDisplay}</p>
+              ${invitation.role === 'SUPER_ADMIN' 
+                ? '<p style="color: #9333EA;"><strong>Super Admins</strong> have full access to manage all aspects including other admins.</p>'
+                : '<p><strong>Admins</strong> can manage appointments, blog posts, payments, and service pricing.</p>'
+              }
+            </div>
+
+            <p>To complete your registration, please click the button below to set up your account:</p>
+
+            <center>
+              <a href="${setupUrl}" class="button" style="color: white;">Complete Setup</a>
+            </center>
+
+            <div class="warning">
+              <strong>⚠️ Important:</strong>
+              <ul style="margin: 10px 0;">
+                <li>This invitation link will expire in 7 days</li>
+                <li>You'll need to create a secure password (minimum 8 characters)</li>
+                <li>If you didn't expect this invitation, please ignore this email</li>
+              </ul>
+            </div>
+
+            <p>If the button doesn't work, copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; font-size: 12px; color: #666;">${setupUrl}</p>
+
+            <div class="footer">
+              <p>For support, contact us:</p>
+              <p>📧 contact@becof.tn | 📞 +216 12 345 678</p>
+              <p style="margin-top: 20px; font-size: 12px; color: #999;">
+                © 2025 BECOF - Orientation Consulting
+              </p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Admin invitation sent to:', invitation.email);
+  } catch (error) {
+    console.error('Error sending admin invitation:', error);
+    throw error;
+  }
+}

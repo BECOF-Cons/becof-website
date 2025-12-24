@@ -10,7 +10,7 @@ export default async function AdminPage() {
     redirect('/admin/login');
   }
 
-  if (session.user?.role !== 'ADMIN') {
+  if (!['ADMIN', 'SUPER_ADMIN'].includes(session.user?.role as string)) {
     redirect('/');
   }
 
