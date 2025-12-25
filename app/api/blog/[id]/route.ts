@@ -70,7 +70,7 @@ export async function PATCH(
     const validatedData = blogPostSchema.parse(body);
 
     // Check if post exists
-    const existingPost = await prisma.blogPost.findUnique(
+    const existingPost = await prisma.blogPost.findUnique({
       where: { id },
     });
 
@@ -142,7 +142,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const post = await prisma.blogPost.findUnique(
+    const post = await prisma.blogPost.findUnique({
       where: { id },
     });
 
