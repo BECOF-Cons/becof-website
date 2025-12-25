@@ -1,5 +1,4 @@
 import { useTranslations } from 'next-intl';
-import { unstable_setRequestLocale } from 'next-intl/server';
 import Hero from '@/components/home/Hero';
 import Features from '@/components/home/Features';
 import Stats from '@/components/home/Stats';

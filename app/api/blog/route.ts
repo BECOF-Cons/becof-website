@@ -14,7 +14,7 @@ const blogPostSchema = z.object({
   contentEn: z.string().min(1, 'English content is required'),
   categoryId: z.string().min(1, 'Category is required'),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
-  featuredImage: z.string().optional(),
+  coverImage: z.string().optional(),
   tags: z.string().optional(),
   metaKeywords: z.string().optional(),
 });
