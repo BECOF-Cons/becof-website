@@ -21,11 +21,12 @@ const blogPostSchema = z.object({
 // GET - Get single blog post
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const post = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         category: true,
         author: {
@@ -55,9 +56,10 @@ export async function GET(
 // PATCH - Update blog post
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user) {
@@ -68,8 +70,8 @@ export async function PATCH(
     const validatedData = blogPostSchema.parse(body);
 
     // Check if post exists
-    const existingPost = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+    const existingPost = await prisma.blogPost.findUnique(
+      where: { id },
     });
 
     if (!existingPost) {
@@ -97,7 +99,7 @@ export async function PATCH(
     }
 
     const post = await prisma.blogPost.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         category: true,
@@ -130,17 +132,18 @@ export async function PATCH(
 // DELETE - Delete blog post
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const post = await prisma.blogPost.findUnique({
-      where: { id: params.id },
+    const post = await prisma.blogPost.findUnique(
+      where: { id },
     });
 
     if (!post) {
@@ -148,7 +151,7 @@ export async function DELETE(
     }
 
     await prisma.blogPost.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Post deleted successfully' });
