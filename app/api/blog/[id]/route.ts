@@ -6,7 +6,8 @@ import { z } from 'zod';
 const blogPostSchema = z.object({
   titleFr: z.string().min(1, 'French title is required'),
   titleEn: z.string().min(1, 'English title is required'),
-  slug: z.string().min(1, 'Slug is required'),
+  slugEn: z.string().min(1, 'English slug is required'),
+  slugFr: z.string().min(1, 'French slug is required'),
   excerptFr: z.string().min(1, 'French excerpt is required'),
   excerptEn: z.string().min(1, 'English excerpt is required'),
   contentFr: z.string().min(1, 'French content is required'),
@@ -78,15 +79,28 @@ export async function PATCH(
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    // Check if slug is unique (if changed)
-    if (validatedData.slug !== existingPost.slug) {
+    // Check if slugs are unique (if changed)
+    if (validatedData.slugEn !== existingPost.slugEn) {
       const slugExists = await prisma.blogPost.findUnique({
-        where: { slug: validatedData.slug },
+        where: { slugEn: validatedData.slugEn },
       });
 
       if (slugExists) {
         return NextResponse.json(
-          { error: 'A post with this slug already exists' },
+          { error: 'A post with this English slug already exists' },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (validatedData.slugFr !== existingPost.slugFr) {
+      const slugExists = await prisma.blogPost.findUnique({
+        where: { slugFr: validatedData.slugFr },
+      });
+
+      if (slugExists) {
+        return NextResponse.json(
+          { error: 'A post with this French slug already exists' },
           { status: 400 }
         );
       }

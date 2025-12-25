@@ -7,7 +7,8 @@ import { z } from 'zod';
 const blogPostSchema = z.object({
   titleFr: z.string().min(1, 'French title is required'),
   titleEn: z.string().min(1, 'English title is required'),
-  slug: z.string().min(1, 'Slug is required'),
+  slugEn: z.string().min(1, 'English slug is required'),
+  slugFr: z.string().min(1, 'French slug is required'),
   excerptFr: z.string().min(1, 'French excerpt is required'),
   excerptEn: z.string().min(1, 'English excerpt is required'),
   contentFr: z.string().min(1, 'French content is required'),
@@ -68,14 +69,25 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const validatedData = blogPostSchema.parse(body);
 
-    // Check if slug is unique
-    const existingPost = await prisma.blogPost.findUnique({
-      where: { slug: validatedData.slug },
+    // Check if slugs are unique
+    const existingSlugEn = await prisma.blogPost.findUnique({
+      where: { slugEn: validatedData.slugEn },
     });
 
-    if (existingPost) {
+    if (existingSlugEn) {
       return NextResponse.json(
-        { error: 'A post with this slug already exists' },
+        { error: 'A post with this English slug already exists' },
+        { status: 400 }
+      );
+    }
+
+    const existingSlugFr = await prisma.blogPost.findUnique({
+      where: { slugFr: validatedData.slugFr },
+    });
+
+    if (existingSlugFr) {
+      return NextResponse.json(
+        { error: 'A post with this French slug already exists' },
         { status: 400 }
       );
     }
