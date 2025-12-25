@@ -123,12 +123,24 @@ export async function POST(request: NextRequest) {
     });
 
     // Send invitation email
-    await sendAdminInvitation({
-      email,
-      role,
-      token,
-      invitedBy: session.user.name || session.user.email || 'Admin',
-    });
+    try {
+      await sendAdminInvitation({
+        email,
+        role,
+        token,
+        invitedBy: session.user.name || session.user.email || 'Admin',
+      });
+    } catch (emailError: any) {
+      // Delete the invitation if email fails
+      await prisma.adminInvitation.delete({
+        where: { id: invitation.id },
+      });
+      
+      return NextResponse.json({ 
+        error: 'Failed to send invitation email',
+        details: emailError.message || 'Please configure SMTP settings in environment variables'
+      }, { status: 500 });
+    }
 
     return NextResponse.json({
       message: 'Invitation sent successfully',

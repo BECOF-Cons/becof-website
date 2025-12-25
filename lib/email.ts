@@ -1,16 +1,27 @@
 import nodemailer from 'nodemailer';
 import { prisma } from './prisma';
 
-// Create transporter
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+// Check if email is configured
+function isEmailConfigured(): boolean {
+  return !!(process.env.SMTP_USER && process.env.SMTP_PASSWORD);
+}
+
+// Create transporter only if configured
+function createTransporter() {
+  if (!isEmailConfigured()) {
+    return null;
+  }
+  
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
+}
 
 // Get admin emails
 async function getAdminEmails(): Promise<string[]> {
@@ -34,6 +45,14 @@ export async function sendAppointmentConfirmation(appointment: {
   date: Date;
   service: string;
 }) {
+  if (!isEmailConfigured()) {
+    console.warn('⚠️ Email not configured. Skipping appointment confirmation email.');
+    return;
+  }
+
+  const transporter = createTransporter();
+  if (!transporter) return;
+
   const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
     weekday: 'long',
     year: 'numeric',
@@ -564,7 +583,17 @@ export async function sendAdminInvitation(invitation: {
   token: string;
   invitedBy: string;
 }) {
-  const setupUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/admin/setup?token=${invitation.token}`;
+  if (!isEmailConfigured()) {
+    console.warn('⚠️ Email not configured. Skipping admin invitation email.');
+    throw new Error('Email is not configured. Please set SMTP environment variables to send invitations.');
+  }
+
+  const transporter = createTransporter();
+  if (!transporter) {
+    throw new Error('Email transporter could not be created.');
+  }
+
+  const setupUrl = `${process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/admin/setup?token=${invitation.token}`;
   
   const roleDisplay = invitation.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin';
 

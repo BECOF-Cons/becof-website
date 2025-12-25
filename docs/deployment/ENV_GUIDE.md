@@ -1,11 +1,11 @@
 # Environment Variables Guide
 
 ## Overview
-This guide explains all environment variables needed for the BECOF application.
+This guide explains all environment variables needed for the BECOF application and which features require them.
 
 ---
 
-## 🔴 Required Variables
+## 🔴 Required for Core Functionality
 
 These variables **must** be set for the application to work:
 
@@ -14,6 +14,7 @@ These variables **must** be set for the application to work:
 DATABASE_URL="postgresql://user:password@host:5432/database?schema=public"
 ```
 - **What**: PostgreSQL database connection string
+- **Required for**: All database operations (blog, appointments, users, etc.)
 - **Where to get**: 
   - [Neon.tech](https://neon.tech) (Free tier recommended)
   - [Supabase](https://supabase.com) (Free tier)
@@ -26,6 +27,7 @@ DATABASE_URL="postgresql://user:password@host:5432/database?schema=public"
 NEXTAUTH_SECRET="your-secret-here"
 ```
 - **What**: Secret key for encrypting sessions
+- **Required for**: Admin login and authentication
 - **How to generate**: Run `openssl rand -base64 32` in terminal
 - **Example**: `J8F3kL9mN2pQ5rT8vX1yZ4cD6fG9hK2m`
 
@@ -33,21 +35,45 @@ NEXTAUTH_SECRET="your-secret-here"
 NEXTAUTH_URL="https://yourdomain.com"
 ```
 - **What**: Full URL of your deployed application
+- **Required for**: NextAuth callbacks and redirects
 - **Development**: `http://localhost:3000`
-- **Production**: Your actual domain (e.g., `https://becof.vercel.app`)
+- **Production**: Your actual domain (e.g., `https://becof-website.vercel.app`)
+- **Important**: Must match the exact URL users access (including subdomain)
 
 ---
 
-## 🟡 Recommended Variables
+## 🟡 Optional - Email Features
 
-These variables enable important features:
+**Without these, the site works but:**
+- ❌ Admin invitations won't send (use direct user creation instead)
+- ❌ Appointment confirmations won't send
+- ❌ Contact form submissions won't notify admins
+- ✅ All other features work normally (blog, appointments are saved, admin panel, etc.)
 
-### Email Configuration
+### Email Configuration (for Gmail)
 ```bash
 SMTP_HOST="smtp.gmail.com"
 SMTP_PORT="587"
 SMTP_USER="your-email@gmail.com"
 SMTP_PASSWORD="your-app-specific-password"
+```
+**What**: SMTP credentials for sending emails
+**Required for**: 
+- Sending admin invitation emails
+- Appointment confirmation emails
+- Contact form notification emails
+
+**How to get Gmail App Password**:
+1. Enable 2-Factor Authentication on your Google account
+2. Go to [Google App Passwords](https://myaccount.google.com/apppasswords)
+3. Generate a new app password for "Mail"
+4. Use the 16-character code as `SMTP_PASSWORD`
+
+```bash
+ADMIN_EMAIL="admin@becof.tn"
+```
+- **What**: Email address to receive contact form submissions
+- **Required for**: Contact form notifications
 ADMIN_EMAIL="admin@becof.tn"
 ```
 - **What**: Email server settings for contact form and notifications

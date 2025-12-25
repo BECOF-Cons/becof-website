@@ -113,7 +113,7 @@ export default function LoginPage() {
           {/* Info */}
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500">
-              Default credentials: admin@becof.tn / admin123
+              Default credentials: admin@becof.tn / Admin123!
             </p>
           </div>
         </div>

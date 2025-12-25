@@ -2,7 +2,30 @@
 
 A modern, bilingual (French/English) website for BECOF consulting services, featuring appointment booking, blog management, and payment integration.
 
-## 🚀 Quick Start
+## 🌐 Live Production Site
+
+**URL:** https://becof-website-eq4wxpa5f-helmis-projects-e3f11f27.vercel.app
+
+- **Homepage:** `/` (French & English)
+- **Blog:** `/blog`
+- **Services & Booking:** `/appointment`
+- **Contact:** `/contact`
+- **Admin Panel:** `/admin/login`
+
+## 📚 Documentation
+
+**For Site Administrators:**
+- **[USER GUIDE](./docs/USER_GUIDE.md)** ⭐ - Complete guide for using the deployed website
+
+**For Deployment:**
+- [Quick Deployment (10 min)](./docs/deployment/QUICKSTART.md) - Fast Vercel setup
+- [Full Deployment Guide](./docs/deployment/DEPLOYMENT.md) - Comprehensive guide (3 platforms)
+- [Environment Variables](./docs/deployment/ENV_GUIDE.md) - Complete configuration reference
+- [Production Checklist](./docs/deployment/PRODUCTION_CHECKLIST.md) - Pre-launch verification
+
+**All documentation:** See [docs/README.md](./docs/README.md)
+
+## 🚀 Quick Start (Local Development)
 
 ### Local Development
 
@@ -36,10 +59,6 @@ A modern, bilingual (French/English) website for BECOF consulting services, feat
 6. **Access the application**
    - Website: http://localhost:3000
    - Admin: http://localhost:3000/admin
-
-## 📦 Production Deployment
-
-See [QUICKSTART.md](./QUICKSTART.md) for fastest deployment to Vercel, or [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment guide with all options.
 
 ## ✨ Features
 - **Bilingual Support**: Full French/English translation

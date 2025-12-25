@@ -62,9 +62,11 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth();
     
-    if (!session?.user) {
+    if (!session?.user || !(session.user as any).id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const userId = (session.user as any).id as string;
 
     const body = await req.json();
     const validatedData = blogPostSchema.parse(body);
@@ -95,7 +97,7 @@ export async function POST(req: NextRequest) {
     const post = await prisma.blogPost.create({
       data: {
         ...validatedData,
-        authorId: session.user.id!,
+        authorId: userId,
         publishedAt: validatedData.status === 'PUBLISHED' ? new Date() : null,
       },
       include: {
