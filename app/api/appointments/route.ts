@@ -141,8 +141,8 @@ export async function POST(req: NextRequest) {
     // Send notification to admins (async, don't wait) - OPTIONAL
     try {
       if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {
-        const { notifyAdminsNewAppointment } = await import('@/lib/email');
-        notifyAdminsNewAppointment({
+        const { notifyAdminsOfAppointment } = await import('@/lib/email');
+        notifyAdminsOfAppointment({
           id: appointment.id,
           clientName: validatedData.name,
           clientEmail: validatedData.email,
