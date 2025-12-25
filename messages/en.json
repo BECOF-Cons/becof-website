@@ -1,4 +1,8 @@
 {
+  "brand": {
+    "name": "BECOF Consulting",
+    "shortName": "BECOF"
+  },
   "nav": {
     "home": "Home",
     "blog": "Blog",
