@@ -2,6 +2,14 @@
 
 A modern, bilingual (French/English) website for BECOF consulting services, featuring appointment booking, blog management, and payment integration.
 
+## Where to Find Information
+
+- How to use the admin panel: USER_GUIDE.md
+- Environment variables explained: ENV_GUIDE.md
+- Deployment instructions: DEPLOYMENT.md
+- Quick start: QUICKSTART.md
+- All documentation: README.md
+
 ## 🌐 Live Production Site
 
 **URL:** https://becof-website-eq4wxpa5f-helmis-projects-e3f11f27.vercel.app
