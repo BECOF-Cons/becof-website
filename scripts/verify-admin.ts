@@ -22,6 +22,13 @@ async function verifyAdmin() {
     console.log('Created:', admin.createdAt);
     console.log('');
     
+    // Check if password exists
+    if (!admin.password) {
+      console.log('❌ Admin has no password set');
+      await prisma.$disconnect();
+      return;
+    }
+    
     // Test passwords
     const passwords = ['Admin123!', 'admin123', 'Admin123'];
     
