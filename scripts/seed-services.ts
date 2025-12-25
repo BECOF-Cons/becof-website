@@ -81,14 +81,27 @@ async function main() {
 
   for (const service of services) {
     try {
-      await prisma.service.upsert({
+      // Check if service with this type already exists
+      const existing = await prisma.service.findFirst({
         where: { serviceType: service.serviceType },
-        update: service,
-        create: service,
       });
-      console.log(`✅ Created/Updated service: ${service.nameEn}`);
+
+      if (existing) {
+        // Update existing service
+        await prisma.service.update({
+          where: { id: existing.id },
+          data: service,
+        });
+        console.log(`✅ Updated service: ${service.nameEn}`);
+      } else {
+        // Create new service
+        await prisma.service.create({
+          data: service,
+        });
+        console.log(`✅ Created service: ${service.nameEn}`);
+      }
     } catch (error) {
-      console.error(`❌ Error creating service ${service.nameEn}:`, error);
+      console.error(`❌ Error creating/updating service ${service.nameEn}:`, error);
     }
   }
 
