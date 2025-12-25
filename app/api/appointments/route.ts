@@ -58,7 +58,11 @@ export async function POST(req: NextRequest) {
     // Create appointment (using temp userId - will be updated when auth is required)
     // For now, get the first admin user as a placeholder
     const adminUser = await prisma.user.findFirst({
-      where: { role: 'ADMIN' },
+      where: { 
+        role: {
+          in: ['ADMIN', 'SUPER_ADMIN']
+        }
+      },
     });
 
     if (!adminUser) {

@@ -27,7 +27,11 @@ function createTransporter() {
 async function getAdminEmails(): Promise<string[]> {
   try {
     const admins = await prisma.user.findMany({
-      where: { role: 'ADMIN' },
+      where: { 
+        role: {
+          in: ['ADMIN', 'SUPER_ADMIN']
+        }
+      },
       select: { email: true },
     });
     return admins.map((admin) => admin.email);
