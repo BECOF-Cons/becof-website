@@ -135,9 +135,7 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
   const isFrench = locale === 'fr';
 
   const post = await prisma.blogPost.findUnique({
-    where: {
-      [isFrench ? 'slugFr' : 'slugEn']: slug,
-    },
+    where: isFrench ? { slugFr: slug } : { slugEn: slug },
   });
 
   if (!post || !post.published) {
