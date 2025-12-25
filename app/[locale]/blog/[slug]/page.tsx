@@ -90,10 +90,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       {/* Featured Image */}
-      {post.featuredImage && (
+      {post.coverImage && (
         <div className="container mx-auto px-4 -mt-10 mb-12">
           <img
-            src={post.featuredImage}
+            src={post.coverImage}
             alt={title}
             className="w-full max-w-4xl mx-auto rounded-lg shadow-2xl"
           />
