@@ -130,7 +130,7 @@ export async function sendAppointmentConfirmation(appointment: {
 }
 
 // Notify admins of new appointment
-export async function notifyAdminsNewAppointment(appointment: {
+export async function notifyAdminsOfAppointment(appointment: {
   id: string;
   clientName: string;
   clientEmail: string;
@@ -139,6 +139,14 @@ export async function notifyAdminsNewAppointment(appointment: {
   service: string;
   notes?: string;
 }) {
+  if (!isEmailConfigured()) {
+    console.warn('⚠️ Email not configured. Skipping admin notification email.');
+    return;
+  }
+
+  const transporter = createTransporter();
+  if (!transporter) return;
+
   const adminEmails = await getAdminEmails();
   if (adminEmails.length === 0) return;
 
@@ -240,6 +248,14 @@ export async function sendPaymentConfirmation(payment: {
 }) {
   if (!payment.appointment) return;
 
+  if (!isEmailConfigured()) {
+    console.warn('⚠️ Email not configured. Skipping payment confirmation email.');
+    return;
+  }
+
+  const transporter = createTransporter();
+  if (!transporter) return;
+
   const formattedDate = new Date(payment.appointment.date).toLocaleString('fr-FR', {
     weekday: 'long',
     year: 'numeric',
@@ -322,6 +338,14 @@ export async function notifyAdminsContactForm(contact: {
   subject: string;
   message: string;
 }) {
+  if (!isEmailConfigured()) {
+    console.warn('⚠️ Email not configured. Skipping contact form notification.');
+    return;
+  }
+
+  const transporter = createTransporter();
+  if (!transporter) return;
+
   const adminEmails = await getAdminEmails();
   
   // Add helmiboussetta11@gmail.com if not already in admin list
@@ -396,6 +420,14 @@ export async function sendCancellationNotification(appointment: {
   date: Date;
   service: string;
 }) {
+  if (!isEmailConfigured()) {
+    console.warn('⚠️ Email not configured. Skipping cancellation notification.');
+    return;
+  }
+
+  const transporter = createTransporter();
+  if (!transporter) return;
+
   const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
     weekday: 'long',
     year: 'numeric',
@@ -467,6 +499,14 @@ export async function sendBankTransferInstructions(appointment: {
   service: string;
   price: number;
 }) {
+  if (!isEmailConfigured()) {
+    console.warn('⚠️ Email not configured. Skipping bank transfer instructions.');
+    return;
+  }
+
+  const transporter = createTransporter();
+  if (!transporter) return;
+
   const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
     weekday: 'long',
     year: 'numeric',
