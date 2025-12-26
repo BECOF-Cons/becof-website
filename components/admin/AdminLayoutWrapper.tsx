@@ -16,6 +16,7 @@ import {
   DollarSign,
   Users,
 } from 'lucide-react';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface AdminLayoutWrapperProps {
   children: React.ReactNode;
@@ -136,6 +137,7 @@ export default function AdminLayoutWrapper({ children, user, title }: AdminLayou
           <div className="flex flex-1 justify-between">
             <h2 className="text-2xl font-semibold text-gray-900">{pageTitle}</h2>
             <div className="flex items-center gap-x-4">
+              <LanguageSwitcher />
               <span className="text-sm text-gray-500 hidden sm:block">
                 Welcome back, {user?.name || 'Admin'}!
               </span>

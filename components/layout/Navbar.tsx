@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const t = useTranslations('nav');
+  const tBrand = useTranslations('brand');
   const locale = useLocale();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -46,7 +47,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href={`/${locale}`} className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              {t('brand.name')}
+              {tBrand('name')}
             </Link>
           </div>
 

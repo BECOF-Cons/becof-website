@@ -7,6 +7,7 @@ import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react
 export default function Footer() {
   const t = useTranslations('footer');
   const tNav = useTranslations('nav');
+  const tBrand = useTranslations('brand');
   const locale = useLocale();
 
   const navigation = [
@@ -29,7 +30,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <Link href={`/${locale}`} className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              {t('brand.name')}
+              {tBrand('name')}
             </Link>
             <p className="mt-4 text-sm text-gray-400 max-w-md">
               {t('description')}
@@ -93,7 +94,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="mt-8 border-t border-gray-800 pt-8 text-center">
           <p className="text-sm text-gray-400">
-            © {new Date().getFullYear()} {t('brand.name')}. {t('rights')}
+            © {new Date().getFullYear()} {tBrand('name')}. {t('rights')}
           </p>
         </div>
       </div>
