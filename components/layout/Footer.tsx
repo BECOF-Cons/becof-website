@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <Link href={`/${locale}`} className="text-2xl font-bold text-blue-600">
+            <Link href={`/${locale}`} className="text-2xl font-bold bg-gradient-to-r from-white to-[#F9AA04] bg-clip-text text-transparent hover:from-[#F9AA04] hover:to-white transition-all">
               {tBrand('name')}
             </Link>
             <p className="mt-4 text-sm text-gray-400 max-w-md">
@@ -37,15 +37,15 @@ export default function Footer() {
             </p>
             <div className="mt-6 space-y-2">
               <div className="flex items-center space-x-2 text-sm">
-                <Mail className="h-4 w-4 text-amber-500" />
+                <Mail className="h-4 w-4" style={{color: '#F9AA04'}} />
                 <span>contact@becof.tn</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <Phone className="h-4 w-4 text-amber-500" />
+                <Phone className="h-4 w-4" style={{color: '#F9AA04'}} />
                 <span>+216 XX XXX XXX</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <MapPin className="h-4 w-4 text-amber-500" />
+                <MapPin className="h-4 w-4" style={{color: '#F9AA04'}} />
                 <span>Tunis, Tunisia</span>
               </div>
             </div>
@@ -80,7 +80,10 @@ export default function Footer() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-400 hover:text-amber-500 transition-colors"
+                  className="text-gray-400 transition-colors"
+                  style={{'--hover-color': '#F9AA04'} as React.CSSProperties}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#F9AA04'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

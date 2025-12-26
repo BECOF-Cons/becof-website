@@ -91,9 +91,18 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Link
                 href="/admin/blog/new"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all"
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg transition-all"
+                style={{'--hover-border': '#233691', '--hover-bg': 'rgba(35, 54, 145, 0.05)'} as React.CSSProperties}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#233691';
+                  e.currentTarget.style.backgroundColor = 'rgba(35, 54, 145, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.backgroundColor = '';
+                }}
               >
-                <FileText className="h-8 w-8 text-blue-700" />
+                <FileText className="h-8 w-8" style={{color: '#233691'}} />
                 <div>
                   <p className="font-medium text-gray-900">New Blog Post</p>
                   <p className="text-sm text-gray-500">Create content</p>
@@ -102,9 +111,17 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
 
               <Link
                 href="/admin/appointments"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-amber-600 hover:bg-amber-50 transition-all"
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg transition-all"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#F9AA04';
+                  e.currentTarget.style.backgroundColor = 'rgba(249, 170, 4, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.backgroundColor = '';
+                }}
               >
-                <Calendar className="h-8 w-8 text-amber-600" />
+                <Calendar className="h-8 w-8" style={{color: '#F9AA04'}} />
                 <div>
                   <p className="font-medium text-gray-900">View Appointments</p>
                   <p className="text-sm text-gray-500">Manage bookings</p>
@@ -113,9 +130,17 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
 
               <Link
                 href="/admin/settings"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg transition-all"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#233691';
+                  e.currentTarget.style.backgroundColor = 'rgba(35, 54, 145, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.backgroundColor = '';
+                }}
               >
-                <Settings className="h-8 w-8 text-blue-600" />
+                <Settings className="h-8 w-8" style={{color: '#233691'}} />
                 <div>
                   <p className="font-medium text-gray-900">Settings</p>
                   <p className="text-sm text-gray-500">Configure site</p>

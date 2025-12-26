@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+:root {
+  --brand-blue: #233691;
+  --brand-orange: #F9AA04;
+  --brand-blue-rgb: 35, 54, 145;
+  --brand-orange-rgb: 249, 170, 4;
+}
+
 * {
   border-color: rgb(229 231 235);
 }
@@ -39,4 +46,19 @@ html {
 
 .animation-delay-4000 {
   animation-delay: 4s;
+}
+
+/* Smooth gradient animation */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
 }

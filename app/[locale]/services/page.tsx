@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import { Compass, Briefcase, TrendingUp, Users, CheckCircle, ArrowRight, Lightbulb } from 'lucide-react';
+import { Compass, Briefcase, TrendingUp, Users, CheckCircle, ArrowRight, Lightbulb, GraduationCap, Target, Award, BookOpen, Calendar, FileText } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 
 async function getServices() {
   try {
@@ -25,11 +26,30 @@ const iconMap: { [key: string]: any } = {
   CAREER_COUNSELING: Briefcase,
   CAREER_COACHING: TrendingUp,
   GROUP_WORKSHOP: Users,
+  Compass,
+  Briefcase,
+  TrendingUp,
+  Users,
+  Lightbulb,
+  GraduationCap,
+  Target,
+  Award,
+  BookOpen,
+  Calendar,
+  FileText,
   default: Lightbulb,
 };
 
-function getIconForService(serviceType: string) {
-  return iconMap[serviceType] || iconMap.default;
+function getIconForService(iconName?: string, serviceType?: string) {
+  // First try to get icon by name
+  if (iconName && iconMap[iconName]) {
+    return iconMap[iconName];
+  }
+  // Fallback to serviceType mapping
+  if (serviceType && iconMap[serviceType]) {
+    return iconMap[serviceType];
+  }
+  return iconMap.default;
 }
 
 export default async function ServicesPage({
@@ -41,7 +61,7 @@ export default async function ServicesPage({
   const dbServices = await getServices();
 
   const services = dbServices.map((service) => ({
-    icon: getIconForService(service.serviceType),
+    icon: getIconForService(service.icon || undefined, service.serviceType),
     title: locale === 'fr' ? service.nameFr : service.nameEn,
     description: locale === 'fr' ? service.descriptionFr : service.descriptionEn,
     price: service.price.includes('TND') ? service.price : `${service.price} TND`,
@@ -51,7 +71,7 @@ export default async function ServicesPage({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
+      <div className="text-white py-20" style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}>
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {locale === 'fr' ? 'Nos Services' : 'Our Services'}
@@ -75,14 +95,14 @@ export default async function ServicesPage({
                 className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow p-8"
               >
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-blue-100 to-amber-100 p-3 rounded-lg">
-                    <Icon className="h-8 w-8 text-teal-600" />
+                  <div className="p-3 rounded-lg" style={{background: 'linear-gradient(135deg, rgba(35, 54, 145, 0.1) 0%, rgba(249, 170, 4, 0.1) 100%)'}}>
+                    <Icon className="h-8 w-8" style={{color: '#233691'}} />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       {service.title}
                     </h3>
-                    <span className="font-semibold text-teal-600 text-lg">{service.price}</span>
+                    <span className="font-semibold text-lg" style={{color: '#233691'}}>{service.price}</span>
                   </div>
                 </div>
 
@@ -90,7 +110,8 @@ export default async function ServicesPage({
 
                 <Link
                   href={`/${locale}/appointment?service=${encodeURIComponent(service.serviceType)}`}
-                  className="inline-flex items-center gap-2 bg-amber-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-600 hover:shadow-lg transform hover:scale-105 transition-all"
+                  className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
+                  style={{background: 'linear-gradient(135deg, #F9AA04 0%, #e69a03 100%)'}}
                 >
                   {locale === 'fr' ? 'Réserver maintenant' : 'Book Now'}
                   <ArrowRight className="h-5 w-5" />

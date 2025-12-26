@@ -163,19 +163,28 @@ export default function AppointmentPage() {
 
         {/* Pricing Info */}
         {formData.service && (
-          <div className="bg-gradient-to-r bg-blue-600 rounded-lg p-6 mb-8 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm opacity-90">
-                  {locale === 'fr' ? 'Tarif de consultation' : 'Consultation Fee'}
-                </p>
-                <p className="text-3xl font-bold">{getSelectedServicePrice()} TND</p>
+          <div className="rounded-lg p-6 mb-8 relative overflow-hidden border-2" style={{borderColor: '#F9AA04', background: 'linear-gradient(135deg, rgba(35, 54, 145, 0.95) 0%, rgba(26, 40, 112, 0.95) 100%)'}}>
+            {/* Decorative orange accent */}
+            <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-30" style={{background: '#F9AA04'}}></div>
+            <div className="relative">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm" style={{color: '#F9AA04', fontWeight: '500'}}>
+                    {locale === 'fr' ? 'Tarif de consultation' : 'Consultation Fee'}
+                  </p>
+                  <p className="text-4xl font-bold mt-1 text-white">{getSelectedServicePrice()} <span className="text-2xl" style={{color: '#F9AA04'}}>TND</span></p>
+                </div>
+                <div className="rounded-full p-3" style={{background: 'rgba(249, 170, 4, 0.15)'}}>
+                  <Clock className="h-10 w-10" style={{color: '#F9AA04'}} />
+                </div>
               </div>
-              <Clock className="h-12 w-12 opacity-80" />
+              <div className="mt-4 flex items-center gap-2">
+                <div className="h-1 w-12 rounded-full" style={{background: '#F9AA04'}}></div>
+                <p className="text-sm text-white/90">
+                  {locale === 'fr' ? 'Séance de 60 minutes' : '60-minute session'}
+                </p>
+              </div>
             </div>
-            <p className="text-sm mt-2 opacity-90">
-              {locale === 'fr' ? 'Séance de 60 minutes' : '60-minute session'}
-            </p>
           </div>
         )}
 
@@ -320,7 +329,8 @@ export default function AppointmentPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r bg-blue-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}
           >
             {loading
               ? locale === 'fr'

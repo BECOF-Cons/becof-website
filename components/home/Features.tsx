@@ -12,19 +12,19 @@ export default function Features() {
       icon: Compass,
       title: t('counseling.title'),
       description: t('counseling.description'),
-      color: 'from-blue-600 to-blue-700',
+      color: 'from-[#233691] to-[#1a2870]',
     },
     {
       icon: GraduationCap,
       title: t('universities.title'),
       description: t('universities.description'),
-      color: 'from-amber-500 to-orange-500',
+      color: 'from-[#F9AA04] to-[#e69a03]',
     },
     {
       icon: FileText,
       title: t('application.title'),
       description: t('application.description'),
-      color: 'from-amber-500 to-orange-400',
+      color: 'from-[#F9AA04] to-[#d68c02]',
     },
   ];
 
@@ -56,7 +56,7 @@ export default function Features() {
               <div className={`inline-flex rounded-xl bg-gradient-to-br ${feature.color} p-3 text-white shadow-lg`}>
                 <feature.icon className="h-6 w-6" />
               </div>
-              <h3 className="mt-6 text-xl font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+              <h3 className="mt-6 text-xl font-semibold text-gray-900 group-hover:text-[#233691] transition-colors">
                 {feature.title}
               </h3>
               <p className="mt-2 text-gray-600">

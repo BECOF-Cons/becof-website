@@ -45,7 +45,7 @@ export default function ImageUpload({ value, onChange, onRemove }: ImageUploadPr
             }}
             appearance={{
               button:
-                'ut-ready:bg-teal-600 ut-uploading:cursor-not-allowed ut-uploading:bg-teal-400 bg-teal-600 text-sm font-medium',
+                'ut-ready:bg-[#F9AA04] ut-uploading:cursor-not-allowed ut-uploading:bg-[#e69a03] bg-[#F9AA04] text-sm font-medium',
               allowedContent: 'text-xs text-gray-500',
             }}
           />

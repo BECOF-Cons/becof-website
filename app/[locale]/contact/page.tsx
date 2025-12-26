@@ -77,7 +77,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
+      <div className="text-white py-20" style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}>
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {locale === 'fr' ? 'Contactez-nous' : 'Contact Us'}

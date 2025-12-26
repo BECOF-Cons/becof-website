@@ -42,7 +42,7 @@ export default function AdminLoginForm({ locale }: { locale: string }) {
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-blue-700">
+          <h1 className="text-4xl font-bold" style={{color: '#233691'}}>
             BECOF
           </h1>
           <p className="mt-2 text-gray-600">Admin Dashboard</p>
@@ -102,7 +102,8 @@ export default function AdminLoginForm({ locale }: { locale: string }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 hover:shadow-lg transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full py-2.5 px-4 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>

@@ -38,7 +38,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
+      <div className="text-white py-20" style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}>
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {isFrench ? 'Notre Blog' : 'Our Blog'}
@@ -55,7 +55,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       <div className="container mx-auto px-4 -mt-8">
         <div className="bg-white rounded-lg shadow-md p-4 max-w-4xl mx-auto">
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <button className="px-4 py-2 bg-teal-600 text-white rounded-lg font-medium">
+            <button className="px-4 py-2 text-white rounded-lg font-medium" style={{backgroundColor: '#233691'}}>
               {isFrench ? 'Tous' : 'All'}
             </button>
             {categories.map((cat) => (
@@ -115,7 +115,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                   )}
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="text-xs font-medium px-2 py-1 bg-teal-100 text-teal-700 rounded">
+                      <span className="text-xs font-medium px-2 py-1 rounded" style={{backgroundColor: 'rgba(249, 170, 4, 0.15)', color: '#F9AA04'}}>
                         {categoryName}
                       </span>
                       <div className="flex items-center gap-1 text-xs text-gray-500">
@@ -123,11 +123,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
                         <span>{publishDate}</span>
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#233691] transition-colors">
                       {title}
                     </h3>
                     <p className="text-gray-600 mb-4 line-clamp-3">{excerpt}</p>
-                    <div className="flex items-center text-teal-600 font-medium">
+                    <div className="flex items-center font-medium" style={{color: '#233691'}}>
                       {isFrench ? 'Lire plus' : 'Read more'}
                       <ArrowRight
                         size={16}

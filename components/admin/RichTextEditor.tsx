@@ -39,7 +39,8 @@ export default function RichTextEditor({
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-teal-600 underline',
+          class: 'underline',
+          style: 'color: #233691;',
         },
       }),
       Image.configure({

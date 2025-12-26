@@ -2,7 +2,27 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Edit2, Trash2, Save, X, Loader2, DollarSign, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, Loader2, DollarSign, Eye, EyeOff, Compass, Briefcase, TrendingUp, Users, Lightbulb, GraduationCap, Target, Award, BookOpen, Calendar, FileText } from 'lucide-react';
+
+// Available icons for services
+const AVAILABLE_ICONS = [
+  { name: 'Compass', component: Compass, label: 'Compass' },
+  { name: 'Briefcase', component: Briefcase, label: 'Briefcase' },
+  { name: 'TrendingUp', component: TrendingUp, label: 'Trending Up' },
+  { name: 'Users', component: Users, label: 'Users' },
+  { name: 'Lightbulb', component: Lightbulb, label: 'Lightbulb' },
+  { name: 'GraduationCap', component: GraduationCap, label: 'Graduation Cap' },
+  { name: 'Target', component: Target, label: 'Target' },
+  { name: 'Award', component: Award, label: 'Award' },
+  { name: 'BookOpen', component: BookOpen, label: 'Book Open' },
+  { name: 'Calendar', component: Calendar, label: 'Calendar' },
+  { name: 'FileText', component: FileText, label: 'File Text' },
+];
+
+const getIconComponent = (iconName?: string) => {
+  const icon = AVAILABLE_ICONS.find(i => i.name === iconName);
+  return icon ? icon.component : Lightbulb;
+};
 
 interface Service {
   id: string;
@@ -12,6 +32,7 @@ interface Service {
   descriptionFr: string;
   price: string;
   serviceType: string;
+  icon?: string;
   active: boolean;
   displayOrder: number;
 }
@@ -119,6 +140,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
       descriptionFr: formData.get('descriptionFr') as string,
       price: formData.get('price') as string,
       serviceType: formData.get('serviceType') as string,
+      icon: formData.get('icon') as string,
       active: formData.get('active') === 'true',
       displayOrder: parseInt(formData.get('displayOrder') as string) || 0,
     };
@@ -265,6 +287,29 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Icon
+                      </label>
+                      <select
+                        value={editForm.icon || 'Lightbulb'}
+                        onChange={(e) => setEditForm({ ...editForm, icon: e.target.value })}
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      >
+                        {AVAILABLE_ICONS.map((icon) => (
+                          <option key={icon.name} value={icon.name}>
+                            {icon.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+                        <span>Preview:</span>
+                        {(() => {
+                          const IconComponent = getIconComponent(editForm.icon);
+                          return <IconComponent className="h-5 w-5" style={{color: '#233691'}} />;
+                        })()}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
                         Price
                       </label>
                       <input
@@ -328,6 +373,14 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
+                        {(() => {
+                          const IconComponent = getIconComponent(service.icon);
+                          return (
+                            <div className="p-2 rounded-lg" style={{background: 'rgba(35, 54, 145, 0.1)'}}>
+                              <IconComponent className="h-6 w-6" style={{color: '#233691'}} />
+                            </div>
+                          );
+                        })()}
                         <h4 className="text-lg font-semibold text-gray-900">
                           {service.nameEn} / {service.nameFr}
                         </h4>
@@ -444,6 +497,22 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
               </div>
 
               <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Icon *
+                  </label>
+                  <select
+                    name="icon"
+                    defaultValue="Lightbulb"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    {AVAILABLE_ICONS.map((icon) => (
+                      <option key={icon.name} value={icon.name}>
+                        {icon.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Service Type *

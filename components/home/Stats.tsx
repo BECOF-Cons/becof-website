@@ -12,25 +12,26 @@ export default function Stats() {
       value: '500+',
       label: t('students'),
       icon: TrendingUp,
-      color: 'text-blue-700',
+      color: '#233691',
     },
     {
       value: '50+',
       label: t('universities'),
       icon: Award,
-      color: 'text-amber-600',
+      color: '#F9AA04',
     },
     {
       value: '95%',
       label: t('successRate'),
       icon: Heart,
-      color: 'text-blue-600',
+      color: '#233691',
     },
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#233691] via-[#1a2870] to-[#233691] animate-gradient"></div>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {stats.map((stat, index) => (
             <motion.div
@@ -43,7 +44,7 @@ export default function Stats() {
             >
               <div className="flex justify-center mb-4">
                 <div className="rounded-full bg-white p-3">
-                  <stat.icon className={`h-8 w-8 ${stat.color}`} />
+                  <stat.icon className="h-8 w-8" style={{color: stat.color}} />
                 </div>
               </div>
               <div className="text-5xl font-bold text-white mb-2">

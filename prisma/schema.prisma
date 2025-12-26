@@ -233,6 +233,7 @@ model Service {
   descriptionFr  String
   price          String // Can be numeric or text like "Sur devis"
   serviceType    String      // Free text for flexibility
+  icon           String?     @default("Lightbulb") // Lucide icon name
   active         Boolean     @default(true)
   displayOrder   Int         @default(0)
   createdAt      DateTime    @default(now())
