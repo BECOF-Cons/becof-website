@@ -27,7 +27,15 @@ export default function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  return intlMiddleware(request);
+  // Add custom header to identify admin routes
+  const response = intlMiddleware(request);
+  const isAdminRoute = pathname.includes('/admin');
+  
+  if (isAdminRoute) {
+    response.headers.set('x-is-admin', 'true');
+  }
+
+  return response;
 }
 
 export const config = {

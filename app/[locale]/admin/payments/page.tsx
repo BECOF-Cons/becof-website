@@ -48,7 +48,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
     const styles = {
       KONNECT: 'bg-blue-100 text-blue-800',
       FLOUCI: 'bg-green-100 text-green-800',
-      D17: 'bg-purple-100 text-purple-800',
+      D17: 'bg-amber-100 text-amber-800',
       BANK_TRANSFER: 'bg-gray-100 text-gray-800',
     };
     return styles[method as keyof typeof styles] || 'bg-gray-100 text-gray-800';
@@ -106,7 +106,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
 
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <div className="bg-purple-500 rounded-lg p-3">
+              <div className="bg-amber-600 rounded-lg p-3">
                 <DollarSign className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">

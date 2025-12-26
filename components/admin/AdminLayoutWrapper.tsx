@@ -80,7 +80,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 border-b border-gray-200">
-            <Link href={`/${locale}/admin`} className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <Link href={`/${locale}/admin`} className="text-2xl font-bold text-blue-700">
               BECOF {translations.title}
             </Link>
             <button
@@ -102,7 +102,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-indigo-50 text-indigo-600'
+                      ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
@@ -116,7 +116,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
           {/* User info & Logout */}
           <div className="border-t border-gray-200 p-4">
             <div className="flex items-center space-x-3 mb-3">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white font-semibold">
+              <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
                 {user?.name?.[0] || 'A'}
               </div>
               <div className="flex-1 min-w-0">

@@ -46,7 +46,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href={`/${locale}`} className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <Link href={`/${locale}`} className="text-3xl font-bold text-blue-700">
               {tBrand('name')}
             </Link>
           </div>
@@ -57,7 +57,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+                className="text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors"
               >
                 {item.name}
               </Link>
@@ -69,7 +69,7 @@ export default function Navbar() {
             {/* Language Switcher */}
             <button
               onClick={switchLocale}
-              className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+              className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors"
             >
               <Globe className="h-4 w-4" />
               <span className="uppercase">{locale === 'fr' ? 'EN' : 'FR'}</span>
@@ -78,7 +78,7 @@ export default function Navbar() {
             {/* CTA Button */}
             <Link
               href={`/${locale}/appointment`}
-              className="hidden md:inline-flex items-center rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:shadow-lg transform hover:scale-105 transition-all"
+              className="hidden md:inline-flex items-center rounded-full bg-blue-600 px-6 py-2 text-sm font-semibold text-white shadow-lg hover:bg-blue-700 hover:shadow-xl transform hover:scale-105 transition-all"
             >
               {t('bookAppointment')}
             </Link>
@@ -107,7 +107,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-700"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
@@ -115,7 +115,7 @@ export default function Navbar() {
             ))}
             <Link
               href={`/${locale}/appointment`}
-              className="block rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 px-3 py-2 text-center text-base font-semibold text-white"
+              className="block rounded-md bg-blue-600 px-3 py-2 text-center text-base font-semibold text-white hover:bg-blue-700 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               {t('bookAppointment')}

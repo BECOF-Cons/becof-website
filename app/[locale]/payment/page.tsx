@@ -381,7 +381,7 @@ export default function PaymentPage() {
         <button
           onClick={handlePayment}
           disabled={!paymentMethod || loading}
-          className="w-full bg-gradient-to-r from-teal-600 to-purple-600 text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading
             ? locale === 'fr'

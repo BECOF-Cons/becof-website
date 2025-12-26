@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <Link href={`/${locale}`} className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            <Link href={`/${locale}`} className="text-2xl font-bold text-blue-600">
               {tBrand('name')}
             </Link>
             <p className="mt-4 text-sm text-gray-400 max-w-md">
@@ -37,15 +37,15 @@ export default function Footer() {
             </p>
             <div className="mt-6 space-y-2">
               <div className="flex items-center space-x-2 text-sm">
-                <Mail className="h-4 w-4 text-indigo-400" />
+                <Mail className="h-4 w-4 text-amber-500" />
                 <span>contact@becof.tn</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <Phone className="h-4 w-4 text-indigo-400" />
+                <Phone className="h-4 w-4 text-amber-500" />
                 <span>+216 XX XXX XXX</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <MapPin className="h-4 w-4 text-indigo-400" />
+                <MapPin className="h-4 w-4 text-amber-500" />
                 <span>Tunis, Tunisia</span>
               </div>
             </div>
@@ -80,7 +80,7 @@ export default function Footer() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-amber-500 transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

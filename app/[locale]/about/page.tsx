@@ -60,7 +60,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-teal-600 to-purple-700 text-white py-20">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {locale === 'fr' ? 'À propos de BECOF' : 'About BECOF'}
@@ -124,7 +124,7 @@ export default function AboutPage() {
                     className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="bg-gradient-to-br from-teal-100 to-purple-100 p-3 rounded-lg">
+                      <div className="bg-gradient-to-br from-blue-100 to-amber-100 p-3 rounded-lg">
                         <Icon className="h-6 w-6 text-teal-600" />
                       </div>
                       <div>
@@ -163,7 +163,7 @@ export default function AboutPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-br from-teal-600 to-purple-700 text-white py-16">
+      <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
             {locale === 'fr' ? 'Commencez votre parcours avec nous' : 'Start your journey with us'}

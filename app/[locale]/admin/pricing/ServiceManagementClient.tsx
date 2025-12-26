@@ -164,11 +164,15 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
         throw new Error('Failed to toggle service status');
       }
 
-      const updatedService = await response.json();
+      const data = await response.json();
       
-      // Update local state immediately and re-sort
-      const updatedServices = services.map(s => s.id === id ? updatedService : s);
-      setServices(updatedServices.sort((a, b) => a.displayOrder - b.displayOrder));
+      // Use allServices from API response if available, otherwise update locally
+      if (data.allServices) {
+        setServices(data.allServices);
+      } else {
+        const updatedServices = services.map(s => s.id === id ? data.service : s);
+        setServices(updatedServices.sort((a, b) => a.displayOrder - b.displayOrder));
+      }
     } catch (error: any) {
       alert(error.message || 'Failed to toggle service status');
     }
@@ -187,7 +191,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-700 to-amber-500 text-white rounded-lg hover:from-blue-800 hover:to-amber-600 transition-all shadow-md"
           >
             <Plus className="h-5 w-5" />
             Add Service
@@ -217,7 +221,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                         type="text"
                         value={editForm.nameEn || ''}
                         onChange={(e) => setEditForm({ ...editForm, nameEn: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -228,7 +232,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                         type="text"
                         value={editForm.nameFr || ''}
                         onChange={(e) => setEditForm({ ...editForm, nameFr: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       />
                     </div>
                   </div>
@@ -241,7 +245,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                       <textarea
                         value={editForm.descriptionEn || ''}
                         onChange={(e) => setEditForm({ ...editForm, descriptionEn: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         rows={3}
                       />
                     </div>
@@ -252,7 +256,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                       <textarea
                         value={editForm.descriptionFr || ''}
                         onChange={(e) => setEditForm({ ...editForm, descriptionFr: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         rows={3}
                       />
                     </div>
@@ -267,7 +271,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                         type="text"
                         value={editForm.price || ''}
                         onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         placeholder="150 or Sur devis"
                       />
                     </div>
@@ -279,7 +283,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                         type="number"
                         value={editForm.displayOrder || 0}
                         onChange={(e) => setEditForm({ ...editForm, displayOrder: parseInt(e.target.value) })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         min="1"
                       />
                       <p className="text-xs text-gray-500 mt-1">
@@ -293,7 +297,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                       <select
                         value={editForm.active ? 'true' : 'false'}
                         onChange={(e) => setEditForm({ ...editForm, active: e.target.value === 'true' })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       >
                         <option value="true">Active</option>
                         <option value="false">Inactive</option>
@@ -311,7 +315,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     <button
                       onClick={handleSaveEdit}
                       disabled={loading}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
                       {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Save className="h-5 w-5" />}
                       Save
@@ -342,7 +346,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                         <p>{service.descriptionFr}</p>
                       </div>
                       <div className="flex items-center gap-4 mt-3">
-                        <div className="flex items-center gap-2 text-indigo-600">
+                        <div className="flex items-center gap-2 text-blue-700">
                           <DollarSign className="h-5 w-5" />
                           <span className="font-semibold">{service.price} TND</span>
                         </div>
@@ -364,7 +368,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                       </button>
                       <button
                         onClick={() => handleEdit(service)}
-                        className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                        className="p-2 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
                       >
                         <Edit2 className="h-5 w-5" />
                       </button>
@@ -398,7 +402,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     type="text"
                     name="nameEn"
                     required
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -409,7 +413,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     type="text"
                     name="nameFr"
                     required
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -423,7 +427,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     name="descriptionEn"
                     required
                     rows={3}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -434,7 +438,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     name="descriptionFr"
                     required
                     rows={3}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -449,7 +453,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     name="serviceType"
                     required
                     placeholder="ORIENTATION_SESSION"
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Use UPPERCASE_WITH_UNDERSCORES format
@@ -464,7 +468,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     name="price"
                     required
                     placeholder="150 or Sur devis"
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -476,7 +480,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     name="displayOrder"
                     defaultValue={getNextDisplayOrder()}
                     min="1"
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Enter the position where this service should appear (1 = first, 2 = second, etc.). Services at this position and after will be shifted down.
@@ -491,7 +495,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                 <select
                   name="active"
                   defaultValue="true"
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
                   <option value="true">Active</option>
                   <option value="false">Inactive</option>
@@ -510,7 +514,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-700 to-amber-500 text-white rounded-lg hover:from-blue-800 hover:to-amber-600 transition-all disabled:opacity-50"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {loading ? 'Creating...' : 'Create Service'}

@@ -81,8 +81,8 @@ export default function PricingForm({ initialPrices }: PricingFormProps) {
       {services.map((service) => (
         <div key={service.key} className="border-b border-gray-200 pb-6 last:border-0">
           <div className="flex items-start gap-4">
-            <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-3 rounded-lg">
-              <DollarSign className="h-6 w-6 text-indigo-600" />
+            <div className="bg-gradient-to-br from-blue-100 to-amber-100 p-3 rounded-lg">
+              <DollarSign className="h-6 w-6 text-blue-700" />
             </div>
             <div className="flex-1">
               <label htmlFor={service.key} className="block text-sm font-semibold text-gray-900 mb-1">
@@ -95,7 +95,7 @@ export default function PricingForm({ initialPrices }: PricingFormProps) {
                   id={service.key}
                   value={prices[service.key as keyof typeof prices]}
                   onChange={(e) => setPrices({ ...prices, [service.key]: e.target.value })}
-                  className="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   placeholder="150 or Sur devis"
                   required
                 />
@@ -116,7 +116,7 @@ export default function PricingForm({ initialPrices }: PricingFormProps) {
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex items-center gap-2 px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-blue-700 to-amber-500 hover:from-blue-800 hover:to-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {loading ? 'Saving...' : 'Save Changes'}

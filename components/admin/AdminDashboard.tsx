@@ -41,19 +41,19 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
       name: 'Total Posts', 
       value: stats.totalPosts.toString(), 
       icon: FileText, 
-      color: 'bg-indigo-500' 
+      color: 'bg-blue-600' 
     },
     { 
-      name: 'Appointments', 
+      name: 'Total Appointments', 
       value: stats.totalAppointments.toString(), 
       icon: Calendar, 
-      color: 'bg-purple-500' 
+      color: 'bg-amber-600' 
     },
     { 
       name: 'Total Revenue', 
-      value: `${stats.totalRevenue.toLocaleString()} TND`, 
+      value: `${stats.totalRevenue.toFixed(2)} DT`, 
       icon: TrendingUp, 
-      color: 'bg-pink-500' 
+      color: 'bg-blue-500'
     },
     { 
       name: 'Active Users', 
@@ -91,9 +91,9 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Link
                 href="/admin/blog/new"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-all"
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all"
               >
-                <FileText className="h-8 w-8 text-indigo-600" />
+                <FileText className="h-8 w-8 text-blue-700" />
                 <div>
                   <p className="font-medium text-gray-900">New Blog Post</p>
                   <p className="text-sm text-gray-500">Create content</p>
@@ -102,9 +102,9 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
 
               <Link
                 href="/admin/appointments"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all"
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-amber-600 hover:bg-amber-50 transition-all"
               >
-                <Calendar className="h-8 w-8 text-purple-600" />
+                <Calendar className="h-8 w-8 text-amber-600" />
                 <div>
                   <p className="font-medium text-gray-900">View Appointments</p>
                   <p className="text-sm text-gray-500">Manage bookings</p>
@@ -113,9 +113,9 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
 
               <Link
                 href="/admin/settings"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-pink-500 hover:bg-pink-50 transition-all"
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
               >
-                <Settings className="h-8 w-8 text-pink-600" />
+                <Settings className="h-8 w-8 text-blue-600" />
                 <div>
                   <p className="font-medium text-gray-900">Settings</p>
                   <p className="text-sm text-gray-500">Configure site</p>
@@ -125,11 +125,11 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
           </div>
 
           {/* Getting Started */}
-          <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow p-6">
+          <div className="mt-8 bg-gradient-to-r from-blue-50 to-amber-50 rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Getting Started</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
-                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-indigo-600 text-white text-sm font-semibold">
+                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-semibold">
                   1
                 </span>
                 <div>
@@ -138,7 +138,7 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
                 </div>
               </li>
               <li className="flex items-start space-x-3">
-                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-purple-600 text-white text-sm font-semibold">
+                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-semibold">
                   2
                 </span>
                 <div>
@@ -147,7 +147,7 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
                 </div>
               </li>
               <li className="flex items-start space-x-3">
-                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-pink-600 text-white text-sm font-semibold">
+                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-semibold">
                   3
                 </span>
                 <div>

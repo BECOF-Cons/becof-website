@@ -38,7 +38,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-teal-600 to-purple-700 text-white py-20">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {isFrench ? 'Notre Blog' : 'Our Blog'}

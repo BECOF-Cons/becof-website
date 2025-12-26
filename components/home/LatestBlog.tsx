@@ -133,20 +133,20 @@ export default function LatestBlog() {
               className="group relative rounded-2xl bg-white overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
             >
               {/* Image */}
-              <div className="aspect-video bg-gradient-to-br from-indigo-400 to-purple-400 relative overflow-hidden">
+              <div className="aspect-video bg-gradient-to-br from-blue-400 to-amber-400 relative overflow-hidden">
                 {image && (
                   <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
                 )}
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
                 <div className="absolute top-4 left-4">
-                  <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-indigo-600">
+                  <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-blue-700">
                     {category}
                   </span>
                 </div>
               </div>
 
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2">
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2">
                   {title}
                 </h3>
                 <p className="mt-3 text-gray-600 line-clamp-3">
@@ -166,7 +166,7 @@ export default function LatestBlog() {
 
                 <Link
                   href={`/${locale}/blog/${slug}`}
-                  className="mt-6 inline-flex items-center text-sm font-semibold text-indigo-600 group-hover:text-indigo-700"
+                  className="mt-6 inline-flex items-center text-sm font-semibold text-blue-700 group-hover:text-blue-800"
                 >
                   {t('readMore')}
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -180,7 +180,7 @@ export default function LatestBlog() {
         <div className="mt-12 text-center">
           <Link
             href={`/${locale}/blog`}
-            className="inline-flex items-center rounded-full border-2 border-indigo-600 px-8 py-3 text-base font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all"
+            className="inline-flex items-center rounded-full border-2 border-amber-500 px-8 py-3 text-base font-semibold text-amber-600 hover:bg-amber-50 transition-all"
           >
             {t('allPosts')}
             <ArrowRight className="ml-2 h-5 w-5" />

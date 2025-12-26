@@ -163,7 +163,7 @@ export default function AppointmentPage() {
 
         {/* Pricing Info */}
         {formData.service && (
-          <div className="bg-gradient-to-r from-teal-600 to-purple-600 rounded-lg p-6 mb-8 text-white">
+          <div className="bg-gradient-to-r bg-blue-600 rounded-lg p-6 mb-8 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm opacity-90">
@@ -320,7 +320,7 @@ export default function AppointmentPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-teal-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r bg-blue-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading
               ? locale === 'fr'

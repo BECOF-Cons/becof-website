@@ -17,7 +17,7 @@ export default function LanguageSwitcher({ currentLocale }: { currentLocale: str
   return (
     <button
       onClick={switchLocale}
-      className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+      className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors"
     >
       <Globe className="h-4 w-4" />
       <span className="uppercase">{currentLocale === 'fr' ? 'EN' : 'FR'}</span>

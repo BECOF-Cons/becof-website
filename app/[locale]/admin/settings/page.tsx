@@ -38,14 +38,14 @@ export default async function AdminSettingsPage({ params }: { params: Promise<{ 
       title: 'Service Pricing',
       description: 'Manage prices for your services',
       href: '/admin/pricing',
-      color: 'bg-indigo-500',
+      color: 'bg-blue-600',
     },
     {
       icon: Mail,
       title: 'Email Settings',
       description: 'Configure SMTP and email notifications',
       href: '#',
-      color: 'bg-purple-500',
+      color: 'bg-amber-600',
       badge: 'Configured',
     },
     {
@@ -53,7 +53,7 @@ export default async function AdminSettingsPage({ params }: { params: Promise<{ 
       title: 'Google Calendar',
       description: 'Manage calendar integration',
       href: '#',
-      color: 'bg-pink-500',
+      color: 'bg-blue-500',
       badge: 'Setup Required',
     },
     {

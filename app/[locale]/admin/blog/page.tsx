@@ -5,6 +5,7 @@ import Link from 'next/link';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Edit, Trash2, Plus, Eye } from 'lucide-react';
 import { getAdminTranslations } from '@/lib/admin-translations';
+import DeleteBlogButton from './DeleteBlogButton';
 
 export default async function BlogManagementPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -45,8 +46,8 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
           <p className="text-gray-600 mt-1">Manage your blog content</p>
         </div>
         <Link
-          href="/admin/blog/new"
-          className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors"
+          href={`/${locale}/admin/blog/new`}
+          className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors"
         >
           <Plus size={20} />
           New Post
@@ -79,8 +80,8 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
           <div className="text-center py-12">
             <p className="text-gray-500 mb-4">No blog posts yet</p>
             <Link
-              href="/admin/blog/new"
-              className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700"
+              href={`/${locale}/admin/blog/new`}
+              className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700"
             >
               <Plus size={20} />
               Create your first post
@@ -159,7 +160,7 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
                       <div className="flex items-center justify-end gap-2">
                         {post.published && (
                           <Link
-                            href={`/blog/${post.slugFr}`}
+                            href={`/${locale}/blog/${post.slugFr}`}
                             target="_blank"
                             className="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                             title="View post"
@@ -168,18 +169,17 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
                           </Link>
                         )}
                         <Link
-                          href={`/admin/blog/edit/${post.id}`}
-                          className="p-2 text-teal-600 hover:bg-teal-50 rounded transition-colors"
+                          href={`/${locale}/admin/blog/edit/${post.id}`}
+                          className="p-2 text-amber-600 hover:bg-amber-50 rounded transition-colors"
                           title="Edit post"
                         >
                           <Edit size={18} />
                         </Link>
-                        <button
-                          className="p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
-                          title="Delete post"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                        <DeleteBlogButton 
+                          postId={post.id} 
+                          postTitle={post.titleEn} 
+                          locale={locale}
+                        />
                       </div>
                     </td>
                   </tr>

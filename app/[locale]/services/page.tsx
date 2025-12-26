@@ -51,7 +51,7 @@ export default async function ServicesPage({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-teal-600 to-purple-700 text-white py-20">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {locale === 'fr' ? 'Nos Services' : 'Our Services'}
@@ -75,7 +75,7 @@ export default async function ServicesPage({
                 className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow p-8"
               >
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-teal-100 to-purple-100 p-3 rounded-lg">
+                  <div className="bg-gradient-to-br from-blue-100 to-amber-100 p-3 rounded-lg">
                     <Icon className="h-8 w-8 text-teal-600" />
                   </div>
                   <div className="flex-1">
@@ -90,7 +90,7 @@ export default async function ServicesPage({
 
                 <Link
                   href={`/${locale}/appointment?service=${encodeURIComponent(service.serviceType)}`}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
+                  className="inline-flex items-center gap-2 bg-amber-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-600 hover:shadow-lg transform hover:scale-105 transition-all"
                 >
                   {locale === 'fr' ? 'Réserver maintenant' : 'Book Now'}
                   <ArrowRight className="h-5 w-5" />
@@ -102,7 +102,7 @@ export default async function ServicesPage({
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-br from-teal-600 to-purple-700 text-white py-16">
+      <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
             {locale === 'fr' ? 'Prêt à commencer votre transformation?' : 'Ready to start your transformation?'}

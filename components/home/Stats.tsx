@@ -12,24 +12,24 @@ export default function Stats() {
       value: '500+',
       label: t('students'),
       icon: TrendingUp,
-      color: 'text-indigo-600',
+      color: 'text-blue-700',
     },
     {
       value: '50+',
       label: t('universities'),
       icon: Award,
-      color: 'text-purple-600',
+      color: 'text-amber-600',
     },
     {
       value: '95%',
       label: t('successRate'),
       icon: Heart,
-      color: 'text-pink-600',
+      color: 'text-blue-600',
     },
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
+    <section className="py-24 bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {stats.map((stat, index) => (
