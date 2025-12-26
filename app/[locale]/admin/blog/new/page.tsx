@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
-import BlogPostForm from '@/app/admin/blog/BlogPostForm';
+import BlogPostForm from '../BlogPostForm';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 

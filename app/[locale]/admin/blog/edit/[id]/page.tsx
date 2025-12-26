@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
-import BlogPostForm from '@/app/admin/blog/BlogPostForm';
+import BlogPostForm from '../../BlogPostForm';
 
 export default async function EditBlogPostPage({
   params,
