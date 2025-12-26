@@ -5,17 +5,21 @@ import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import BlogPostForm from '../BlogPostForm';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { getAdminTranslations } from '@/lib/admin-translations';
 
-export default async function NewBlogPostPage() {
+export default async function NewBlogPostPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
 
   if (!session) {
-    redirect('/admin/login');
+    redirect(`/${locale}/admin/login`);
   }
 
   if (!['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
-    redirect('/');
+    redirect(`/${locale}`);
   }
+
+  const translations = await getAdminTranslations(locale);
 
   const categories = await prisma.blogCategory.findMany({
     orderBy: {
@@ -24,7 +28,7 @@ export default async function NewBlogPostPage() {
   });
 
   return (
-    <AdminLayoutWrapper user={session.user} title="New Blog Post">
+    <AdminLayoutWrapper user={session.user} title={translations.nav.blogPosts} locale={locale} translations={translations}>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">

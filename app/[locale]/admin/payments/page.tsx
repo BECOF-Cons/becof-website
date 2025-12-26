@@ -3,20 +3,24 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { CreditCard, CheckCircle, Clock, XCircle, DollarSign } from 'lucide-react';
+import { getAdminTranslations } from '@/lib/admin-translations';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export default async function AdminPaymentsPage() {
+export default async function AdminPaymentsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
 
   if (!session) {
-    redirect('/admin/login');
+    redirect(`/${locale}/admin/login`);
   }
 
   if (!['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
-    redirect('/');
+    redirect(`/${locale}`);
   }
+
+  const translations = await getAdminTranslations(locale);
 
   const payments = await prisma.payment.findMany({
     include: {
@@ -60,7 +64,7 @@ export default async function AdminPaymentsPage() {
   };
 
   return (
-    <AdminLayoutWrapper user={session.user} title="Payments">
+    <AdminLayoutWrapper user={session.user} title={translations.nav.payments} locale={locale} translations={translations}>
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

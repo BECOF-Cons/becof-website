@@ -5,20 +5,24 @@ import Link from 'next/link';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Calendar, Clock, User, Mail, Phone, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { ConfirmPaymentButton } from './ConfirmPaymentButton';
+import { getAdminTranslations } from '@/lib/admin-translations';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export default async function AdminAppointmentsPage() {
+export default async function AdminAppointmentsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
 
   if (!session) {
-    redirect('/admin/login');
+    redirect(`/${locale}/admin/login`);
   }
 
   if (!['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
-    redirect('/');
+    redirect(`/${locale}`);
   }
+
+  const translations = await getAdminTranslations(locale);
 
   const appointments = await prisma.appointment.findMany({
     include: {
@@ -60,7 +64,7 @@ export default async function AdminAppointmentsPage() {
   };
 
   return (
-    <AdminLayoutWrapper user={session.user} title="Appointments">
+    <AdminLayoutWrapper user={session.user} title={translations.nav.appointments} locale={locale} translations={translations}>
       <div className="space-y-6">
         {/* Header */}
         <div>

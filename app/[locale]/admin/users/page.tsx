@@ -3,17 +3,21 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import AdminManagementClient from './AdminManagementClient';
+import { getAdminTranslations } from '@/lib/admin-translations';
 
-export default async function AdminManagementPage() {
+export default async function AdminManagementPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
 
   if (!session) {
-    redirect('/admin/login');
+    redirect(`/${locale}/admin/login`);
   }
 
   if ((session.user as any)?.role !== 'SUPER_ADMIN') {
-    redirect('/admin');
+    redirect(`/${locale}/admin`);
   }
+
+  const translations = await getAdminTranslations(locale);
 
   // Fetch admins and pending invitations
   const admins = await prisma.user.findMany({

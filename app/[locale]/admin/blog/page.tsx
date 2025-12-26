@@ -4,17 +4,21 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Edit, Trash2, Plus, Eye } from 'lucide-react';
+import { getAdminTranslations } from '@/lib/admin-translations';
 
-export default async function BlogManagementPage() {
+export default async function BlogManagementPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
 
   if (!session) {
-    redirect('/admin/login');
+    redirect(`/${locale}/admin/login`);
   }
 
   if (!['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
-    redirect('/');
+    redirect(`/${locale}`);
   }
+
+  const translations = await getAdminTranslations(locale);
 
   const posts = await prisma.blogPost.findMany({
     include: {
@@ -32,7 +36,7 @@ export default async function BlogManagementPage() {
   });
 
   return (
-    <AdminLayoutWrapper user={session.user} title="Blog Management">
+    <AdminLayoutWrapper user={session.user} title={translations.nav.blogPosts} locale={locale} translations={translations}>
       <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">

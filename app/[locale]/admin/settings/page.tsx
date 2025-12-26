@@ -3,17 +3,21 @@ import { redirect } from 'next/navigation';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Settings as SettingsIcon, Mail, Calendar, CreditCard, Globe } from 'lucide-react';
 import Link from 'next/link';
+import { getAdminTranslations } from '@/lib/admin-translations';
 
-export default async function AdminSettingsPage() {
+export default async function AdminSettingsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
 
   if (!session) {
-    redirect('/admin/login');
+    redirect(`/${locale}/admin/login`);
   }
 
   if (!['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
-    redirect('/');
+    redirect(`/${locale}`);
   }
+
+  const translations = await getAdminTranslations(locale);
 
   // Check environment variables
   const hasGoogleCalendar = !!(
@@ -63,7 +67,7 @@ export default async function AdminSettingsPage() {
   ];
 
   return (
-    <AdminLayoutWrapper user={session.user} title="Settings">
+    <AdminLayoutWrapper user={session.user} title={translations.nav.settings} locale={locale} translations={translations}>
       <div className="max-w-4xl">
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">System Configuration</h3>
