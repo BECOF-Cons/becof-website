@@ -59,7 +59,12 @@ export default async function AdminManagementPage({ params }: { params: Promise<
   });
 
   return (
-    <AdminLayoutWrapper user={session.user} title="Admin Management">
+    <AdminLayoutWrapper
+      user={session.user}
+      title={translations.nav.adminManagement}
+      locale={locale}
+      translations={translations}
+    >
       <AdminManagementClient 
         initialAdmins={admins} 
         initialInvitations={pendingInvitations}
