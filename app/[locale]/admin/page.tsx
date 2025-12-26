@@ -2,17 +2,22 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import AdminDashboard from '@/components/admin/AdminDashboard';
+import { getTranslations } from 'next-intl/server';
 
-export default async function AdminPage() {
+export default async function AdminPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
 
   if (!session) {
-    redirect('/admin/login');
+    redirect(`/${locale}/admin/login`);
   }
 
   if (!['ADMIN', 'SUPER_ADMIN'].includes(session.user?.role as string)) {
-    redirect('/');
+    redirect(`/${locale}`);
   }
+
+  // Get translations
+  const t = await getTranslations({ locale, namespace: 'admin' });
 
   // Fetch real statistics
   const [appointments, payments, users, blogPosts] = await Promise.all([
@@ -38,5 +43,20 @@ export default async function AdminPage() {
     totalPosts: blogPosts,
   };
 
-  return <AdminDashboard user={session?.user} stats={stats} />;
+  const translations = {
+    nav: {
+      dashboard: t('nav.dashboard'),
+      blogPosts: t('nav.blogPosts'),
+      appointments: t('nav.appointments'),
+      payments: t('nav.payments'),
+      servicePricing: t('nav.servicePricing'),
+      adminManagement: t('nav.adminManagement'),
+      settings: t('nav.settings'),
+    },
+    welcome: t('welcome'),
+    signOut: t('signOut'),
+    title: t('title'),
+  };
+
+  return <AdminDashboard user={session?.user} stats={stats} locale={locale} translations={translations} />;
 }

@@ -131,5 +131,19 @@
     "search": "Search",
     "filter": "Filter",
     "noResults": "No results found"
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "dashboard": "Dashboard",
+      "blogPosts": "Blog Posts",
+      "appointments": "Appointments",
+      "payments": "Payments",
+      "servicePricing": "Service Pricing",
+      "adminManagement": "Admin Management",
+      "settings": "Settings"
+    },
+    "welcome": "Welcome back",
+    "signOut": "Sign Out"
   }
 }

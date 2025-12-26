@@ -18,9 +18,24 @@ interface AdminDashboardProps {
     totalUsers: number;
     totalPosts: number;
   };
+  locale: string;
+  translations: {
+    nav: {
+      dashboard: string;
+      blogPosts: string;
+      appointments: string;
+      payments: string;
+      servicePricing: string;
+      adminManagement: string;
+      settings: string;
+    };
+    welcome: string;
+    signOut: string;
+    title: string;
+  };
 }
 
-export default function AdminDashboard({ user, stats }: AdminDashboardProps) {
+export default function AdminDashboard({ user, stats, locale, translations }: AdminDashboardProps) {
   const statCards = [
     { 
       name: 'Total Posts', 
@@ -49,7 +64,7 @@ export default function AdminDashboard({ user, stats }: AdminDashboardProps) {
   ];
 
   return (
-    <AdminLayoutWrapper user={user} title="Dashboard">
+    <AdminLayoutWrapper user={user} title={translations.nav.dashboard} locale={locale} translations={translations}>
       {/* Stats */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         {statCards.map((stat) => (

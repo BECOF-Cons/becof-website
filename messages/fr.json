@@ -131,5 +131,19 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "noResults": "Aucun résultat trouvé"
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "blogPosts": "Articles de blog",
+      "appointments": "Rendez-vous",
+      "payments": "Paiements",
+      "servicePricing": "Tarification des services",
+      "adminManagement": "Gestion des admins",
+      "settings": "Paramètres"
+    },
+    "welcome": "Bienvenue",
+    "signOut": "Déconnexion"
   }
 }

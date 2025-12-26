@@ -11,11 +11,16 @@ const intlMiddleware = createMiddleware({
 export default function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Skip middleware for API routes, static files, and admin routes
+  // Redirect /admin to /en/admin (admin routes now use locale)
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    const locale = request.cookies.get('NEXT_LOCALE')?.value || 'en';
+    return NextResponse.redirect(new URL(pathname.replace('/admin', `/${locale}/admin`), request.url));
+  }
+
+  // Skip middleware for API routes and static files
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
-    pathname.startsWith('/admin') ||
     pathname.includes('/favicon.ico') ||
     pathname.includes('/images/')
   ) {

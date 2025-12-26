@@ -1,53 +1,18 @@
-'use client';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import AdminLoginForm from '@/components/admin/AdminLoginForm';
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { Lock, Mail } from 'lucide-react';
+export default async function LoginPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const session = await auth();
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  // If already logged in, redirect to admin dashboard
+  if (session && ['ADMIN', 'SUPER_ADMIN'].includes(session.user?.role as string)) {
+    redirect(`/${locale}/admin`);
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        setError('Invalid email or password');
-      } else {
-        router.push('/admin');
-        router.refresh();
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="max-w-md w-full">
-      {/* Logo */}
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          BECOF
-        </h1>
-        <p className="mt-2 text-gray-600">Admin Dashboard</p>
-      </div>
-
-        {/* Login Form */}
+  return <AdminLoginForm locale={locale} />;
+}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Sign In</h2>
 

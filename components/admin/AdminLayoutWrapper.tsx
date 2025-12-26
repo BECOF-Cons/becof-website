@@ -22,25 +22,40 @@ interface AdminLayoutWrapperProps {
   children: React.ReactNode;
   user: any;
   title?: string;
+  locale: string;
+  translations: {
+    nav: {
+      dashboard: string;
+      blogPosts: string;
+      appointments: string;
+      payments: string;
+      servicePricing: string;
+      adminManagement: string;
+      settings: string;
+    };
+    welcome: string;
+    signOut: string;
+    title: string;
+  };
 }
 
-export default function AdminLayoutWrapper({ children, user, title }: AdminLayoutWrapperProps) {
+export default function AdminLayoutWrapper({ children, user, title, locale, translations }: AdminLayoutWrapperProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
-    { name: 'Appointments', href: '/admin/appointments', icon: Calendar },
-    { name: 'Payments', href: '/admin/payments', icon: CreditCard },
-    { name: 'Service Pricing', href: '/admin/pricing', icon: DollarSign },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
+    { name: translations.nav.dashboard, href: `/${locale}/admin`, icon: LayoutDashboard },
+    { name: translations.nav.blogPosts, href: `/${locale}/admin/blog`, icon: FileText },
+    { name: translations.nav.appointments, href: `/${locale}/admin/appointments`, icon: Calendar },
+    { name: translations.nav.payments, href: `/${locale}/admin/payments`, icon: CreditCard },
+    { name: translations.nav.servicePricing, href: `/${locale}/admin/pricing`, icon: DollarSign },
+    { name: translations.nav.settings, href: `/${locale}/admin/settings`, icon: Settings },
   ];
 
   // Add admin management for super admins
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
   if (isSuperAdmin) {
-    navigation.splice(5, 0, { name: 'Admin Management', href: '/admin/users', icon: Users });
+    navigation.splice(5, 0, { name: translations.nav.adminManagement, href: `/${locale}/admin/users`, icon: Users });
   }
 
   // Get page title from pathname if not provided
@@ -65,8 +80,8 @@ export default function AdminLayoutWrapper({ children, user, title }: AdminLayou
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 border-b border-gray-200">
-            <Link href="/admin" className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              BECOF Admin
+            <Link href={`/${locale}/admin`} className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              BECOF {translations.title}
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -116,7 +131,7 @@ export default function AdminLayoutWrapper({ children, user, title }: AdminLayou
               className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
               <LogOut className="h-4 w-4" />
-              <span>Sign Out</span>
+              <span>{translations.signOut}</span>
             </button>
           </div>
         </div>
@@ -137,9 +152,9 @@ export default function AdminLayoutWrapper({ children, user, title }: AdminLayou
           <div className="flex flex-1 justify-between">
             <h2 className="text-2xl font-semibold text-gray-900">{pageTitle}</h2>
             <div className="flex items-center gap-x-4">
-              <LanguageSwitcher />
+              <LanguageSwitcher currentLocale={locale} />
               <span className="text-sm text-gray-500 hidden sm:block">
-                Welcome back, {user?.name || 'Admin'}!
+                {translations.welcome}, {user?.name || 'Admin'}!
               </span>
             </div>
           </div>
