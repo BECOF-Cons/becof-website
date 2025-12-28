@@ -19,19 +19,29 @@ export default async function AdminPage({ params }: { params: Promise<{ locale: 
   // Get translations
   const t = await getTranslations({ locale, namespace: 'admin' });
 
-  // Fetch real statistics
-  const [appointments, payments, users, blogPosts] = await Promise.all([
-    prisma.appointment.count(),
-    prisma.payment.findMany({
-      where: {
-        appointment: {
-          status: 'CONFIRMED'
+  // Fetch real statistics with error handling
+  let appointments = 0;
+  let payments: any[] = [];
+  let users = 0;
+  let blogPosts = 0;
+
+  try {
+    [appointments, payments, users, blogPosts] = await Promise.all([
+      prisma.appointment.count().catch(() => 0),
+      prisma.payment.findMany({
+        where: {
+          appointment: {
+            status: 'CONFIRMED'
+          }
         }
-      }
-    }),
-    prisma.user.count(),
-    prisma.blogPost.count().catch(() => 0), // Blog posts might not exist yet
-  ]);
+      }).catch(() => []),
+      prisma.user.count().catch(() => 0),
+      prisma.blogPost.count().catch(() => 0),
+    ]);
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error);
+    // Continue with default values
+  }
 
   // Calculate total revenue from confirmed payments
   const totalRevenue = payments.reduce((sum, payment) => {
