@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     // Check if slot is already taken
     const existingAppointment = await prisma.appointment.findFirst({
       where: {
-        preferredDate: appointmentDate,
+        date: appointmentDate,
         status: {
           in: ['PENDING', 'CONFIRMED'],
         },
@@ -198,7 +198,7 @@ export async function GET(req: NextRequest) {
     const appointments = await prisma.appointment.findMany({
       where: status ? { status: status as any } : undefined,
       orderBy: {
-        preferredDate: 'desc',
+        createdAt: 'desc',
       },
     });
 

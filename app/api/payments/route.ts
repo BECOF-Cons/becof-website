@@ -133,10 +133,10 @@ export async function GET(req: NextRequest) {
       include: {
         appointment: {
           select: {
-            studentName: true,
-            studentEmail: true,
-            preferredDate: true,
-            serviceType: true,
+            name: true,
+            email: true,
+            date: true,
+            service: true,
           },
         },
       },
