@@ -85,27 +85,14 @@ model BlogPost {
   published   Boolean  @default(false)
   featured    Boolean  @default(false)
   authorId    String
-  categoryId  String?
   tags        String   @default("")
   viewCount   Int      @default(0)
   publishedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  author   User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category BlogCategory?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  author   User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   seo      BlogPostSEO?
-}
-
-model BlogCategory {
-  id        String     @id @default(cuid())
-  nameEn    String
-  nameFr    String
-  slugEn    String     @unique
-  slugFr    String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  posts     BlogPost[]
 }
 
 model BlogPostSEO {

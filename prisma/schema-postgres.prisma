@@ -51,6 +51,7 @@ model User {
 
   accounts      Account[]
   sessions      Session[]
+  blogPosts     BlogPost[]
   Appointment   Appointment[]
   Payment       Payment[]
 }
@@ -72,19 +73,55 @@ enum UserRole {
 // Blog Post model
 model BlogPost {
   id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  excerpt     String
-  content     String
-  image       String?
+  titleEn     String
+  titleFr     String
+  slugEn      String   @unique
+  slugFr      String   @unique
+  excerptEn   String
+  excerptFr   String
+  contentEn   String
+  contentFr   String
+  coverImage  String?
   published   Boolean  @default(false)
+  featured    Boolean  @default(false)
   authorId    String
+  categoryId  String?
+  tags        String   @default("")
+  viewCount   Int      @default(0)
+  publishedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  titleFr     String?
-  excerptFr   String?
-  contentFr   String?
+  author   User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category BlogCategory?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  seo      BlogPostSEO?
+}
+
+model BlogCategory {
+  id        String     @id @default(cuid())
+  nameEn    String
+  nameFr    String
+  slugEn    String     @unique
+  slugFr    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  posts     BlogPost[]
+}
+
+model BlogPostSEO {
+  id              String   @id @default(cuid())
+  blogPostId      String   @unique
+  metaTitleEn     String?
+  metaTitleFr     String?
+  metaDescEn      String?
+  metaDescFr      String?
+  ogImageEn       String?
+  ogImageFr       String?
+  keywords        String   @default("")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  blogPost BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
 }
 
 // Service model
