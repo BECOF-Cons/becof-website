@@ -28,21 +28,23 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
     select: {
       id: true,
       userId: true,
-      serviceType: true,
-      price: true,
-      studentName: true,
-      studentEmail: true,
-      studentPhone: true,
-      preferredDate: true,
-      alternateDate: true,
+      service: true,
+      name: true,
+      email: true,
+      phone: true,
+      date: true,
+      time: true,
       status: true,
-      notes: true,
-      googleEventId: true,
-      meetingLink: true,
-      cancellationNote: true,
+      message: true,
       createdAt: true,
       updatedAt: true,
-      payment: true,
+      payment: {
+        select: {
+          status: true,
+          amount: true,
+          currency: true,
+        },
+      },
       user: {
         select: {
           name: true,
@@ -159,7 +161,7 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
                       <div className="flex items-center gap-2">
                         <User size={16} className="text-gray-400" />
                         <span className="font-medium text-gray-900">
-                          {appointment.studentName}
+                          {appointment.name}
                         </span>
                       </div>
                     </td>
@@ -167,11 +169,11 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <Mail size={14} className="text-gray-400" />
-                          <span>{appointment.studentEmail}</span>
+                          <span>{appointment.email}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Phone size={14} className="text-gray-400" />
-                          <span>{appointment.studentPhone}</span>
+                          <span>{appointment.phone}</span>
                         </div>
                       </div>
                     </td>
@@ -179,24 +181,24 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
                       <div className="flex items-center gap-2 text-sm">
                         <Calendar size={14} className="text-gray-400" />
                         <span>
-                          {new Date(appointment.preferredDate).toLocaleString('en-US', {
+                          {new Date(appointment.date).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
                           })}
+                          {' at '}
+                          {appointment.time}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-2 py-1 text-xs bg-gray-100 rounded">
-                        {appointment.serviceType}
+                        {appointment.service}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-medium text-gray-900">
-                        {appointment.price} TND
+                        {appointment.payment?.amount || 'N/A'} {appointment.payment?.currency || 'TND'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
