@@ -142,6 +142,7 @@ export async function notifyAdminsOfAppointment(appointment: {
   date: Date;
   service: string;
   notes?: string;
+  message?: string;
 }) {
   if (!isEmailConfigured()) {
     console.warn('⚠️ Email not configured. Skipping admin notification email.');

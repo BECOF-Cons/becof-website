@@ -65,7 +65,10 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
     pending: payments.filter((p) => p.appointment?.status === 'PENDING').length,
     totalRevenue: payments
       .filter((p) => p.appointment?.status === 'CONFIRMED')
-      .reduce((sum, p) => sum + p.amount, 0),
+      .reduce((sum, p) => {
+        const amount = parseFloat(p.amount) || 0;
+        return sum + amount;
+      }, 0),
   };
 
   const getPaymentMethodBadge = (method: string) => {
@@ -184,15 +187,15 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                         {payment.id.slice(0, 8)}...
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{payment.appointment?.studentName}</div>
-                        <div className="text-sm text-gray-500">{payment.appointment?.studentEmail}</div>
+                        <div className="text-sm text-gray-900">{payment.appointment?.name}</div>
+                        <div className="text-sm text-gray-500">{payment.appointment?.email}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                         {payment.amount} TND
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.paymentMethod)}`}>
-                          {payment.paymentMethod.replace('_', ' ')}
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.method || '')}`}>
+                          {payment.method?.replace('_', ' ') || 'N/A'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

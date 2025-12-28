@@ -61,5 +61,13 @@ export default async function AdminPage({ params }: { params: Promise<{ locale: 
     title: t('title'),
   };
 
-  return <AdminDashboard user={session?.user} stats={stats} locale={locale} translations={translations} />;
+  // Serialize user data to avoid non-serializable values
+  const serializedUser = session?.user ? {
+    name: session.user.name,
+    email: session.user.email,
+    image: session.user.image,
+    role: session.user.role,
+  } : null;
+
+  return <AdminDashboard user={serializedUser} stats={stats} locale={locale} translations={translations} />;
 }

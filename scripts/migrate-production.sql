@@ -178,7 +178,55 @@ VALUES
     (gen_random_uuid()::text, 'Studies', 'Études', 'studies', 'etudes', NOW(), NOW())
 ON CONFLICT ("slugEn") DO NOTHING;
 
--- 8. Drop old columns (optional - only after confirming data is migrated)
+-- 8. Add icon column to Service table if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Service' AND column_name='icon') THEN
+        ALTER TABLE "Service" ADD COLUMN "icon" TEXT DEFAULT 'Lightbulb';
+    END IF;
+END $$;
+
+-- 9. Add googleEventId column to Appointment table if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='googleEventId') THEN
+        ALTER TABLE "Appointment" ADD COLUMN "googleEventId" TEXT;
+    END IF;
+END $$;
+
+-- 10. Create SiteSettings table
+CREATE TABLE IF NOT EXISTS "SiteSettings" (
+    "id" TEXT NOT NULL,
+    "key" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SiteSettings_pkey" PRIMARY KEY ("id")
+);
+
+-- 11. Create unique index for SiteSettings key
+CREATE UNIQUE INDEX IF NOT EXISTS "SiteSettings_key_key" ON "SiteSettings"("key");
+
+-- 12. Create AdminInvitation table
+CREATE TABLE IF NOT EXISTS "AdminInvitation" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "role" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "used" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "AdminInvitation_pkey" PRIMARY KEY ("id")
+);
+
+-- 13. Create unique indexes for AdminInvitation
+CREATE UNIQUE INDEX IF NOT EXISTS "AdminInvitation_email_key" ON "AdminInvitation"("email");
+CREATE UNIQUE INDEX IF NOT EXISTS "AdminInvitation_token_key" ON "AdminInvitation"("token");
+
+-- 14. Drop old columns (optional - only after confirming data is migrated)
 -- ALTER TABLE "BlogPost" DROP COLUMN IF EXISTS "title";
 -- ALTER TABLE "BlogPost" DROP COLUMN IF EXISTS "slug";
 -- ALTER TABLE "BlogPost" DROP COLUMN IF EXISTS "excerpt";
