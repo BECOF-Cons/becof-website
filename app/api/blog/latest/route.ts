@@ -7,28 +7,6 @@ export async function GET() {
       where: {
         published: true,
       },
-      select: {
-        id: true,
-        titleEn: true,
-        titleFr: true,
-        slugEn: true,
-        slugFr: true,
-        excerptEn: true,
-        excerptFr: true,
-        coverImage: true,
-        publishedAt: true,
-        author: {
-          select: {
-            name: true,
-          },
-        },
-        category: {
-          select: {
-            nameEn: true,
-            nameFr: true,
-          },
-        },
-      },
       orderBy: {
         publishedAt: 'desc',
       },

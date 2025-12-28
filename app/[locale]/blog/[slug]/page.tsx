@@ -16,37 +16,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const post = await prisma.blogPost.findUnique({
     where: isFrench ? { slugFr: slug } : { slugEn: slug },
-    select: {
-      id: true,
-      titleEn: true,
-      titleFr: true,
-      slugEn: true,
-      slugFr: true,
-      excerptEn: true,
-      excerptFr: true,
-      contentEn: true,
-      contentFr: true,
-      coverImage: true,
-      published: true,
-      featured: true,
-      publishedAt: true,
-      createdAt: true,
-      updatedAt: true,
-      category: {
-        select: {
-          id: true,
-          nameEn: true,
-          nameFr: true,
-          slugEn: true,
-          slugFr: true,
-        },
-      },
-      author: {
-        select: {
-          name: true,
-        },
-      },
-    },
   });
 
   if (!post || !post.published) {

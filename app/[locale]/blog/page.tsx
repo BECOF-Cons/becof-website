@@ -16,34 +16,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
     where: {
       published: true,
     },
-    select: {
-      id: true,
-      titleEn: true,
-      titleFr: true,
-      slugEn: true,
-      slugFr: true,
-      excerptEn: true,
-      excerptFr: true,
-      coverImage: true,
-      published: true,
-      featured: true,
-      publishedAt: true,
-      createdAt: true,
-      category: {
-        select: {
-          id: true,
-          nameEn: true,
-          nameFr: true,
-          slugEn: true,
-          slugFr: true,
-        },
-      },
-      author: {
-        select: {
-          name: true,
-        },
-      },
-    },
     orderBy: {
       publishedAt: 'desc',
     },
