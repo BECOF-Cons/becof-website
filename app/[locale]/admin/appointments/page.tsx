@@ -27,6 +27,12 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
   const appointments = await prisma.appointment.findMany({
     include: {
       payment: true,
+      user: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',

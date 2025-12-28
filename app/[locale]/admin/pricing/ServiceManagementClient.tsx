@@ -19,7 +19,7 @@ const AVAILABLE_ICONS = [
   { name: 'FileText', component: FileText, label: 'File Text' },
 ];
 
-const getIconComponent = (iconName?: string) => {
+const getIconComponent = (iconName?: string | null) => {
   const icon = AVAILABLE_ICONS.find(i => i.name === iconName);
   return icon ? icon.component : Lightbulb;
 };
@@ -32,7 +32,7 @@ interface Service {
   descriptionFr: string;
   price: string;
   serviceType: string;
-  icon?: string;
+  icon?: string | null;
   active: boolean;
   displayOrder: number;
 }

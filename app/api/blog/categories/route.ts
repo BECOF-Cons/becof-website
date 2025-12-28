@@ -43,10 +43,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // Generate slugs from names
+    const slugEn = nameEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const slugFr = nameFr.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
     const category = await prisma.blogCategory.create({
       data: {
         nameEn,
         nameFr,
+        slugEn,
+        slugFr,
       },
     });
 
