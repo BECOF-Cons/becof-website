@@ -29,7 +29,7 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
       payment: true,
     },
     orderBy: {
-      preferredDate: 'desc',
+      createdAt: 'desc',
     },
   });
 
