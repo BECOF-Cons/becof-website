@@ -22,27 +22,30 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
 
   const translations = await getAdminTranslations(locale);
 
-  const payments = await prisma.payment.findMany({
-    select: {
-      id: true,
-      userId: true,
-      appointmentId: true,
-      amount: true,
-      currency: true,
-      status: true,
-      method: true,
-      transactionId: true,
-      createdAt: true,
-      updatedAt: true,
-      appointment: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          date: true,
-          time: true,
-          service: true,
+  let payments: any[] = [];
+  
+  try {
+    payments = await prisma.payment.findMany({
+      select: {
+        id: true,
+        userId: true,
+        appointmentId: true,
+        amount: true,
+        currency: true,
+        status: true,
+        method: true,
+        transactionId: true,
+        createdAt: true,
+        updatedAt: true,
+        appointment: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            date: true,
+            time: true,
+            service: true,
           status: true,
           user: {
             select: {
@@ -58,6 +61,10 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
       createdAt: 'desc',
     },
   });
+  } catch (error) {
+    console.error('Error fetching payments:', error);
+    // Continue with empty array
+  }
 
   const stats = {
     total: payments.length,

@@ -24,18 +24,14 @@ export default function Navbar() {
   const switchLocale = () => {
     const newLocale = locale === 'fr' ? 'en' : 'fr';
     
-    // Handle both with and without locale prefix in pathname
-    let newPathname;
-    if (pathname.startsWith(`/${locale}`)) {
-      // Replace existing locale
-      newPathname = pathname.replace(`/${locale}`, `/${newLocale}`);
-    } else if (pathname === '/' || pathname === '') {
-      // Root path - add locale
-      newPathname = `/${newLocale}`;
+    // Parse pathname and replace locale
+    const segments = pathname.split('/').filter(Boolean);
+    if (segments.length > 0 && (segments[0] === 'en' || segments[0] === 'fr')) {
+      segments[0] = newLocale;
     } else {
-      // Path without locale - prepend new locale
-      newPathname = `/${newLocale}${pathname}`;
+      segments.unshift(newLocale);
     }
+    const newPathname = '/' + segments.join('/');
     
     window.location.href = newPathname;
   };
@@ -69,7 +65,7 @@ export default function Navbar() {
             {/* Language Switcher */}
             <button
               onClick={switchLocale}
-              className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-[#233691] transition-colors"
+              className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-[#233691] transition-colors cursor-pointer"
             >
               <Globe className="h-4 w-4" />
               <span className="uppercase">{locale === 'fr' ? 'EN' : 'FR'}</span>

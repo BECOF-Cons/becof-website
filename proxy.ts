@@ -5,17 +5,11 @@ import { locales } from './i18n/request';
 const intlMiddleware = createMiddleware({
   locales,
   defaultLocale: 'fr',
-  localePrefix: 'as-needed'
+  localePrefix: 'always' // Changed from 'as-needed' to 'always' to prevent redirect loops
 });
 
 export default function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-
-  // Redirect /admin to /en/admin (admin routes now use locale)
-  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
-    const locale = request.cookies.get('NEXT_LOCALE')?.value || 'en';
-    return NextResponse.redirect(new URL(pathname.replace('/admin', `/${locale}/admin`), request.url));
-  }
 
   // Skip middleware for API routes and static files
   if (
@@ -27,14 +21,14 @@ export default function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Add custom header to identify admin routes
+  // Handle locale routing via next-intl
   const response = intlMiddleware(request);
-  const isAdminRoute = pathname.includes('/admin');
   
-  if (isAdminRoute) {
+  // Add header to identify admin routes
+  if (pathname.includes('/admin')) {
     response.headers.set('x-is-admin', 'true');
   }
-
+  
   return response;
 }
 

@@ -24,38 +24,45 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
 
   const translations = await getAdminTranslations(locale);
 
-  const appointments = await prisma.appointment.findMany({
-    select: {
-      id: true,
-      userId: true,
-      service: true,
-      name: true,
-      email: true,
-      phone: true,
-      date: true,
-      time: true,
-      status: true,
-      message: true,
-      createdAt: true,
-      updatedAt: true,
-      payment: {
-        select: {
-          status: true,
-          amount: true,
-          currency: true,
+  let appointments: any[] = [];
+  
+  try {
+    appointments = await prisma.appointment.findMany({
+      select: {
+        id: true,
+        userId: true,
+        service: true,
+        name: true,
+        email: true,
+        phone: true,
+        date: true,
+        time: true,
+        status: true,
+        message: true,
+        createdAt: true,
+        updatedAt: true,
+        payment: {
+          select: {
+            status: true,
+            amount: true,
+            currency: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
         },
       },
-      user: {
-        select: {
-          name: true,
-          email: true,
-        },
+      orderBy: {
+        createdAt: 'desc',
       },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+    });
+  } catch (error) {
+    console.error('Error fetching appointments:', error);
+    // Continue with empty array
+  }
 
   const getStatusBadge = (status: string) => {
     const styles = {
