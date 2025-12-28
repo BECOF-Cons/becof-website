@@ -20,8 +20,29 @@ export async function POST(req: NextRequest) {
     // Find payment
     const payment = await prisma.payment.findUnique({
       where: { id: paymentId },
-      include: {
-        appointment: true,
+      select: {
+        id: true,
+        userId: true,
+        appointmentId: true,
+        amount: true,
+        currency: true,
+        status: true,
+        method: true,
+        transactionId: true,
+        createdAt: true,
+        updatedAt: true,
+        appointment: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            date: true,
+            time: true,
+            service: true,
+            status: true,
+          },
+        },
       },
     });
 

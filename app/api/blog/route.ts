@@ -32,8 +32,33 @@ export async function GET(req: NextRequest) {
         ...(status && { status: status as any }),
         ...(categoryId && { categoryId }),
       },
-      include: {
-        category: true,
+      select: {
+        id: true,
+        titleEn: true,
+        titleFr: true,
+        slugEn: true,
+        slugFr: true,
+        excerptEn: true,
+        excerptFr: true,
+        contentEn: true,
+        contentFr: true,
+        coverImage: true,
+        published: true,
+        featured: true,
+        categoryId: true,
+        authorId: true,
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        category: {
+          select: {
+            id: true,
+            nameEn: true,
+            nameFr: true,
+            slugEn: true,
+            slugFr: true,
+          },
+        },
         author: {
           select: {
             id: true,
@@ -105,8 +130,31 @@ export async function POST(req: NextRequest) {
         authorId: userId,
         publishedAt: validatedData.status === 'PUBLISHED' ? new Date() : null,
       },
-      include: {
-        category: true,
+      select: {
+        id: true,
+        titleEn: true,
+        titleFr: true,
+        slugEn: true,
+        slugFr: true,
+        excerptEn: true,
+        excerptFr: true,
+        contentEn: true,
+        contentFr: true,
+        coverImage: true,
+        published: true,
+        featured: true,
+        categoryId: true,
+        authorId: true,
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        category: {
+          select: {
+            id: true,
+            nameEn: true,
+            nameFr: true,
+          },
+        },
         author: {
           select: {
             name: true,

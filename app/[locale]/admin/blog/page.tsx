@@ -22,8 +22,31 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
   const translations = await getAdminTranslations(locale);
 
   const posts = await prisma.blogPost.findMany({
-    include: {
-      category: true,
+    select: {
+      id: true,
+      titleEn: true,
+      titleFr: true,
+      slugEn: true,
+      slugFr: true,
+      excerptEn: true,
+      excerptFr: true,
+      coverImage: true,
+      published: true,
+      featured: true,
+      categoryId: true,
+      authorId: true,
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+      category: {
+        select: {
+          id: true,
+          nameEn: true,
+          nameFr: true,
+          slugEn: true,
+          slugFr: true,
+        },
+      },
       author: {
         select: {
           name: true,

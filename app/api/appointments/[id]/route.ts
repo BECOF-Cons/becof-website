@@ -11,8 +11,29 @@ export async function GET(
     const { id } = await params;
     const appointment = await prisma.appointment.findUnique({
       where: { id },
-      include: {
-        payment: true,
+      select: {
+        id: true,
+        userId: true,
+        name: true,
+        email: true,
+        phone: true,
+        date: true,
+        time: true,
+        service: true,
+        message: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        payment: {
+          select: {
+            id: true,
+            amount: true,
+            currency: true,
+            status: true,
+            method: true,
+            transactionId: true,
+          },
+        },
       },
     });
 

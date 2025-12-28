@@ -27,8 +27,33 @@ export default async function EditBlogPostPage({
 
   const post = await prisma.blogPost.findUnique({
     where: { id },
-    include: {
-      category: true,
+    select: {
+      id: true,
+      titleEn: true,
+      titleFr: true,
+      slugEn: true,
+      slugFr: true,
+      excerptEn: true,
+      excerptFr: true,
+      contentEn: true,
+      contentFr: true,
+      coverImage: true,
+      published: true,
+      featured: true,
+      categoryId: true,
+      authorId: true,
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+      category: {
+        select: {
+          id: true,
+          nameEn: true,
+          nameFr: true,
+          slugEn: true,
+          slugFr: true,
+        },
+      },
     },
   });
 

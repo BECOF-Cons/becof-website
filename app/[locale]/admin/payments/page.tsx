@@ -23,10 +23,34 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
   const translations = await getAdminTranslations(locale);
 
   const payments = await prisma.payment.findMany({
-    include: {
+    select: {
+      id: true,
+      userId: true,
+      appointmentId: true,
+      amount: true,
+      currency: true,
+      status: true,
+      method: true,
+      transactionId: true,
+      createdAt: true,
+      updatedAt: true,
       appointment: {
-        include: {
-          user: true,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          date: true,
+          time: true,
+          service: true,
+          status: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
         },
       },
     },
