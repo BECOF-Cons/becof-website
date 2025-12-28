@@ -16,6 +16,15 @@ export default async function BlogPage({ params }: BlogPageProps) {
     where: {
       published: true,
     },
+    include: {
+      category: true,
+      author: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+    },
     orderBy: {
       publishedAt: 'desc',
     },

@@ -64,7 +64,6 @@ export default async function ServicesPage({
     icon: getIconForService(service.icon || undefined, service.serviceType),
     title: locale === 'fr' ? service.nameFr : service.nameEn,
     description: locale === 'fr' ? service.descriptionFr : service.descriptionEn,
-    price: service.price.includes('TND') ? service.price : `${service.price} TND`,
     serviceType: service.serviceType,
   }));
 
@@ -102,7 +101,6 @@ export default async function ServicesPage({
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       {service.title}
                     </h3>
-                    <span className="font-semibold text-lg" style={{color: '#233691'}}>{service.price}</span>
                   </div>
                 </div>
 

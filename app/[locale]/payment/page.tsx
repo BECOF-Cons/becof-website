@@ -34,8 +34,10 @@ export default function PaymentPage() {
         .then((res) => res.json())
         .then((data) => {
           setAppointment(data);
-          // Use the price stored in the appointment
-          setPrice(data.price?.toString() || '150');
+          // Use the price from the payment record
+          if (data.payment && data.payment.amount) {
+            setPrice(data.payment.amount.toString());
+          }
         })
         .catch((err) => console.error('Error fetching appointment:', err));
     }

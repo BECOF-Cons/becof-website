@@ -17,6 +17,9 @@ export async function POST(req: NextRequest) {
     // Check if appointment exists
     const appointment = await prisma.appointment.findUnique({
       where: { id: validatedData.appointmentId },
+      include: {
+        payment: true,
+      },
     });
 
     if (!appointment) {
@@ -26,31 +29,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if payment already exists
-    const existingPayment = await prisma.payment.findFirst({
-      where: {
-        appointmentId: validatedData.appointmentId,
-        status: { in: ['PENDING', 'COMPLETED'] },
-      },
-    });
-
-    if (existingPayment) {
+    // Check if payment already exists and is completed
+    if (appointment.payment && appointment.payment.status === 'COMPLETED') {
       return NextResponse.json(
-        { error: 'Payment already exists for this appointment' },
+        { error: 'Payment already completed for this appointment' },
         { status: 400 }
       );
     }
 
-    // Create payment record
-    const payment = await prisma.payment.create({
-      data: {
-        userId: appointment.userId, // Get userId from appointment
-        appointmentId: validatedData.appointmentId,
-        amount: validatedData.amount,
-        paymentMethod: validatedData.paymentMethod,
-        status: 'PENDING',
-      },
-    });
+    // Update existing payment or create new one
+    let payment;
+    if (appointment.payment) {
+      // Update existing payment
+      payment = await prisma.payment.update({
+        where: { id: appointment.payment.id },
+        data: {
+          amount: validatedData.amount.toString(),
+          method: validatedData.paymentMethod,
+          status: 'PENDING',
+        },
+      });
+    } else {
+      // Create new payment record
+      payment = await prisma.payment.create({
+        data: {
+          userId: appointment.userId,
+          appointmentId: validatedData.appointmentId,
+          amount: validatedData.amount.toString(),
+          method: validatedData.paymentMethod,
+          status: 'PENDING',
+        },
+      });
+    }
 
     // Handle different payment methods
     let paymentUrl = null;

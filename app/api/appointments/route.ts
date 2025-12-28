@@ -104,6 +104,17 @@ export async function POST(req: NextRequest) {
         service: mappedServiceType as any,
         message: validatedData.message || '',
         status: 'PENDING',
+        payment: {
+          create: {
+            userId: adminUser.id,
+            amount: servicePrice.toString(),
+            currency: 'TND',
+            status: 'PENDING',
+          },
+        },
+      },
+      include: {
+        payment: true,
       },
     });
 

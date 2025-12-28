@@ -7,6 +7,14 @@ export async function GET() {
       where: {
         published: true,
       },
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
       orderBy: {
         publishedAt: 'desc',
       },
