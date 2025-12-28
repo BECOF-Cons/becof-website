@@ -186,9 +186,92 @@ BEGIN
     END IF;
 END $$;
 
--- 9. Add googleEventId column to Appointment table if it doesn't exist
+-- 9. Add missing columns to Appointment table if they don't exist
 DO $$
 BEGIN
+    -- Add name column if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='name') THEN
+        ALTER TABLE "Appointment" ADD COLUMN "name" TEXT;
+        -- Set a default value for existing rows
+        UPDATE "Appointment" SET "name" = COALESCE("studentName", 'Unknown') WHERE "name" IS NULL;
+        -- Make it NOT NULL after populating
+        ALTER TABLE "Appointment" ALTER COLUMN "name" SET NOT NULL;
+    END IF;
+
+    -- Add email column if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='email') THEN
+        ALTER TABLE "Appointment" ADD COLUMN "email" TEXT;
+        -- Set a default value for existing rows
+        UPDATE "Appointment" SET "email" = COALESCE("studentEmail", 'unknown@example.com') WHERE "email" IS NULL;
+        -- Make it NOT NULL after populating
+        ALTER TABLE "Appointment" ALTER COLUMN "email" SET NOT NULL;
+    END IF;
+
+    -- Add phone column if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='phone') THEN
+        ALTER TABLE "Appointment" ADD COLUMN "phone" TEXT;
+        -- Set a default value for existing rows
+        UPDATE "Appointment" SET "phone" = COALESCE("studentPhone", 'N/A') WHERE "phone" IS NULL;
+        -- Make it NOT NULL after populating
+        ALTER TABLE "Appointment" ALTER COLUMN "phone" SET NOT NULL;
+    END IF;
+
+    -- Add date column if it doesn't exist (keep existing appointmentDate)
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='date') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='appointmentDate') THEN
+            -- Copy from appointmentDate if it exists
+            ALTER TABLE "Appointment" ADD COLUMN "date" TIMESTAMP(3);
+            UPDATE "Appointment" SET "date" = "appointmentDate" WHERE "date" IS NULL;
+            ALTER TABLE "Appointment" ALTER COLUMN "date" SET NOT NULL;
+        ELSE
+            -- Set a default date if no appointmentDate exists
+            ALTER TABLE "Appointment" ADD COLUMN "date" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP;
+            ALTER TABLE "Appointment" ALTER COLUMN "date" DROP DEFAULT;
+        END IF;
+    END IF;
+
+    -- Add time column if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='time') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='appointmentTime') THEN
+            -- Copy from appointmentTime if it exists
+            ALTER TABLE "Appointment" ADD COLUMN "time" TEXT;
+            UPDATE "Appointment" SET "time" = "appointmentTime" WHERE "time" IS NULL;
+            ALTER TABLE "Appointment" ALTER COLUMN "time" SET NOT NULL;
+        ELSE
+            -- Set a default time
+            ALTER TABLE "Appointment" ADD COLUMN "time" TEXT DEFAULT '10:00';
+            UPDATE "Appointment" SET "time" = '10:00' WHERE "time" IS NULL;
+            ALTER TABLE "Appointment" ALTER COLUMN "time" DROP DEFAULT;
+        END IF;
+    END IF;
+
+    -- Add service column if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='service') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='serviceType') THEN
+            -- Copy from serviceType if it exists
+            ALTER TABLE "Appointment" ADD COLUMN "service" TEXT;
+            UPDATE "Appointment" SET "service" = "serviceType" WHERE "service" IS NULL;
+            ALTER TABLE "Appointment" ALTER COLUMN "service" SET NOT NULL;
+        ELSE
+            -- Set a default service
+            ALTER TABLE "Appointment" ADD COLUMN "service" TEXT DEFAULT 'General Consultation';
+            UPDATE "Appointment" SET "service" = 'General Consultation' WHERE "service" IS NULL;
+            ALTER TABLE "Appointment" ALTER COLUMN "service" DROP DEFAULT;
+        END IF;
+    END IF;
+
+    -- Add message column if it doesn't exist (nullable, so no default needed)
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='message') THEN
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='notes') THEN
+            -- Copy from notes if it exists
+            ALTER TABLE "Appointment" ADD COLUMN "message" TEXT;
+            UPDATE "Appointment" SET "message" = "notes" WHERE "message" IS NULL;
+        ELSE
+            ALTER TABLE "Appointment" ADD COLUMN "message" TEXT;
+        END IF;
+    END IF;
+
+    -- Add googleEventId column if it doesn't exist
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Appointment' AND column_name='googleEventId') THEN
         ALTER TABLE "Appointment" ADD COLUMN "googleEventId" TEXT;
     END IF;
