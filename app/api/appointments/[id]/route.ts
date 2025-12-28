@@ -137,10 +137,10 @@ export async function DELETE(
     if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {
       const { sendCancellationNotification } = await import('@/lib/email');
       sendCancellationNotification({
-        clientName: appointment.studentName,
-        clientEmail: appointment.studentEmail,
-        date: appointment.preferredDate,
-        service: appointment.serviceType,
+        clientName: appointment.name,
+        clientEmail: appointment.email,
+        date: appointment.date,
+        service: appointment.service,
       }).catch((err) => console.error('Error sending cancellation email:', err));
     }
 

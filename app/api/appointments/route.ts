@@ -96,13 +96,13 @@ export async function POST(req: NextRequest) {
     const appointment = await prisma.appointment.create({
       data: {
         userId: adminUser.id, // Placeholder - in production, this would be the client's user ID
-        studentName: validatedData.name,
-        studentEmail: validatedData.email,
-        studentPhone: validatedData.phone,
-        preferredDate: appointmentDate,
-        serviceType: mappedServiceType as any,
-        price: servicePrice,
-        notes: validatedData.message || '',
+        name: validatedData.name,
+        email: validatedData.email,
+        phone: validatedData.phone,
+        date: appointmentDate,
+        time: validatedData.time,
+        service: mappedServiceType as any,
+        message: validatedData.message || '',
         status: 'PENDING',
       },
     });

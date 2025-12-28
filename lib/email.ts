@@ -207,10 +207,10 @@ export async function notifyAdminsOfAppointment(appointment: {
                 <strong>💼 Service :</strong> ${appointment.service}
               </div>
               ${
-                appointment.notes
+                appointment.notes || appointment.message
                   ? `
               <div class="info-item">
-                <strong>📝 Notes :</strong> ${appointment.notes}
+                <strong>📝 Notes :</strong> ${appointment.notes || appointment.message}
               </div>
               `
                   : ''

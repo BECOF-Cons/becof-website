@@ -80,13 +80,16 @@ export async function POST(req: NextRequest) {
         if (process.env.SMTP_USER && process.env.SMTP_PASSWORD && appointment) {
           const { sendBankTransferInstructions } = await import('@/lib/email');
           
+          // Get price from payment amount
+          const price = parseFloat(payment.amount);
+          
           sendBankTransferInstructions({
             id: appointment.id,
-            clientName: appointment.studentName,
-            clientEmail: appointment.studentEmail,
-            date: appointment.preferredDate,
-            service: appointment.serviceType,
-            price: appointment.price,
+            clientName: appointment.name,
+            clientEmail: appointment.email,
+            date: appointment.date,
+            service: appointment.service,
+            price: price,
           }).catch((err) => console.error('Error sending bank transfer instructions:', err));
         }
         
