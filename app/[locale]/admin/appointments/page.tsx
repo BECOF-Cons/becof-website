@@ -6,22 +6,9 @@ import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Calendar, Clock, User, Mail, Phone, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { ConfirmPaymentButton } from './ConfirmPaymentButton';
 import { getAdminTranslations } from '@/lib/admin-translations';
-import { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-
-type AppointmentWithRelations = Prisma.AppointmentGetPayload<{
-  include: {
-    payment: true;
-    user: {
-      select: {
-        name: true;
-        email: true;
-      };
-    };
-  };
-}>;
 
 export default async function AdminAppointmentsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -37,8 +24,24 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
 
   const translations = await getAdminTranslations(locale);
 
-  const appointments: AppointmentWithRelations[] = await prisma.appointment.findMany({
-    include: {
+  const appointments = await prisma.appointment.findMany({
+    select: {
+      id: true,
+      userId: true,
+      serviceType: true,
+      price: true,
+      studentName: true,
+      studentEmail: true,
+      studentPhone: true,
+      preferredDate: true,
+      alternateDate: true,
+      status: true,
+      notes: true,
+      googleEventId: true,
+      meetingLink: true,
+      cancellationNote: true,
+      createdAt: true,
+      updatedAt: true,
       payment: true,
       user: {
         select: {
