@@ -29,7 +29,7 @@ export default function Hero() {
             style={{backgroundColor: 'rgba(35, 54, 145, 0.1)', color: '#233691'}}
           >
             <Sparkles className="h-4 w-4" />
-            <span>{locale === 'fr' ? 'Orientation scolaire et Universitaire personnalisée' : 'Personalized Academic and University Guidance'}</span>
+            <span>{locale === 'fr' ? 'Orientation Scolaire et Universitaire Personnalisée' : 'Personalized Academic and University Guidance'}</span>
           </motion.div>
 
           {/* Main heading */}
