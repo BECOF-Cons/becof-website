@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Plus, Edit2, Trash2, Save, X, Loader2, DollarSign, Eye, EyeOff, Compass, Briefcase, TrendingUp, Users, Lightbulb, GraduationCap, Target, Award, BookOpen, Calendar, FileText } from 'lucide-react';
 
 // Available icons for services
@@ -43,6 +44,8 @@ interface ServiceManagementClientProps {
 
 export default function ServiceManagementClient({ initialServices }: ServiceManagementClientProps) {
   const router = useRouter();
+  const t = useTranslations('admin.pricing');
+  
   // Sort services by displayOrder
   const sortedInitialServices = [...initialServices].sort((a, b) => a.displayOrder - b.displayOrder);
   const [services, setServices] = useState(sortedInitialServices);
@@ -107,7 +110,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
+    if (!confirm(t('confirmDelete', { name }))) {
       return;
     }
 
@@ -206,9 +209,9 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Service Management</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('title')}</h3>
             <p className="text-sm text-gray-600">
-              Manage your services, pricing, and availability
+              {t('subtitle')}
             </p>
           </div>
           <button
@@ -216,7 +219,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
             className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-700 to-amber-500 text-white rounded-lg hover:from-blue-800 hover:to-amber-600 transition-all shadow-md"
           >
             <Plus className="h-5 w-5" />
-            Add Service
+            {t('addService')}
           </button>
         </div>
       </div>
@@ -237,7 +240,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Name (English)
+                        {t('form.nameEn')}
                       </label>
                       <input
                         type="text"
@@ -248,7 +251,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Name (French)
+                        {t('form.nameFr')}
                       </label>
                       <input
                         type="text"

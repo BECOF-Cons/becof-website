@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { CreditCard, CheckCircle, Clock, XCircle, DollarSign } from 'lucide-react';
 import { getAdminTranslations } from '@/lib/admin-translations';
+import { getTranslations } from 'next-intl/server';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -21,6 +22,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
   }
 
   const translations = await getAdminTranslations(locale);
+  const t = await getTranslations({ locale, namespace: 'admin.payments' });
 
   let payments: any[] = [];
   
@@ -108,7 +110,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                 <CreditCard className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Payments</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.total')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.total}</p>
               </div>
             </div>
@@ -120,7 +122,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                 <CheckCircle className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Completed</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.completed')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.completed}</p>
               </div>
             </div>
@@ -132,7 +134,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                 <Clock className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.pending')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.pending}</p>
               </div>
             </div>
@@ -144,7 +146,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                 <DollarSign className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.totalRevenue')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.totalRevenue} TND</p>
               </div>
             </div>
@@ -154,13 +156,13 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
         {/* Payments Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Payments</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{t('title')}</h3>
           </div>
           {payments.length === 0 ? (
             <div className="px-6 py-12 text-center">
               <CreditCard className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No payments yet</h3>
-              <p className="mt-1 text-sm text-gray-500">Payments will appear here once appointments are booked.</p>
+              <h3 className="mt-2 text-sm font-medium text-gray-900">{t('noPayments')}</h3>
+              <p className="mt-1 text-sm text-gray-500">{t('subtitle')}</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -171,19 +173,19 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                       ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Client
+                      {t('table.client')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Amount
+                      {t('table.amount')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Method
+                      {t('table.method')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                      {t('table.status')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
+                      {t('table.date')}
                     </th>
                   </tr>
                 </thead>

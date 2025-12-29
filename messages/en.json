@@ -144,6 +144,192 @@
       "settings": "Settings"
     },
     "welcome": "Welcome back",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "dashboard": {
+      "stats": {
+        "totalPosts": "Total Posts",
+        "totalAppointments": "Total Appointments",
+        "totalRevenue": "Total Revenue",
+        "activeUsers": "Active Users"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "newPost": "New Blog Post",
+        "newPostDesc": "Create content",
+        "viewAppointments": "View Appointments",
+        "viewAppointmentsDesc": "Manage bookings",
+        "settings": "Settings",
+        "settingsDesc": "Configure site"
+      },
+      "gettingStarted": {
+        "title": "Getting Started",
+        "step1Title": "Create your first blog post",
+        "step1Desc": "Share orientation tips with students",
+        "step2Title": "Configure payment settings",
+        "step2Desc": "Setup Konnect, Flouci, or D17 accounts",
+        "step3Title": "Connect Google Calendar",
+        "step3Desc": "Enable automatic appointment scheduling"
+      }
+    },
+    "blog": {
+      "title": "Blog Posts",
+      "subtitle": "Manage your blog content",
+      "createNew": "Create Post",
+      "noPosts": "No posts found",
+      "table": {
+        "title": "Title",
+        "category": "Category",
+        "author": "Author",
+        "status": "Status",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "status": {
+        "published": "Published",
+        "draft": "Draft"
+      },
+      "actions": {
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "appointments": {
+      "title": "Appointments",
+      "subtitle": "Manage client appointments",
+      "noAppointments": "No appointments yet",
+      "stats": {
+        "total": "Total",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "completed": "Completed"
+      },
+      "table": {
+        "client": "Client",
+        "contact": "Contact",
+        "dateTime": "Date & Time",
+        "service": "Service",
+        "status": "Status",
+        "payment": "Payment",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "paymentStatus": {
+        "pending": "Pending",
+        "completed": "Paid",
+        "failed": "Failed"
+      },
+      "actions": {
+        "view": "View Details",
+        "confirmPayment": "Confirm Payment"
+      }
+    },
+    "pricing": {
+      "title": "Service Management",
+      "subtitle": "Manage your services, pricing, and availability",
+      "addService": "Add Service",
+      "noServices": "No services found",
+      "form": {
+        "nameEn": "Name (English)",
+        "nameFr": "Name (French)",
+        "descriptionEn": "Description (English)",
+        "descriptionFr": "Description (French)",
+        "icon": "Icon",
+        "preview": "Preview",
+        "price": "Price",
+        "displayOrder": "Display Order",
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "positionInfo": "Enter the position where this service should appear (currently at position {position})"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "toggleActive": "Toggle Status"
+      },
+      "confirmDelete": "Are you sure you want to delete \"{name}\"? This action cannot be undone."
+    },
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Manage payment transactions",
+      "noPayments": "No payments yet",
+      "stats": {
+        "total": "Total",
+        "completed": "Completed",
+        "pending": "Pending",
+        "totalRevenue": "Total Revenue"
+      },
+      "table": {
+        "client": "Client",
+        "service": "Service",
+        "amount": "Amount",
+        "method": "Method",
+        "status": "Status",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "methods": {
+        "KONNECT": "Konnect",
+        "FLOUCI": "Flouci",
+        "D17": "D17",
+        "BANK_TRANSFER": "Bank Transfer"
+      },
+      "status": {
+        "PENDING": "Pending",
+        "CONFIRMED": "Confirmed",
+        "CANCELLED": "Cancelled"
+      }
+    },
+    "settings": {
+      "title": "System Configuration",
+      "subtitle": "Manage your website settings and integrations",
+      "sections": {
+        "servicePricing": {
+          "title": "Service Pricing",
+          "description": "Manage prices for your services"
+        },
+        "emailSettings": {
+          "title": "Email Settings",
+          "description": "Configure SMTP and email notifications"
+        },
+        "googleCalendar": {
+          "title": "Google Calendar",
+          "description": "Manage calendar integration"
+        },
+        "siteSettings": {
+          "title": "Site Settings",
+          "description": "General website configuration"
+        }
+      },
+      "badges": {
+        "configured": "Configured",
+        "setupRequired": "Setup Required",
+        "comingSoon": "Coming Soon"
+      },
+      "emailConfig": {
+        "title": "Email Configuration",
+        "smtpHost": "SMTP Host",
+        "smtpUser": "SMTP User",
+        "status": "Status",
+        "configured": "Configured",
+        "notConfigured": "Not Configured"
+      },
+      "calendarConfig": {
+        "title": "Google Calendar Integration",
+        "clientId": "Google Client ID",
+        "status": "Status",
+        "configured": "Connected",
+        "notConfigured": "Not Connected",
+        "setupInstructions": "Setup Instructions"
+      }
+    }
   }
 }
