@@ -29,7 +29,7 @@ export default function Hero() {
             style={{backgroundColor: 'rgba(35, 54, 145, 0.1)', color: '#233691'}}
           >
             <Sparkles className="h-4 w-4" />
-            <span>Orientation Universitaire Personnalisée</span>
+            <span>{locale === 'fr' ? 'Orientation scolaire et Universitaire personnalisée' : 'Personalized Academic and University Guidance'}</span>
           </motion.div>
 
           {/* Main heading */}
@@ -90,11 +90,11 @@ export default function Hero() {
           >
             <div className="text-center">
               <div className="text-3xl font-bold" style={{color: '#233691'}}>500+</div>
-              <div className="mt-1 text-sm text-gray-600">Étudiants</div>
+              <div className="mt-1 text-sm text-gray-600">{locale === 'fr' ? 'Étudiants' : 'Students'}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold" style={{color: '#F9AA04'}}>50+</div>
-              <div className="text-sm text-gray-600">Partner Universities</div>
+              <div className="text-sm text-gray-600">{locale === 'fr' ? 'Universités Partenaires' : 'Partner Universities'}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold" style={{color: '#233691'}}>95%</div>
