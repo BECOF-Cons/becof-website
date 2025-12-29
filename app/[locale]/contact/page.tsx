@@ -105,10 +105,10 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium text-gray-900">Email</p>
                     <a
-                      href="mailto:contact@becof.tn"
+                      href="mailto:becofconseil@gmail.com"
                       className="text-teal-600 hover:text-teal-700"
                     >
-                      contact@becof.tn
+                      becofconseil@gmail.com
                     </a>
                   </div>
                 </div>
@@ -120,10 +120,10 @@ export default function ContactPage() {
                       {locale === 'fr' ? 'Téléphone' : 'Phone'}
                     </p>
                     <a
-                      href="tel:+21612345678"
+                      href="tel:+21653216700"
                       className="text-teal-600 hover:text-teal-700"
                     >
-                      +216 12 345 678
+                      +216 53 216 700
                     </a>
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export default function ContactPage() {
                       {locale === 'fr' ? 'Adresse' : 'Address'}
                     </p>
                     <p className="text-gray-600">
-                      Tunis, Tunisia
+                      Hammamet, Tunisie
                     </p>
                   </div>
                 </div>

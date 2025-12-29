@@ -38,15 +38,15 @@ export default function Footer() {
             <div className="mt-6 space-y-2">
               <div className="flex items-center space-x-2 text-sm">
                 <Mail className="h-4 w-4" style={{color: '#F9AA04'}} />
-                <span>contact@becof.tn</span>
+                <span>becofconseil@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
                 <Phone className="h-4 w-4" style={{color: '#F9AA04'}} />
-                <span>+216 XX XXX XXX</span>
+                <span>+216 53 216 700</span>
               </div>
               <div className="flex items-center space-x-2 text-sm">
                 <MapPin className="h-4 w-4" style={{color: '#F9AA04'}} />
-                <span>Tunis, Tunisia</span>
+                <span>Hammamet, Tunisie</span>
               </div>
             </div>
           </div>

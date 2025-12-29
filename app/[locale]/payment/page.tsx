@@ -135,8 +135,8 @@ export default function PaymentPage() {
                 </li>
                 <li>
                   {locale === 'fr'
-                    ? 'Envoyez la preuve de paiement à contact@becof.tn'
-                    : 'Send payment proof to contact@becof.tn'}
+                    ? 'Envoyez la preuve de paiement à becofconseil@gmail.com'
+                    : 'Send payment proof to becofconseil@gmail.com'}
                 </li>
                 <li>
                   {locale === 'fr'
@@ -369,7 +369,7 @@ export default function PaymentPage() {
                   {locale === 'fr'
                     ? 'Après avoir effectué le virement, envoyez une capture d\'écran de la preuve de paiement à '
                     : 'After making the transfer, send a screenshot of the payment proof to '}
-                  <a href="mailto:contact@becof.tn" className="font-semibold underline">contact@becof.tn</a>
+                  <a href="mailto:becofconseil@gmail.com" className="font-semibold underline">becofconseil@gmail.com</a>
                   {locale === 'fr'
                     ? ' avec le numéro de référence ci-dessus pour confirmation rapide.'
                     : ' with the reference number above for quick confirmation.'}

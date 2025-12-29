@@ -13,24 +13,24 @@
   },
   "home": {
     "hero": {
-      "title": "Votre Avenir Universitaire Commence Ici",
-      "subtitle": "Orientation personnalisée pour les bacheliers tunisiens. Choisissez la bonne université et tracez votre chemin vers le succès.",
+      "title": "Votre Avenir Universitaire et Professionnel Commence Ici",
+      "subtitle": "Au supérieur comme au secondaire, choisissez la filière qui correspond le mieux à votre projet... à vos ambitions.",
       "cta": "Réserver une Consultation",
       "secondaryCta": "Explorer le Blog"
     },
     "features": {
-      "title": "Comment Nous Vous Aidons",
+      "title": "Comment Vous Aider?",
       "counseling": {
-        "title": "Conseil en Orientation",
-        "description": "Des séances personnalisées pour comprendre vos intérêts et vos objectifs de carrière"
+        "title": "Orientation scolaire et Universitaire personnalisée",
+        "description": "Des entretiens personnalisés pour mieux choisir, mieux vous orienter"
       },
       "universities": {
-        "title": "Sélection d'Universités",
-        "description": "Trouvez les meilleures universités qui correspondent à votre profil et vos ambitions"
+        "title": "Sélection de filières et d'Universités",
+        "description": "Trouvez un descriptif détaillé, des spécialités et établissements du supérieur"
       },
       "application": {
-        "title": "Aide aux Candidatures",
-        "description": "Assistance complète pour vos dossiers et démarches administratives"
+        "title": "Événements et Salons Universitaires",
+        "description": "Organisation d'ateliers et de manifestations diverses pour accompagner au mieux les jeunes bacheliers."
       }
     },
     "stats": {

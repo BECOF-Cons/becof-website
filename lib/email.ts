@@ -99,7 +99,7 @@ export async function sendAppointmentConfirmation(appointment: {
               <h3 style="margin-top: 0; color: #14B8A6;">Détails du rendez-vous</h3>
               <p><strong>📅 Date :</strong> ${formattedDate}</p>
               <p><strong>💼 Service :</strong> ${appointment.service}</p>
-              <p><strong>📍 Lieu :</strong> BECOF - Tunis, Tunisia</p>
+              <p><strong>📍 Lieu :</strong> BECOF - Hammamet, Tunisie</p>
             </div>
 
             <p>Un événement Google Calendar a été créé et envoyé à votre adresse email. Vous recevrez une invitation que vous pourrez ajouter à votre calendrier.</p>
@@ -113,7 +113,7 @@ export async function sendAppointmentConfirmation(appointment: {
 
             <div class="footer">
               <p>Pour toute question, contactez-nous :</p>
-              <p>📧 contact@becof.tn | 📞 +216 12 345 678</p>
+              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
               <p style="margin-top: 20px; font-size: 12px; color: #999;">
                 © 2025 BECOF - Orientation Consulting
               </p>
@@ -319,7 +319,7 @@ export async function sendPaymentConfirmation(payment: {
 
             <div style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
               <p>Besoin d'aide ? Contactez-nous :</p>
-              <p>📧 contact@becof.tn | 📞 +216 12 345 678</p>
+              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
             </div>
           </div>
         </div>
@@ -360,8 +360,8 @@ export async function notifyAdminsContactForm(contact: {
     recipients.push(helmiEmail);
   }
   
-  // Also add contact@becof.tn if not in list
-  const becofEmail = 'contact@becof.tn';
+  // Also add becofconseil@gmail.com if not in list
+  const becofEmail = 'becofconseil@gmail.com';
   if (!recipients.includes(becofEmail)) {
     recipients.push(becofEmail);
   }
@@ -478,7 +478,7 @@ export async function sendCancellationNotification(appointment: {
 
             <div style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
               <p>Pour toute question :</p>
-              <p>📧 contact@becof.tn | 📞 +216 12 345 678</p>
+              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
             </div>
           </div>
         </div>
@@ -588,7 +588,7 @@ export async function sendBankTransferInstructions(appointment: {
                 <strong>2.</strong> Prenez une capture d'écran de la preuve de paiement (reçu bancaire)
               </div>
               <div class="step">
-                <strong>3.</strong> Envoyez la capture d'écran à <strong>contact@becof.tn</strong> avec la référence <strong>${referenceNumber}</strong>
+                <strong>3.</strong> Envoyez la capture d'écran à <strong>becofconseil@gmail.com</strong> avec la référence <strong>${referenceNumber}</strong>
               </div>
               <div class="step">
                 <strong>4.</strong> Votre rendez-vous sera confirmé dans les 24 heures après vérification
@@ -601,7 +601,7 @@ export async function sendBankTransferInstructions(appointment: {
 
             <div class="footer">
               <p>Pour toute question, contactez-nous :</p>
-              <p>📧 contact@becof.tn | 📞 +216 12 345 678</p>
+              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
               <p style="margin-top: 20px; font-size: 12px; color: #999;">
                 © 2025 BECOF - Orientation Consulting
               </p>
@@ -702,7 +702,7 @@ export async function sendAdminInvitation(invitation: {
 
             <div class="footer">
               <p>For support, contact us:</p>
-              <p>📧 contact@becof.tn | 📞 +216 12 345 678</p>
+              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
               <p style="margin-top: 20px; font-size: 12px; color: #999;">
                 © 2025 BECOF - Orientation Consulting
               </p>

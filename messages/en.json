@@ -13,24 +13,24 @@
   },
   "home": {
     "hero": {
-      "title": "Your University Future Starts Here",
-      "subtitle": "Personalized guidance for Tunisian high school graduates. Choose the right university and pave your path to success.",
+      "title": "Your Academic and Professional Future Starts Here",
+      "subtitle": "Whether in higher education or secondary school, choose the path that best fits your project... your ambitions.",
       "cta": "Book a Consultation",
       "secondaryCta": "Explore Blog"
     },
     "features": {
       "title": "How We Help You",
       "counseling": {
-        "title": "Career Counseling",
-        "description": "Personalized sessions to understand your interests and career goals"
+        "title": "Personalized Academic and University Guidance",
+        "description": "Personalized interviews to help you make better choices and guide you better"
       },
       "universities": {
-        "title": "University Selection",
-        "description": "Find the best universities that match your profile and ambitions"
+        "title": "Program and University Selection",
+        "description": "Find detailed descriptions, specialties and higher education institutions"
       },
       "application": {
-        "title": "Application Help",
-        "description": "Complete assistance with your applications and administrative procedures"
+        "title": "University Events and Fairs",
+        "description": "Organization of workshops and various events to best support young graduates."
       }
     },
     "stats": {
