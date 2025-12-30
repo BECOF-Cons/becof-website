@@ -7,6 +7,7 @@ import { Edit, Trash2, Plus, Eye } from 'lucide-react';
 import { getAdminTranslations } from '@/lib/admin-translations';
 import { getTranslations } from 'next-intl/server';
 import DeleteBlogButton from './DeleteBlogButton';
+import TogglePublishButton from './TogglePublishButton';
 
 export default async function BlogManagementPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -160,6 +161,11 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <TogglePublishButton
+                          postId={post.id}
+                          currentStatus={post.published}
+                          locale={locale}
+                        />
                         {post.published && (
                           <Link
                             href={`/${locale}/blog/${post.slugFr}`}

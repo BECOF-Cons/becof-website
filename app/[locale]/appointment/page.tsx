@@ -74,6 +74,13 @@ export default function AppointmentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate service selection
+    if (!formData.service || formData.service === '') {
+      alert(locale === 'fr' ? 'Veuillez sélectionner un service' : 'Please select a service');
+      return;
+    }
+    
     setLoading(true);
 
     try {

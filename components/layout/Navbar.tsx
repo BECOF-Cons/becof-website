@@ -42,7 +42,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href={`/${locale}`} className="text-3xl font-bold" style={{color: '#233691'}}>
+            <Link href={`/${locale}`} className="text-3xl font-bold bg-gradient-to-r from-[#233691] to-[#F9AA04] bg-clip-text text-transparent hover:from-[#F9AA04] hover:to-[#233691] transition-all">
               {tBrand('name')}
             </Link>
           </div>
