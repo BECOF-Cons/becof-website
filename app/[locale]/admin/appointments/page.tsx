@@ -6,6 +6,7 @@ import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Calendar, Clock, User, Mail, Phone, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { ConfirmPaymentButton } from './ConfirmPaymentButton';
 import { getAdminTranslations } from '@/lib/admin-translations';
+import { getTranslations } from 'next-intl/server';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -23,15 +24,47 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
   }
 
   const translations = await getAdminTranslations(locale);
+  const t = await getTranslations({ locale, namespace: 'admin.appointments' });
 
-  const appointments = await prisma.appointment.findMany({
-    include: {
-      payment: true,
-    },
-    orderBy: {
-      preferredDate: 'desc',
-    },
-  });
+  let appointments: any[] = [];
+  
+  try {
+    appointments = await prisma.appointment.findMany({
+      select: {
+        id: true,
+        userId: true,
+        service: true,
+        name: true,
+        email: true,
+        phone: true,
+        date: true,
+        time: true,
+        status: true,
+        message: true,
+        createdAt: true,
+        updatedAt: true,
+        payment: {
+          select: {
+            status: true,
+            amount: true,
+            currency: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching appointments:', error);
+    // Continue with empty array
+  }
 
   const getStatusBadge = (status: string) => {
     const styles = {
@@ -68,26 +101,26 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Appointments</h1>
-          <p className="text-gray-600 mt-1">Manage client appointments</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+          <p className="text-gray-600 mt-1">{t('subtitle')}</p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">Total</p>
+          <p className="text-sm text-gray-600">{t('stats.total')}</p>
           <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
         </div>
         <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">Pending</p>
+          <p className="text-sm text-gray-600">{t('stats.pending')}</p>
           <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
         </div>
         <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">Confirmed</p>
+          <p className="text-sm text-gray-600">{t('stats.confirmed')}</p>
           <p className="text-2xl font-bold text-green-600">{stats.confirmed}</p>
         </div>
         <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">Completed</p>
+          <p className="text-sm text-gray-600">{t('stats.completed')}</p>
           <p className="text-2xl font-bold text-blue-600">{stats.completed}</p>
         </div>
         </div>
@@ -97,7 +130,7 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
         {appointments.length === 0 ? (
           <div className="text-center py-12">
             <Calendar className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <p className="text-gray-500">No appointments yet</p>
+            <p className="text-gray-500">{t('noAppointments')}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -105,28 +138,28 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Client
+                    {t('table.client')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contact
+                    {t('table.contact')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date & Time
+                    {t('table.dateTime')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Service
+                    {t('table.service')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Price
+                    {t('table.payment')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                    {t('table.status')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Payment
+                    {t('table.payment')}
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
+                    {t('table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -137,7 +170,7 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
                       <div className="flex items-center gap-2">
                         <User size={16} className="text-gray-400" />
                         <span className="font-medium text-gray-900">
-                          {appointment.studentName}
+                          {appointment.name}
                         </span>
                       </div>
                     </td>
@@ -145,11 +178,11 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <Mail size={14} className="text-gray-400" />
-                          <span>{appointment.studentEmail}</span>
+                          <span>{appointment.email}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Phone size={14} className="text-gray-400" />
-                          <span>{appointment.studentPhone}</span>
+                          <span>{appointment.phone}</span>
                         </div>
                       </div>
                     </td>
@@ -157,24 +190,24 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
                       <div className="flex items-center gap-2 text-sm">
                         <Calendar size={14} className="text-gray-400" />
                         <span>
-                          {new Date(appointment.preferredDate).toLocaleString('en-US', {
+                          {new Date(appointment.date).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
                           })}
+                          {' at '}
+                          {appointment.time}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-2 py-1 text-xs bg-gray-100 rounded">
-                        {appointment.serviceType}
+                        {appointment.service}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-sm font-medium text-gray-900">
-                        {appointment.price} TND
+                        {appointment.payment?.amount || 'N/A'} {appointment.payment?.currency || 'TND'}
                       </span>
                     </td>
                     <td className="px-6 py-4">

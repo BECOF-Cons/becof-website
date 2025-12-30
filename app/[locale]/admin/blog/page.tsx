@@ -5,6 +5,9 @@ import Link from 'next/link';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Edit, Trash2, Plus, Eye } from 'lucide-react';
 import { getAdminTranslations } from '@/lib/admin-translations';
+import { getTranslations } from 'next-intl/server';
+import DeleteBlogButton from './DeleteBlogButton';
+import TogglePublishButton from './TogglePublishButton';
 
 export default async function BlogManagementPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -19,6 +22,7 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
   }
 
   const translations = await getAdminTranslations(locale);
+  const t = await getTranslations({ locale, namespace: 'admin' });
 
   const posts = await prisma.blogPost.findMany({
     include: {
@@ -41,15 +45,15 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Blog Posts</h1>
-          <p className="text-gray-600 mt-1">Manage your blog content</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('blog.title')}</h1>
+          <p className="text-gray-600 mt-1">{t('blog.subtitle')}</p>
         </div>
         <Link
-          href="/admin/blog/new"
-          className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors"
+          href={`/${locale}/admin/blog/new`}
+          className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors"
         >
           <Plus size={20} />
-          New Post
+          {t('blog.createNew')}
         </Link>
       </div>
 
@@ -77,13 +81,13 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         {posts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">No blog posts yet</p>
+            <p className="text-gray-500 mb-4">{t('blog.noPosts')}</p>
             <Link
-              href="/admin/blog/new"
-              className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700"
+              href={`/${locale}/admin/blog/new`}
+              className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700"
             >
               <Plus size={20} />
-              Create your first post
+              {t('blog.createNew')}
             </Link>
           </div>
         ) : (
@@ -92,22 +96,22 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Title
+                    {t('blog.table.title')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Category
+                    {t('blog.table.category')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                    {t('blog.table.status')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Author
+                    {t('blog.table.author')}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
+                    {t('blog.table.date')}
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
+                    {t('blog.table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -146,7 +150,7 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
                             : 'bg-yellow-100 text-yellow-800'
                         }`}
                       >
-                        {post.published ? 'Published' : 'Draft'}
+                        {post.published ? t('blog.status.published') : t('blog.status.draft')}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
@@ -157,9 +161,14 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <TogglePublishButton
+                          postId={post.id}
+                          currentStatus={post.published}
+                          locale={locale}
+                        />
                         {post.published && (
                           <Link
-                            href={`/blog/${post.slugFr}`}
+                            href={`/${locale}/blog/${post.slugFr}`}
                             target="_blank"
                             className="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                             title="View post"
@@ -168,18 +177,17 @@ export default async function BlogManagementPage({ params }: { params: Promise<{
                           </Link>
                         )}
                         <Link
-                          href={`/admin/blog/edit/${post.id}`}
-                          className="p-2 text-teal-600 hover:bg-teal-50 rounded transition-colors"
+                          href={`/${locale}/admin/blog/edit/${post.id}`}
+                          className="p-2 text-amber-600 hover:bg-amber-50 rounded transition-colors"
                           title="Edit post"
                         >
                           <Edit size={18} />
                         </Link>
-                        <button
-                          className="p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
-                          title="Delete post"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                        <DeleteBlogButton 
+                          postId={post.id} 
+                          postTitle={post.titleEn} 
+                          locale={locale}
+                        />
                       </div>
                     </td>
                   </tr>

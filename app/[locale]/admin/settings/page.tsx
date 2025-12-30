@@ -4,6 +4,7 @@ import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { Settings as SettingsIcon, Mail, Calendar, CreditCard, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { getAdminTranslations } from '@/lib/admin-translations';
+import { getTranslations } from 'next-intl/server';
 
 export default async function AdminSettingsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -18,6 +19,7 @@ export default async function AdminSettingsPage({ params }: { params: Promise<{ 
   }
 
   const translations = await getAdminTranslations(locale);
+  const t = await getTranslations({ locale, namespace: 'admin.settings' });
 
   // Check environment variables
   const hasGoogleCalendar = !!(
@@ -35,34 +37,34 @@ export default async function AdminSettingsPage({ params }: { params: Promise<{ 
   const settingsSections = [
     {
       icon: CreditCard,
-      title: 'Service Pricing',
-      description: 'Manage prices for your services',
-      href: '/admin/pricing',
-      color: 'bg-indigo-500',
+      title: t('sections.servicePricing.title'),
+      description: t('sections.servicePricing.description'),
+      href: `/${locale}/admin/pricing`,
+      color: 'bg-blue-600',
     },
     {
       icon: Mail,
-      title: 'Email Settings',
-      description: 'Configure SMTP and email notifications',
+      title: t('sections.emailSettings.title'),
+      description: t('sections.emailSettings.description'),
       href: '#',
-      color: 'bg-purple-500',
-      badge: 'Configured',
+      color: 'bg-amber-600',
+      badge: t('badges.configured'),
     },
     {
       icon: Calendar,
-      title: 'Google Calendar',
-      description: 'Manage calendar integration',
+      title: t('sections.googleCalendar.title'),
+      description: t('sections.googleCalendar.description'),
       href: '#',
-      color: 'bg-pink-500',
-      badge: 'Setup Required',
+      color: 'bg-blue-500',
+      badge: t('badges.setupRequired'),
     },
     {
       icon: Globe,
-      title: 'Site Settings',
-      description: 'General website configuration',
+      title: t('sections.siteSettings.title'),
+      description: t('sections.siteSettings.description'),
       href: '#',
       color: 'bg-blue-500',
-      badge: 'Coming Soon',
+      badge: t('badges.comingSoon'),
     },
   ];
 
@@ -70,9 +72,9 @@ export default async function AdminSettingsPage({ params }: { params: Promise<{ 
     <AdminLayoutWrapper user={session.user} title={translations.nav.settings} locale={locale} translations={translations}>
       <div className="max-w-4xl">
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">System Configuration</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('title')}</h3>
           <p className="text-sm text-gray-600">
-            Manage your website settings and integrations
+            {t('subtitle')}
           </p>
         </div>
 

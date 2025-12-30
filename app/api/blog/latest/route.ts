@@ -8,15 +8,10 @@ export async function GET() {
         published: true,
       },
       include: {
+        category: true,
         author: {
           select: {
             name: true,
-          },
-        },
-        category: {
-          select: {
-            nameEn: true,
-            nameFr: true,
           },
         },
       },

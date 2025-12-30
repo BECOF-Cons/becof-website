@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Save, X } from 'lucide-react';
+import { Save, X, Plus } from 'lucide-react';
 
 interface BlogPostFormProps {
   categories: Array<{
@@ -29,6 +29,9 @@ interface BlogPostFormProps {
 export default function BlogPostForm({ categories, initialData }: BlogPostFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [newCategoryEn, setNewCategoryEn] = useState('');
+  const [newCategoryFr, setNewCategoryFr] = useState('');
   const [formData, setFormData] = useState({
     titleEn: initialData?.titleEn || '',
     titleFr: initialData?.titleFr || '',
@@ -54,11 +57,52 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
 
   const handleTitleChange = (lang: 'en' | 'fr', value: string) => {
     const slugKey = lang === 'en' ? 'slugEn' : 'slugFr';
-    setFormData({
+      setFormData({
       ...formData,
       [`title${lang === 'en' ? 'En' : 'Fr'}`]: value,
       [slugKey]: generateSlug(value),
     });
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCategoryEn.trim() || !newCategoryFr.trim()) {
+      alert('Please enter both English and French category names');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/blog/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nameEn: newCategoryEn,
+          nameFr: newCategoryFr,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create category');
+      }
+
+      const newCategory = await response.json();
+      
+      // Add the new category to the form data
+      setFormData({ ...formData, categoryId: newCategory.id });
+      setNewCategoryEn('');
+      setNewCategoryFr('');
+      setShowAddCategory(false);
+      
+      // Refresh to get updated categories list
+      router.refresh();
+    } catch (error) {
+      console.error('Error creating category:', error);
+      alert('Failed to create category');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent, asDraft = false) => {
@@ -197,18 +241,87 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Category (Catégorie)
         </label>
-        <select
-          value={formData.categoryId}
-          onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-        >
-          <option value="">Select a category / Sélectionner une catégorie</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.nameEn} / {category.nameFr}
+        <div className="flex gap-2">
+          <select
+            value={formData.categoryId}
+            onChange={(e) => {
+              if (e.target.value === '__ADD_NEW__') {
+                setShowAddCategory(true);
+              } else {
+                setFormData({ ...formData, categoryId: e.target.value });
+              }
+            }}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#233691] focus:border-transparent"
+          >
+            <option value="">Select a category / Sélectionner une catégorie</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.nameEn} / {category.nameFr}
+              </option>
+            ))}
+            <option value="__ADD_NEW__" className="font-semibold" style={{color: '#F9AA04'}}>
+              + Add New Category / Ajouter une nouvelle catégorie
             </option>
-          ))}
-        </select>
+          </select>
+        </div>
+        
+        {/* Add Category Form */}
+        {showAddCategory && (
+          <div className="mt-4 p-4 border-2 rounded-lg" style={{borderColor: '#F9AA04', backgroundColor: 'rgba(249, 170, 4, 0.05)'}}>
+            <div className="flex items-center gap-2 mb-3">
+              <Plus className="h-5 w-5" style={{color: '#F9AA04'}} />
+              <h4 className="font-semibold text-gray-900">Add New Category</h4>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  Category Name (English)
+                </label>
+                <input
+                  type="text"
+                  value={newCategoryEn}
+                  onChange={(e) => setNewCategoryEn(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F9AA04] focus:border-transparent"
+                  placeholder="e.g., Career Advice"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  Category Name (French)
+                </label>
+                <input
+                  type="text"
+                  value={newCategoryFr}
+                  onChange={(e) => setNewCategoryFr(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F9AA04] focus:border-transparent"
+                  placeholder="e.g., Conseils de Carrière"
+                />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddCategory(false);
+                    setNewCategoryEn('');
+                    setNewCategoryFr('');
+                  }}
+                  className="px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleAddCategory}
+                  disabled={loading}
+                  className="px-3 py-1.5 text-sm text-white rounded-lg transition-colors disabled:opacity-50"
+                  style={{background: '#F9AA04'}}
+                >
+                  {loading ? 'Creating...' : 'Create Category'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Cover Image */}

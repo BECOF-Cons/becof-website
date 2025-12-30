@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import AdminLayoutWrapper from '@/components/admin/AdminLayoutWrapper';
 import { CreditCard, CheckCircle, Clock, XCircle, DollarSign } from 'lucide-react';
 import { getAdminTranslations } from '@/lib/admin-translations';
+import { getTranslations } from 'next-intl/server';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -21,12 +22,40 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
   }
 
   const translations = await getAdminTranslations(locale);
+  const t = await getTranslations({ locale, namespace: 'admin.payments' });
 
-  const payments = await prisma.payment.findMany({
-    include: {
-      appointment: {
-        include: {
-          user: true,
+  let payments: any[] = [];
+  
+  try {
+    payments = await prisma.payment.findMany({
+      select: {
+        id: true,
+        userId: true,
+        appointmentId: true,
+        amount: true,
+        currency: true,
+        status: true,
+        method: true,
+        transactionId: true,
+        createdAt: true,
+        updatedAt: true,
+        appointment: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            date: true,
+            time: true,
+            service: true,
+          status: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
         },
       },
     },
@@ -34,6 +63,10 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
       createdAt: 'desc',
     },
   });
+  } catch (error) {
+    console.error('Error fetching payments:', error);
+    // Continue with empty array
+  }
 
   const stats = {
     total: payments.length,
@@ -41,14 +74,17 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
     pending: payments.filter((p) => p.appointment?.status === 'PENDING').length,
     totalRevenue: payments
       .filter((p) => p.appointment?.status === 'CONFIRMED')
-      .reduce((sum, p) => sum + p.amount, 0),
+      .reduce((sum, p) => {
+        const amount = parseFloat(p.amount) || 0;
+        return sum + amount;
+      }, 0),
   };
 
   const getPaymentMethodBadge = (method: string) => {
     const styles = {
       KONNECT: 'bg-blue-100 text-blue-800',
       FLOUCI: 'bg-green-100 text-green-800',
-      D17: 'bg-purple-100 text-purple-800',
+      D17: 'bg-amber-100 text-amber-800',
       BANK_TRANSFER: 'bg-gray-100 text-gray-800',
     };
     return styles[method as keyof typeof styles] || 'bg-gray-100 text-gray-800';
@@ -74,7 +110,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                 <CreditCard className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Payments</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.total')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.total}</p>
               </div>
             </div>
@@ -86,7 +122,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                 <CheckCircle className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Completed</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.completed')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.completed}</p>
               </div>
             </div>
@@ -98,7 +134,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                 <Clock className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.pending')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.pending}</p>
               </div>
             </div>
@@ -106,11 +142,11 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
 
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <div className="bg-purple-500 rounded-lg p-3">
+              <div className="bg-amber-600 rounded-lg p-3">
                 <DollarSign className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                <p className="text-sm font-medium text-gray-600">{t('stats.totalRevenue')}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stats.totalRevenue} TND</p>
               </div>
             </div>
@@ -120,13 +156,13 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
         {/* Payments Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Payments</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{t('title')}</h3>
           </div>
           {payments.length === 0 ? (
             <div className="px-6 py-12 text-center">
               <CreditCard className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No payments yet</h3>
-              <p className="mt-1 text-sm text-gray-500">Payments will appear here once appointments are booked.</p>
+              <h3 className="mt-2 text-sm font-medium text-gray-900">{t('noPayments')}</h3>
+              <p className="mt-1 text-sm text-gray-500">{t('subtitle')}</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -137,19 +173,19 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                       ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Client
+                      {t('table.client')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Amount
+                      {t('table.amount')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Method
+                      {t('table.method')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                      {t('table.status')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
+                      {t('table.date')}
                     </th>
                   </tr>
                 </thead>
@@ -160,15 +196,15 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                         {payment.id.slice(0, 8)}...
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{payment.appointment?.studentName}</div>
-                        <div className="text-sm text-gray-500">{payment.appointment?.studentEmail}</div>
+                        <div className="text-sm text-gray-900">{payment.appointment?.name}</div>
+                        <div className="text-sm text-gray-500">{payment.appointment?.email}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                         {payment.amount} TND
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.paymentMethod)}`}>
-                          {payment.paymentMethod.replace('_', ' ')}
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.method || '')}`}>
+                          {payment.method?.replace('_', ' ') || 'N/A'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

@@ -19,22 +19,35 @@ export default async function AdminPage({ params }: { params: Promise<{ locale: 
   // Get translations
   const t = await getTranslations({ locale, namespace: 'admin' });
 
-  // Fetch real statistics
-  const [appointments, payments, users, blogPosts] = await Promise.all([
-    prisma.appointment.count(),
-    prisma.payment.findMany({
-      where: {
-        appointment: {
-          status: 'CONFIRMED'
+  // Fetch real statistics with error handling
+  let appointments = 0;
+  let payments: any[] = [];
+  let users = 0;
+  let blogPosts = 0;
+
+  try {
+    [appointments, payments, users, blogPosts] = await Promise.all([
+      prisma.appointment.count().catch(() => 0),
+      prisma.payment.findMany({
+        where: {
+          appointment: {
+            status: 'CONFIRMED'
+          }
         }
-      }
-    }),
-    prisma.user.count(),
-    prisma.blogPost.count().catch(() => 0), // Blog posts might not exist yet
-  ]);
+      }).catch(() => []),
+      prisma.user.count().catch(() => 0),
+      prisma.blogPost.count().catch(() => 0),
+    ]);
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error);
+    // Continue with default values
+  }
 
   // Calculate total revenue from confirmed payments
-  const totalRevenue = payments.reduce((sum, payment) => sum + payment.amount, 0);
+  const totalRevenue = payments.reduce((sum, payment) => {
+    const amount = parseFloat(payment.amount) || 0;
+    return sum + amount;
+  }, 0);
 
   const stats = {
     totalAppointments: appointments,
@@ -56,7 +69,41 @@ export default async function AdminPage({ params }: { params: Promise<{ locale: 
     welcome: t('welcome'),
     signOut: t('signOut'),
     title: t('title'),
+    dashboard: {
+      stats: {
+        totalPosts: t('dashboard.stats.totalPosts'),
+        totalAppointments: t('dashboard.stats.totalAppointments'),
+        totalRevenue: t('dashboard.stats.totalRevenue'),
+        activeUsers: t('dashboard.stats.activeUsers'),
+      },
+      quickActions: {
+        title: t('dashboard.quickActions.title'),
+        newPost: t('dashboard.quickActions.newPost'),
+        newPostDesc: t('dashboard.quickActions.newPostDesc'),
+        viewAppointments: t('dashboard.quickActions.viewAppointments'),
+        viewAppointmentsDesc: t('dashboard.quickActions.viewAppointmentsDesc'),
+        settings: t('dashboard.quickActions.settings'),
+        settingsDesc: t('dashboard.quickActions.settingsDesc'),
+      },
+      gettingStarted: {
+        title: t('dashboard.gettingStarted.title'),
+        step1Title: t('dashboard.gettingStarted.step1Title'),
+        step1Desc: t('dashboard.gettingStarted.step1Desc'),
+        step2Title: t('dashboard.gettingStarted.step2Title'),
+        step2Desc: t('dashboard.gettingStarted.step2Desc'),
+        step3Title: t('dashboard.gettingStarted.step3Title'),
+        step3Desc: t('dashboard.gettingStarted.step3Desc'),
+      },
+    },
   };
 
-  return <AdminDashboard user={session?.user} stats={stats} locale={locale} translations={translations} />;
+  // Serialize user data to avoid non-serializable values
+  const serializedUser = session?.user ? {
+    name: session.user.name,
+    email: session.user.email,
+    image: session.user.image,
+    role: session.user.role,
+  } : null;
+
+  return <AdminDashboard user={serializedUser} stats={stats} locale={locale} translations={translations} />;
 }

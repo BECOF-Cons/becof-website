@@ -34,8 +34,10 @@ export default function PaymentPage() {
         .then((res) => res.json())
         .then((data) => {
           setAppointment(data);
-          // Use the price stored in the appointment
-          setPrice(data.price?.toString() || '150');
+          // Use the price from the payment record
+          if (data.payment && data.payment.amount) {
+            setPrice(data.payment.amount.toString());
+          }
         })
         .catch((err) => console.error('Error fetching appointment:', err));
     }
@@ -133,8 +135,8 @@ export default function PaymentPage() {
                 </li>
                 <li>
                   {locale === 'fr'
-                    ? 'Envoyez la preuve de paiement à contact@becof.tn'
-                    : 'Send payment proof to contact@becof.tn'}
+                    ? 'Envoyez la preuve de paiement à becofconseil@gmail.com'
+                    : 'Send payment proof to becofconseil@gmail.com'}
                 </li>
                 <li>
                   {locale === 'fr'
@@ -367,7 +369,7 @@ export default function PaymentPage() {
                   {locale === 'fr'
                     ? 'Après avoir effectué le virement, envoyez une capture d\'écran de la preuve de paiement à '
                     : 'After making the transfer, send a screenshot of the payment proof to '}
-                  <a href="mailto:contact@becof.tn" className="font-semibold underline">contact@becof.tn</a>
+                  <a href="mailto:becofconseil@gmail.com" className="font-semibold underline">becofconseil@gmail.com</a>
                   {locale === 'fr'
                     ? ' avec le numéro de référence ci-dessus pour confirmation rapide.'
                     : ' with the reference number above for quick confirmation.'}
@@ -381,7 +383,7 @@ export default function PaymentPage() {
         <button
           onClick={handlePayment}
           disabled={!paymentMethod || loading}
-          className="w-full bg-gradient-to-r from-teal-600 to-purple-600 text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 hover:shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading
             ? locale === 'fr'

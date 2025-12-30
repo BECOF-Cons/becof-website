@@ -20,8 +20,29 @@ export async function POST(req: NextRequest) {
     // Find payment
     const payment = await prisma.payment.findUnique({
       where: { id: paymentId },
-      include: {
-        appointment: true,
+      select: {
+        id: true,
+        userId: true,
+        appointmentId: true,
+        amount: true,
+        currency: true,
+        status: true,
+        method: true,
+        transactionId: true,
+        createdAt: true,
+        updatedAt: true,
+        appointment: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            date: true,
+            time: true,
+            service: true,
+            status: true,
+          },
+        },
       },
     });
 
@@ -57,23 +78,23 @@ export async function POST(req: NextRequest) {
         // Send payment receipt
         sendPaymentConfirmation({
           appointmentId: payment.appointmentId,
-          amount: payment.amount,
-          paymentMethod: payment.paymentMethod,
+          amount: parseFloat(payment.amount),
+          paymentMethod: payment.method || 'Unknown',
           transactionId: transactionId,
           appointment: {
-            clientName: payment.appointment.studentName,
-            clientEmail: payment.appointment.studentEmail,
-            date: payment.appointment.preferredDate,
-            service: payment.appointment.serviceType,
+            clientName: payment.appointment.name,
+            clientEmail: payment.appointment.email,
+            date: payment.appointment.date,
+            service: payment.appointment.service,
           },
         }).catch((err) => console.error('Error sending payment confirmation:', err));
 
         // Send appointment confirmation
         sendAppointmentConfirmation({
-          clientName: payment.appointment.studentName,
-          clientEmail: payment.appointment.studentEmail,
-          date: payment.appointment.preferredDate,
-          service: payment.appointment.serviceType,
+          clientName: payment.appointment.name,
+          clientEmail: payment.appointment.email,
+          date: payment.appointment.date,
+          service: payment.appointment.service,
         }).catch((err) =>
           console.error('Error sending appointment confirmation:', err)
         );

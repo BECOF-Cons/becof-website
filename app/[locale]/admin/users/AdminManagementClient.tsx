@@ -117,7 +117,7 @@ export default function AdminManagementClient({
           </div>
           <button
             onClick={() => setShowInviteModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-700 to-amber-500 text-white rounded-lg hover:from-blue-800 hover:to-amber-600 transition-all shadow-md"
           >
             <UserPlus className="h-5 w-5" />
             Invite Admin
@@ -128,28 +128,28 @@ export default function AdminManagementClient({
       {/* Active Admins */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h4 className="text-md font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5 text-indigo-600" />
+          <ShieldCheck className="h-5 w-5 text-blue-700" />
           Active Admins ({admins.length})
         </h4>
         <div className="space-y-3">
           {admins.map((admin) => (
             <div
               key={admin.id}
-              className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-indigo-300 transition-colors"
+              className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className={`p-3 rounded-lg ${admin.role === 'SUPER_ADMIN' ? 'bg-purple-100' : 'bg-indigo-100'}`}>
+                <div className={`p-3 rounded-lg ${admin.role === 'SUPER_ADMIN' ? 'bg-amber-100' : 'bg-blue-100'}`}>
                   {admin.role === 'SUPER_ADMIN' ? (
-                    <ShieldCheck className="h-6 w-6 text-purple-600" />
+                    <ShieldCheck className="h-6 w-6 text-amber-600" />
                   ) : (
-                    <Shield className="h-6 w-6 text-indigo-600" />
+                    <Shield className="h-6 w-6 text-blue-700" />
                   )}
                 </div>
                 <div>
                   <h5 className="font-semibold text-gray-900">
                     {admin.name || 'No name'}
                     {admin.id === currentUserId && (
-                      <span className="ml-2 text-xs text-indigo-600">(You)</span>
+                      <span className="ml-2 text-xs text-blue-700">(You)</span>
                     )}
                   </h5>
                   <p className="text-sm text-gray-600">{admin.email}</p>
@@ -157,8 +157,8 @@ export default function AdminManagementClient({
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
                         admin.role === 'SUPER_ADMIN'
-                          ? 'bg-purple-100 text-purple-700'
-                          : 'bg-indigo-100 text-indigo-700'
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-blue-100 text-blue-800'
                       }`}
                     >
                       {admin.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
@@ -206,8 +206,8 @@ export default function AdminManagementClient({
                       <span
                         className={`text-xs px-2 py-1 rounded-full ${
                           invitation.role === 'SUPER_ADMIN'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-indigo-100 text-indigo-700'
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-blue-100 text-blue-800'
                         }`}
                       >
                         {invitation.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
@@ -242,7 +242,7 @@ export default function AdminManagementClient({
                   id="email"
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   placeholder="admin@example.com"
                   required
                 />
@@ -255,7 +255,7 @@ export default function AdminManagementClient({
                   id="role"
                   value={inviteRole}
                   onChange={(e) => setInviteRole(e.target.value as 'ADMIN' | 'SUPER_ADMIN')}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
                   <option value="ADMIN">Admin</option>
                   <option value="SUPER_ADMIN">Super Admin</option>
@@ -278,7 +278,7 @@ export default function AdminManagementClient({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-700 to-amber-500 text-white rounded-lg hover:from-blue-800 hover:to-amber-600 transition-all disabled:opacity-50"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {loading ? 'Sending...' : 'Send Invitation'}

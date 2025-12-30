@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 
 // GET - List all blog categories
@@ -15,6 +16,51 @@ export async function GET() {
     console.error('Error fetching categories:', error);
     return NextResponse.json(
       { error: 'Failed to fetch categories' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST - Create a new category
+export async function POST(request: Request) {
+  try {
+    const session = await auth();
+    
+    if (!session || !['ADMIN', 'SUPER_ADMIN'].includes((session.user as any)?.role)) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const { nameEn, nameFr } = body;
+
+    if (!nameEn || !nameFr) {
+      return NextResponse.json(
+        { error: 'Both English and French names are required' },
+        { status: 400 }
+      );
+    }
+
+    // Generate slugs from names
+    const slugEn = nameEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const slugFr = nameFr.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    const category = await prisma.blogCategory.create({
+      data: {
+        nameEn,
+        nameFr,
+        slugEn,
+        slugFr,
+      },
+    });
+
+    return NextResponse.json(category);
+  } catch (error) {
+    console.error('Error creating category:', error);
+    return NextResponse.json(
+      { error: 'Failed to create category' },
       { status: 500 }
     );
   }

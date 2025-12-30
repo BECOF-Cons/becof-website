@@ -21,6 +21,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       author: {
         select: {
           name: true,
+          email: true,
         },
       },
     },
@@ -52,7 +53,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-teal-600 to-purple-700 text-white py-20">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
         <div className="container mx-auto px-4">
           <Link
             href={`/${locale}/blog`}

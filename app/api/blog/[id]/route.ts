@@ -28,16 +28,6 @@ export async function GET(
     const { id } = await params;
     const post = await prisma.blogPost.findUnique({
       where: { id },
-      include: {
-        category: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
     });
 
     if (!post) {
@@ -115,15 +105,6 @@ export async function PATCH(
     const post = await prisma.blogPost.update({
       where: { id },
       data: updateData,
-      include: {
-        category: true,
-        author: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
     });
 
     return NextResponse.json(post);

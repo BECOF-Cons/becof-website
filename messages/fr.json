@@ -13,24 +13,24 @@
   },
   "home": {
     "hero": {
-      "title": "Votre Avenir Universitaire Commence Ici",
-      "subtitle": "Orientation personnalisée pour les bacheliers tunisiens. Choisissez la bonne université et tracez votre chemin vers le succès.",
+      "title": "Votre Avenir Universitaire et Professionnel Commence Ici",
+      "subtitle": "Au secondaire comme au supérieur, choisissez la filière qui correspond le mieux à votre projet... à vos ambitions.",
       "cta": "Réserver une Consultation",
       "secondaryCta": "Explorer le Blog"
     },
     "features": {
-      "title": "Comment Nous Vous Aidons",
+      "title": "Comment Vous Aider?",
       "counseling": {
-        "title": "Conseil en Orientation",
-        "description": "Des séances personnalisées pour comprendre vos intérêts et vos objectifs de carrière"
+        "title": "Orientation Scolaire et Universitaire Personnalisée",
+        "description": "Des entretiens personnalisés pour mieux choisir, mieux vous orienter"
       },
       "universities": {
-        "title": "Sélection d'Universités",
-        "description": "Trouvez les meilleures universités qui correspondent à votre profil et vos ambitions"
+        "title": "Sélection de filières et d'Universités",
+        "description": "Trouvez un descriptif détaillé, des spécialités et établissements du supérieur"
       },
       "application": {
-        "title": "Aide aux Candidatures",
-        "description": "Assistance complète pour vos dossiers et démarches administratives"
+        "title": "Événements et Salons Universitaires",
+        "description": "Organisation d'ateliers et de manifestations diverses pour accompagner au mieux les jeunes bacheliers."
       }
     },
     "stats": {
@@ -144,6 +144,192 @@
       "settings": "Paramètres"
     },
     "welcome": "Bienvenue",
-    "signOut": "Déconnexion"
+    "signOut": "Déconnexion",
+    "dashboard": {
+      "stats": {
+        "totalPosts": "Total des Articles",
+        "totalAppointments": "Total des Rendez-vous",
+        "totalRevenue": "Revenu Total",
+        "activeUsers": "Utilisateurs Actifs"
+      },
+      "quickActions": {
+        "title": "Actions Rapides",
+        "newPost": "Nouvel Article",
+        "newPostDesc": "Créer du contenu",
+        "viewAppointments": "Voir les Rendez-vous",
+        "viewAppointmentsDesc": "Gérer les réservations",
+        "settings": "Paramètres",
+        "settingsDesc": "Configurer le site"
+      },
+      "gettingStarted": {
+        "title": "Pour Commencer",
+        "step1Title": "Créez votre premier article de blog",
+        "step1Desc": "Partagez des conseils d'orientation avec les étudiants",
+        "step2Title": "Configurez les paramètres de paiement",
+        "step2Desc": "Configurez vos comptes Konnect, Flouci ou D17",
+        "step3Title": "Connectez Google Calendar",
+        "step3Desc": "Activez la planification automatique des rendez-vous"
+      }
+    },
+    "blog": {
+      "title": "Articles de Blog",
+      "subtitle": "Gérez votre contenu de blog",
+      "createNew": "Créer un Article",
+      "noPosts": "Aucun article trouvé",
+      "table": {
+        "title": "Titre",
+        "category": "Catégorie",
+        "author": "Auteur",
+        "status": "Statut",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "status": {
+        "published": "Publié",
+        "draft": "Brouillon"
+      },
+      "actions": {
+        "view": "Voir",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      }
+    },
+    "appointments": {
+      "title": "Rendez-vous",
+      "subtitle": "Gérer les rendez-vous clients",
+      "noAppointments": "Aucun rendez-vous pour le moment",
+      "stats": {
+        "total": "Total",
+        "pending": "En attente",
+        "confirmed": "Confirmés",
+        "completed": "Terminés"
+      },
+      "table": {
+        "client": "Client",
+        "contact": "Contact",
+        "dateTime": "Date & Heure",
+        "service": "Service",
+        "status": "Statut",
+        "payment": "Paiement",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "En attente",
+        "confirmed": "Confirmé",
+        "completed": "Terminé",
+        "cancelled": "Annulé"
+      },
+      "paymentStatus": {
+        "pending": "En attente",
+        "completed": "Payé",
+        "failed": "Échoué"
+      },
+      "actions": {
+        "view": "Voir les détails",
+        "confirmPayment": "Confirmer le paiement"
+      }
+    },
+    "pricing": {
+      "title": "Gestion des Services",
+      "subtitle": "Gérez vos services, tarifs et disponibilité",
+      "addService": "Ajouter un Service",
+      "noServices": "Aucun service trouvé",
+      "form": {
+        "nameEn": "Nom (Anglais)",
+        "nameFr": "Nom (Français)",
+        "descriptionEn": "Description (Anglais)",
+        "descriptionFr": "Description (Français)",
+        "icon": "Icône",
+        "preview": "Aperçu",
+        "price": "Prix",
+        "displayOrder": "Ordre d'affichage",
+        "status": "Statut",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "positionInfo": "Entrez la position où ce service doit apparaître (actuellement à la position {position})"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "toggleActive": "Basculer le statut"
+      },
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer \"{name}\"? Cette action ne peut pas être annulée."
+    },
+    "payments": {
+      "title": "Paiements",
+      "subtitle": "Gérer les transactions de paiement",
+      "noPayments": "Aucun paiement pour le moment",
+      "stats": {
+        "total": "Total",
+        "completed": "Terminés",
+        "pending": "En attente",
+        "totalRevenue": "Revenu Total"
+      },
+      "table": {
+        "client": "Client",
+        "service": "Service",
+        "amount": "Montant",
+        "method": "Méthode",
+        "status": "Statut",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "methods": {
+        "KONNECT": "Konnect",
+        "FLOUCI": "Flouci",
+        "D17": "D17",
+        "BANK_TRANSFER": "Virement bancaire"
+      },
+      "status": {
+        "PENDING": "En attente",
+        "CONFIRMED": "Confirmé",
+        "CANCELLED": "Annulé"
+      }
+    },
+    "settings": {
+      "title": "Configuration du Système",
+      "subtitle": "Gérez les paramètres de votre site web et les intégrations",
+      "sections": {
+        "servicePricing": {
+          "title": "Tarification des Services",
+          "description": "Gérer les prix de vos services"
+        },
+        "emailSettings": {
+          "title": "Paramètres Email",
+          "description": "Configurer SMTP et notifications email"
+        },
+        "googleCalendar": {
+          "title": "Google Calendar",
+          "description": "Gérer l'intégration du calendrier"
+        },
+        "siteSettings": {
+          "title": "Paramètres du Site",
+          "description": "Configuration générale du site web"
+        }
+      },
+      "badges": {
+        "configured": "Configuré",
+        "setupRequired": "Configuration requise",
+        "comingSoon": "Bientôt disponible"
+      },
+      "emailConfig": {
+        "title": "Configuration Email",
+        "smtpHost": "Hôte SMTP",
+        "smtpUser": "Utilisateur SMTP",
+        "status": "Statut",
+        "configured": "Configuré",
+        "notConfigured": "Non configuré"
+      },
+      "calendarConfig": {
+        "title": "Intégration Google Calendar",
+        "clientId": "ID Client Google",
+        "status": "Statut",
+        "configured": "Connecté",
+        "notConfigured": "Non connecté",
+        "setupInstructions": "Instructions de configuration"
+      }
+    }
   }
 }

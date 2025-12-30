@@ -32,16 +32,6 @@ export async function GET(req: NextRequest) {
         ...(status && { status: status as any }),
         ...(categoryId && { categoryId }),
       },
-      include: {
-        category: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -104,15 +94,6 @@ export async function POST(req: NextRequest) {
         ...validatedData,
         authorId: userId,
         publishedAt: validatedData.status === 'PUBLISHED' ? new Date() : null,
-      },
-      include: {
-        category: true,
-        author: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
       },
     });
 

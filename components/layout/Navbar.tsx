@@ -24,18 +24,14 @@ export default function Navbar() {
   const switchLocale = () => {
     const newLocale = locale === 'fr' ? 'en' : 'fr';
     
-    // Handle both with and without locale prefix in pathname
-    let newPathname;
-    if (pathname.startsWith(`/${locale}`)) {
-      // Replace existing locale
-      newPathname = pathname.replace(`/${locale}`, `/${newLocale}`);
-    } else if (pathname === '/' || pathname === '') {
-      // Root path - add locale
-      newPathname = `/${newLocale}`;
+    // Parse pathname and replace locale
+    const segments = pathname.split('/').filter(Boolean);
+    if (segments.length > 0 && (segments[0] === 'en' || segments[0] === 'fr')) {
+      segments[0] = newLocale;
     } else {
-      // Path without locale - prepend new locale
-      newPathname = `/${newLocale}${pathname}`;
+      segments.unshift(newLocale);
     }
+    const newPathname = '/' + segments.join('/');
     
     window.location.href = newPathname;
   };
@@ -46,7 +42,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href={`/${locale}`} className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <Link href={`/${locale}`} className="text-3xl font-bold bg-gradient-to-r from-[#233691] to-[#F9AA04] bg-clip-text text-transparent hover:from-[#F9AA04] hover:to-[#233691] transition-all">
               {tBrand('name')}
             </Link>
           </div>
@@ -57,7 +53,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+                className="text-sm font-medium text-gray-700 hover:text-[#233691] transition-colors"
               >
                 {item.name}
               </Link>
@@ -69,7 +65,7 @@ export default function Navbar() {
             {/* Language Switcher */}
             <button
               onClick={switchLocale}
-              className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+              className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-[#233691] transition-colors cursor-pointer"
             >
               <Globe className="h-4 w-4" />
               <span className="uppercase">{locale === 'fr' ? 'EN' : 'FR'}</span>
@@ -78,7 +74,8 @@ export default function Navbar() {
             {/* CTA Button */}
             <Link
               href={`/${locale}/appointment`}
-              className="hidden md:inline-flex items-center rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:shadow-lg transform hover:scale-105 transition-all"
+              className="hidden md:inline-flex items-center rounded-full px-6 py-2 text-sm font-semibold text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+              style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}
             >
               {t('bookAppointment')}
             </Link>
@@ -107,7 +104,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-[#233691]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
@@ -115,7 +112,8 @@ export default function Navbar() {
             ))}
             <Link
               href={`/${locale}/appointment`}
-              className="block rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 px-3 py-2 text-center text-base font-semibold text-white"
+              className="block rounded-md px-3 py-2 text-center text-base font-semibold text-white transition-colors"
+              style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}
               onClick={() => setMobileMenuOpen(false)}
             >
               {t('bookAppointment')}

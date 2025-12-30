@@ -32,31 +32,57 @@ interface AdminDashboardProps {
     welcome: string;
     signOut: string;
     title: string;
+    dashboard: {
+      stats: {
+        totalPosts: string;
+        totalAppointments: string;
+        totalRevenue: string;
+        activeUsers: string;
+      };
+      quickActions: {
+        title: string;
+        newPost: string;
+        newPostDesc: string;
+        viewAppointments: string;
+        viewAppointmentsDesc: string;
+        settings: string;
+        settingsDesc: string;
+      };
+      gettingStarted: {
+        title: string;
+        step1Title: string;
+        step1Desc: string;
+        step2Title: string;
+        step2Desc: string;
+        step3Title: string;
+        step3Desc: string;
+      };
+    };
   };
 }
 
 export default function AdminDashboard({ user, stats, locale, translations }: AdminDashboardProps) {
   const statCards = [
     { 
-      name: 'Total Posts', 
+      name: translations.dashboard.stats.totalPosts, 
       value: stats.totalPosts.toString(), 
       icon: FileText, 
-      color: 'bg-indigo-500' 
+      color: 'bg-blue-600' 
     },
     { 
-      name: 'Appointments', 
+      name: translations.dashboard.stats.totalAppointments, 
       value: stats.totalAppointments.toString(), 
       icon: Calendar, 
-      color: 'bg-purple-500' 
+      color: 'bg-amber-600' 
     },
     { 
-      name: 'Total Revenue', 
-      value: `${stats.totalRevenue.toLocaleString()} TND`, 
+      name: translations.dashboard.stats.totalRevenue, 
+      value: `${stats.totalRevenue.toFixed(2)} DT`, 
       icon: TrendingUp, 
-      color: 'bg-pink-500' 
+      color: 'bg-blue-500'
     },
     { 
-      name: 'Active Users', 
+      name: translations.dashboard.stats.activeUsers, 
       value: stats.totalUsers.toString(), 
       icon: Users, 
       color: 'bg-blue-500' 
@@ -87,72 +113,97 @@ export default function AdminDashboard({ user, stats, locale, translations }: Ad
 
       {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{translations.dashboard.quickActions.title}</h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Link
-                href="/admin/blog/new"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-all"
+                href={`/${locale}/admin/blog/new`}
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg transition-all"
+                style={{'--hover-border': '#233691', '--hover-bg': 'rgba(35, 54, 145, 0.05)'} as React.CSSProperties}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#233691';
+                  e.currentTarget.style.backgroundColor = 'rgba(35, 54, 145, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.backgroundColor = '';
+                }}
               >
-                <FileText className="h-8 w-8 text-indigo-600" />
+                <FileText className="h-8 w-8" style={{color: '#233691'}} />
                 <div>
-                  <p className="font-medium text-gray-900">New Blog Post</p>
-                  <p className="text-sm text-gray-500">Create content</p>
+                  <p className="font-medium text-gray-900">{translations.dashboard.quickActions.newPost}</p>
+                  <p className="text-sm text-gray-500">{translations.dashboard.quickActions.newPostDesc}</p>
                 </div>
               </Link>
 
               <Link
-                href="/admin/appointments"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all"
+                href={`/${locale}/admin/appointments`}
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg transition-all"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#F9AA04';
+                  e.currentTarget.style.backgroundColor = 'rgba(249, 170, 4, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.backgroundColor = '';
+                }}
               >
-                <Calendar className="h-8 w-8 text-purple-600" />
+                <Calendar className="h-8 w-8" style={{color: '#F9AA04'}} />
                 <div>
-                  <p className="font-medium text-gray-900">View Appointments</p>
-                  <p className="text-sm text-gray-500">Manage bookings</p>
+                  <p className="font-medium text-gray-900">{translations.dashboard.quickActions.viewAppointments}</p>
+                  <p className="text-sm text-gray-500">{translations.dashboard.quickActions.viewAppointmentsDesc}</p>
                 </div>
               </Link>
 
               <Link
-                href="/admin/settings"
-                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:border-pink-500 hover:bg-pink-50 transition-all"
+                href={`/${locale}/admin/settings`}
+                className="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg transition-all"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#233691';
+                  e.currentTarget.style.backgroundColor = 'rgba(35, 54, 145, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.backgroundColor = '';
+                }}
               >
-                <Settings className="h-8 w-8 text-pink-600" />
+                <Settings className="h-8 w-8" style={{color: '#233691'}} />
                 <div>
-                  <p className="font-medium text-gray-900">Settings</p>
-                  <p className="text-sm text-gray-500">Configure site</p>
+                  <p className="font-medium text-gray-900">{translations.dashboard.quickActions.settings}</p>
+                  <p className="text-sm text-gray-500">{translations.dashboard.quickActions.settingsDesc}</p>
                 </div>
               </Link>
             </div>
           </div>
 
           {/* Getting Started */}
-          <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Getting Started</h3>
+          <div className="mt-8 bg-gradient-to-r from-blue-50 to-amber-50 rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{translations.dashboard.gettingStarted.title}</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
-                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-indigo-600 text-white text-sm font-semibold">
+                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-semibold">
                   1
                 </span>
                 <div>
-                  <p className="font-medium text-gray-900">Create your first blog post</p>
-                  <p className="text-sm text-gray-600">Share orientation tips with students</p>
+                  <p className="font-medium text-gray-900">{translations.dashboard.gettingStarted.step1Title}</p>
+                  <p className="text-sm text-gray-600">{translations.dashboard.gettingStarted.step1Desc}</p>
                 </div>
               </li>
               <li className="flex items-start space-x-3">
-                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-purple-600 text-white text-sm font-semibold">
+                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-semibold">
                   2
                 </span>
                 <div>
-                  <p className="font-medium text-gray-900">Configure payment settings</p>
-                  <p className="text-sm text-gray-600">Setup Konnect, Flouci, or D17 accounts</p>
+                  <p className="font-medium text-gray-900">{translations.dashboard.gettingStarted.step2Title}</p>
+                  <p className="text-sm text-gray-600">{translations.dashboard.gettingStarted.step2Desc}</p>
                 </div>
               </li>
               <li className="flex items-start space-x-3">
-                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-pink-600 text-white text-sm font-semibold">
+                <span className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-600 text-white text-sm font-semibold">
                   3
                 </span>
                 <div>
-                  <p className="font-medium text-gray-900">Connect Google Calendar</p>
-                  <p className="text-sm text-gray-600">Enable automatic appointment scheduling</p>
+                  <p className="font-medium text-gray-900">{translations.dashboard.gettingStarted.step3Title}</p>
+                  <p className="text-sm text-gray-600">{translations.dashboard.gettingStarted.step3Desc}</p>
                 </div>
               </li>
             </ul>

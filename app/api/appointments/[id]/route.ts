@@ -11,8 +11,29 @@ export async function GET(
     const { id } = await params;
     const appointment = await prisma.appointment.findUnique({
       where: { id },
-      include: {
-        payment: true,
+      select: {
+        id: true,
+        userId: true,
+        name: true,
+        email: true,
+        phone: true,
+        date: true,
+        time: true,
+        service: true,
+        message: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        payment: {
+          select: {
+            id: true,
+            amount: true,
+            currency: true,
+            status: true,
+            method: true,
+            transactionId: true,
+          },
+        },
       },
     });
 
@@ -137,10 +158,10 @@ export async function DELETE(
     if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {
       const { sendCancellationNotification } = await import('@/lib/email');
       sendCancellationNotification({
-        clientName: appointment.studentName,
-        clientEmail: appointment.studentEmail,
-        date: appointment.preferredDate,
-        service: appointment.serviceType,
+        clientName: appointment.name,
+        clientEmail: appointment.email,
+        date: appointment.date,
+        service: appointment.service,
       }).catch((err) => console.error('Error sending cancellation email:', err));
     }
 
