@@ -51,8 +51,12 @@ export default async function EditBlogPostPage({
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Edit Blog Post</h1>
-            <p className="text-gray-600 mt-1">Update your blog content</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {locale === 'fr' ? 'Modifier l\'Article de Blog' : 'Edit Blog Post'}
+            </h1>
+            <p className="text-gray-600 mt-1">
+              {locale === 'fr' ? 'Mettre à jour le contenu de votre blog' : 'Update your blog content'}
+            </p>
           </div>
         </div>
 
