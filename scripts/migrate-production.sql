@@ -309,7 +309,25 @@ CREATE TABLE IF NOT EXISTS "AdminInvitation" (
 CREATE UNIQUE INDEX IF NOT EXISTS "AdminInvitation_email_key" ON "AdminInvitation"("email");
 CREATE UNIQUE INDEX IF NOT EXISTS "AdminInvitation_token_key" ON "AdminInvitation"("token");
 
--- 14. Drop old columns (optional - only after confirming data is migrated)
+-- 14. Create TeamMember table for team management feature
+CREATE TABLE IF NOT EXISTS "TeamMember" (
+    "id" TEXT NOT NULL,
+    "nameFr" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "titleFr" TEXT NOT NULL,
+    "titleEn" TEXT NOT NULL,
+    "bioFr" TEXT,
+    "bioEn" TEXT,
+    "image" TEXT NOT NULL,
+    "displayOrder" INTEGER NOT NULL DEFAULT 0,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "TeamMember_pkey" PRIMARY KEY ("id")
+);
+
+-- 15. Drop old columns (optional - only after confirming data is migrated)
 -- ALTER TABLE "BlogPost" DROP COLUMN IF EXISTS "title";
 -- ALTER TABLE "BlogPost" DROP COLUMN IF EXISTS "slug";
 -- ALTER TABLE "BlogPost" DROP COLUMN IF EXISTS "excerpt";

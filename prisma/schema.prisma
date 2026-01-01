@@ -211,3 +211,19 @@ model AdminInvitation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Team Member model
+model TeamMember {
+  id            String   @id @default(cuid())
+  nameFr        String
+  nameEn        String
+  titleFr       String
+  titleEn       String
+  bioFr         String?
+  bioEn         String?
+  image         String
+  displayOrder  Int      @default(0)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

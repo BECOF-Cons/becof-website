@@ -46,6 +46,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
   const navigation = [
     { name: translations.nav.dashboard, href: `/${locale}/admin`, icon: LayoutDashboard },
     { name: translations.nav.blogPosts, href: `/${locale}/admin/blog`, icon: FileText },
+    { name: locale === 'fr' ? 'Équipe' : 'Team', href: `/${locale}/admin/team`, icon: Users },
     { name: translations.nav.appointments, href: `/${locale}/admin/appointments`, icon: Calendar },
     { name: translations.nav.payments, href: `/${locale}/admin/payments`, icon: CreditCard },
     { name: translations.nav.servicePricing, href: `/${locale}/admin/pricing`, icon: DollarSign },
@@ -55,7 +56,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
   // Add admin management for super admins
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
   if (isSuperAdmin) {
-    navigation.splice(5, 0, { name: translations.nav.adminManagement, href: `/${locale}/admin/users`, icon: Users });
+    navigation.splice(6, 0, { name: translations.nav.adminManagement, href: `/${locale}/admin/users`, icon: Users });
   }
 
   // Get page title from pathname if not provided

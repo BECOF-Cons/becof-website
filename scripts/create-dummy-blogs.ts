@@ -6,7 +6,12 @@ async function createDummyBlogs() {
   try {
     // Get the admin user
     const admin = await prisma.user.findFirst({
-      where: { role: 'ADMIN' },
+      where: { 
+        OR: [
+          { role: 'ADMIN' },
+          { role: 'SUPER_ADMIN' }
+        ]
+      },
     });
 
     if (!admin) {

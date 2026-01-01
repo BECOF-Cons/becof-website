@@ -13,13 +13,13 @@ async function main() {
     where: { email: 'admin@becof.tn' },
     update: {
       password: hashedPassword,
-      role: 'ADMIN',
+      role: 'SUPER_ADMIN',
     },
     create: {
       email: 'admin@becof.tn',
       name: 'Admin',
       password: hashedPassword,
-      role: 'ADMIN',
+      role: 'SUPER_ADMIN',
     },
   });
 
