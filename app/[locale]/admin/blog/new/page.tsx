@@ -39,8 +39,12 @@ export default async function NewBlogPostPage({ params }: { params: Promise<{ lo
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">New Blog Post</h1>
-            <p className="text-gray-600 mt-1">Create a new blog article</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {locale === 'fr' ? 'Nouvel Article de Blog' : 'New Blog Post'}
+            </h1>
+            <p className="text-gray-600 mt-1">
+              {locale === 'fr' ? 'Créer un nouvel article de blog' : 'Create a new blog article'}
+            </p>
           </div>
         </div>
 

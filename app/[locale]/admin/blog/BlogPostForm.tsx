@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Save, X, Plus } from 'lucide-react';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 
 interface BlogPostFormProps {
   categories: Array<{
@@ -47,20 +48,46 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
   });
 
   const generateSlug = (text: string) => {
-    return text
-      .toLowerCase()
+    if (!text || text.trim() === '') return '';
+    
+    // Simple transliteration map for common Arabic characters
+    const arabicMap: Record<string, string> = {
+      'ا': 'a', 'ب': 'b', 'ت': 't', 'ث': 'th', 'ج': 'j',
+      'ح': 'h', 'خ': 'kh', 'د': 'd', 'ذ': 'dh', 'ر': 'r',
+      'ز': 'z', 'س': 's', 'ش': 'sh', 'ص': 's', 'ض': 'd',
+      'ط': 't', 'ظ': 'z', 'ع': 'a', 'غ': 'gh', 'ف': 'f',
+      'ق': 'q', 'ك': 'k', 'ل': 'l', 'م': 'm', 'ن': 'n',
+      'ه': 'h', 'و': 'w', 'ي': 'y'
+    };
+    
+    let slug = text.toLowerCase();
+    
+    // Replace Arabic characters with Latin equivalents
+    for (const [arabic, latin] of Object.entries(arabicMap)) {
+      slug = slug.replace(new RegExp(arabic, 'g'), latin);
+    }
+    
+    // Normalize and clean up
+    slug = slug
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+      .replace(/[^a-z0-9\s-]/g, '') // Keep only alphanumeric, spaces, and hyphens
+      .trim()
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Remove consecutive hyphens
+      .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+    
+    return slug || 'untitled';
   };
 
   const handleTitleChange = (lang: 'en' | 'fr', value: string) => {
     const slugKey = lang === 'en' ? 'slugEn' : 'slugFr';
-      setFormData({
+    const generatedSlug = generateSlug(value);
+    
+    setFormData({
       ...formData,
       [`title${lang === 'en' ? 'En' : 'Fr'}`]: value,
-      [slugKey]: generateSlug(value),
+      [slugKey]: generatedSlug,
     });
   };
 
@@ -107,6 +134,52 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
 
   const handleSubmit = async (e: React.FormEvent, asDraft = false) => {
     e.preventDefault();
+    
+    // Validate required fields with proper error messages
+    const errors: string[] = [];
+    
+    if (!formData.titleEn || formData.titleEn.trim() === '') {
+      errors.push('English title is required');
+    }
+    if (!formData.titleFr || formData.titleFr.trim() === '') {
+      errors.push('French title is required / Titre français requis');
+    }
+    if (!formData.excerptEn || formData.excerptEn.trim() === '') {
+      errors.push('English excerpt is required');
+    }
+    if (!formData.excerptFr || formData.excerptFr.trim() === '') {
+      errors.push('French excerpt is required / Extrait français requis');
+    }
+    
+    // Validate content fields - check for empty or whitespace-only HTML
+    const isContentEmpty = (html: string) => {
+      if (!html || html.trim() === '') return true;
+      // Remove HTML tags and check if there's actual text content
+      const text = html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+      return text.length === 0;
+    };
+    
+    if (isContentEmpty(formData.contentEn)) {
+      errors.push('English content is required');
+    }
+    if (isContentEmpty(formData.contentFr)) {
+      errors.push('French content is required / Contenu français requis');
+    }
+    
+    if (errors.length > 0) {
+      alert('⚠️ Validation Errors / Erreurs de validation:\n\n' + errors.join('\n'));
+      return;
+    }
+    
+    // Ensure slugs are generated
+    const updatedFormData = { ...formData };
+    if (!updatedFormData.slugEn || updatedFormData.slugEn.trim() === '') {
+      updatedFormData.slugEn = generateSlug(updatedFormData.titleEn) || 'untitled-' + Date.now();
+    }
+    if (!updatedFormData.slugFr || updatedFormData.slugFr.trim() === '') {
+      updatedFormData.slugFr = generateSlug(updatedFormData.titleFr) || 'sans-titre-' + Date.now();
+    }
+    
     setLoading(true);
 
     try {
@@ -122,13 +195,18 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...formData,
-          published: asDraft ? false : formData.published,
+          ...updatedFormData,
+          published: asDraft ? false : updatedFormData.published,
         }),
       });
 
       if (!response.ok) {
         const error = await response.json();
+        console.error('Server validation error:', error);
+        if (error.details) {
+          const issues = error.details.map((d: any) => `${d.path.join('.')}: ${d.message}`).join('\n');
+          throw new Error(`Validation error:\n${issues}`);
+        }
         throw new Error(error.error || 'Failed to save blog post');
       }
 
@@ -147,7 +225,7 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
       {/* English Title */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          English Title *
+          English Title * <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
         </label>
         <input
           type="text"
@@ -155,15 +233,16 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           value={formData.titleEn}
           onChange={(e) => handleTitleChange('en', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Enter English title"
+          placeholder="Enter title in English or Arabic"
+          dir="auto"
         />
-        <p className="text-xs text-gray-500 mt-1">Slug: {formData.slugEn || 'auto-generated'}</p>
+        <p className="text-xs text-gray-500 mt-1">URL Slug: {formData.slugEn || 'auto-generated from title'}</p>
       </div>
 
       {/* French Title */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          French Title * (Titre en français)
+          French Title * (Titre en français) <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
         </label>
         <input
           type="text"
@@ -171,15 +250,16 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           value={formData.titleFr}
           onChange={(e) => handleTitleChange('fr', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Entrez le titre en français"
+          placeholder="Entrez le titre en français ou en arabe"
+          dir="auto"
         />
-        <p className="text-xs text-gray-500 mt-1">Slug: {formData.slugFr || 'auto-généré'}</p>
+        <p className="text-xs text-gray-500 mt-1">URL Slug: {formData.slugFr || 'généré automatiquement'}</p>
       </div>
 
       {/* English Excerpt */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          English Excerpt *
+          English Excerpt * <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
         </label>
         <textarea
           required
@@ -187,14 +267,15 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           onChange={(e) => setFormData({ ...formData, excerptEn: e.target.value })}
           rows={2}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Brief summary in English"
+          placeholder="Brief summary in English or Arabic"
+          dir="auto"
         />
       </div>
 
       {/* French Excerpt */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          French Excerpt * (Extrait en français)
+          French Excerpt * (Extrait en français) <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
         </label>
         <textarea
           required
@@ -202,37 +283,30 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           onChange={(e) => setFormData({ ...formData, excerptFr: e.target.value })}
           rows={2}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Bref résumé en français"
+          placeholder="Bref résumé en français ou en arabe"
+          dir="auto"
         />
       </div>
 
       {/* English Content */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          English Content *
-        </label>
-        <textarea
-          required
-          value={formData.contentEn}
-          onChange={(e) => setFormData({ ...formData, contentEn: e.target.value })}
-          rows={12}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent font-mono text-sm"
-          placeholder="Write your content in English (Markdown supported)"
+        <RichTextEditor
+          label="English Content *"
+          content={formData.contentEn}
+          onChange={(content) => setFormData({ ...formData, contentEn: content })}
+          placeholder="Write your content in English..."
+          supportArabic={true}
         />
       </div>
 
       {/* French Content */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          French Content * (Contenu en français)
-        </label>
-        <textarea
-          required
-          value={formData.contentFr}
-          onChange={(e) => setFormData({ ...formData, contentFr: e.target.value })}
-          rows={12}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent font-mono text-sm"
-          placeholder="Écrivez votre contenu en français (Markdown supporté)"
+        <RichTextEditor
+          label="French Content * (Contenu en français)"
+          content={formData.contentFr}
+          onChange={(content) => setFormData({ ...formData, contentFr: content })}
+          placeholder="Écrivez votre contenu en français..."
+          supportArabic={true}
         />
       </div>
 

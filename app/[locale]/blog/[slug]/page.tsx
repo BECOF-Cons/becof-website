@@ -105,7 +105,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="container mx-auto px-4 pb-20">
         <div className="max-w-4xl mx-auto">
           <article
-            className="prose prose-lg max-w-none mb-12"
+            className="blog-content mb-12"
+            dir="auto"
             dangerouslySetInnerHTML={{ __html: content }}
           />
 
