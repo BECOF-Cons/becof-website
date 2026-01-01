@@ -1,11 +1,58 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { Target, Users, Award, Heart, TrendingUp, Sparkles } from 'lucide-react';
 
+interface TeamMember {
+  id: string;
+  nameFr: string;
+  nameEn: string;
+  titleFr: string;
+  titleEn: string;
+  bioFr: string | null;
+  bioEn: string | null;
+  image: string;
+}
+
 export default function AboutPage() {
   const locale = useLocale();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Convert Google Drive share links to direct image URLs
+  const convertGoogleDriveUrl = (url: string): string => {
+    if (!url) return url;
+    
+    const patterns = [
+      /drive\.google\.com\/file\/d\/([^/]+)/,
+      /drive\.google\.com\/open\?id=([^&]+)/,
+      /drive\.google\.com\/uc\?id=([^&]+)/,
+    ];
+    
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+      }
+    }
+    
+    return url;
+  };
+
+  useEffect(() => {
+    fetch('/api/admin/team')
+      .then((res) => res.json())
+      .then((data) => {
+        setTeamMembers(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching team members:', err);
+        setLoading(false);
+      });
+  }, []);
 
   const values = [
     {
@@ -141,24 +188,118 @@ export default function AboutPage() {
           </div>
 
           {/* Team Section */}
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Award className="h-8 w-8 text-teal-600" />
-              <h2 className="text-3xl font-bold text-gray-900">
-                {locale === 'fr' ? 'Notre Équipe' : 'Our Team'}
-              </h2>
+          {teamMembers.length > 0 && (
+            <div className="mb-12">
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center gap-3 mb-4">
+                  <Users className="h-8 w-8" style={{color: '#F9AA04'}} />
+                  <h2 className="text-3xl font-bold text-gray-900">
+                    {locale === 'fr' ? 'Notre Équipe' : 'Our Team'}
+                  </h2>
+                </div>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  {locale === 'fr'
+                    ? 'Des professionnels passionnés et dévoués à votre réussite'
+                    : 'Passionate professionals dedicated to your success'}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {teamMembers.map((member, index) => {
+                  const name = locale === 'fr' ? member.nameFr : member.nameEn;
+                  const title = locale === 'fr' ? member.titleFr : member.titleEn;
+                  const bio = locale === 'fr' ? member.bioFr : member.bioEn;
+                  const imageUrl = convertGoogleDriveUrl(member.image);
+
+                  return (
+                    <div
+                      key={member.id}
+                      className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
+                    >
+                      {/* Decorative gradient background */}
+                      <div 
+                        className="absolute top-0 left-0 w-full h-32 opacity-10"
+                        style={{background: `linear-gradient(135deg, ${index % 2 === 0 ? '#233691' : '#F9AA04'} 0%, ${index % 2 === 0 ? '#1a2870' : '#e69a03'} 100%)`}}
+                      />
+                      
+                      {/* Content */}
+                      <div className="relative p-6 text-center">
+                        {/* Image with animated border */}
+                        <div className="mb-4 inline-block">
+                          <div 
+                            className="p-1 rounded-full group-hover:scale-105 transition-transform duration-300"
+                            style={{background: `linear-gradient(135deg, ${index % 2 === 0 ? '#233691' : '#F9AA04'} 0%, ${index % 2 === 0 ? '#1a2870' : '#e69a03'} 100%)`}}
+                          >
+                            <div className="bg-white p-1 rounded-full">
+                              <img
+                                src={imageUrl}
+                                alt={name}
+                                className="w-32 h-32 rounded-full object-cover"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                  console.error('Failed to load image:', imageUrl);
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Name */}
+                        <h3 
+                          className="text-xl font-bold mb-2"
+                          style={{color: index % 2 === 0 ? '#233691' : '#F9AA04'}}
+                        >
+                          {name}
+                        </h3>
+
+                        {/* Title */}
+                        <p className="text-sm font-medium text-gray-600 mb-3">
+                          {title}
+                        </p>
+
+                        {/* Bio */}
+                        {bio && (
+                          <p className="text-sm text-gray-500 leading-relaxed">
+                            {bio}
+                          </p>
+                        )}
+
+                        {/* Decorative element */}
+                        <div 
+                          className="mt-4 h-1 w-16 mx-auto rounded-full"
+                          style={{backgroundColor: index % 2 === 0 ? '#233691' : '#F9AA04'}}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              {locale === 'fr'
-                ? 'Notre équipe est composée de conseillers d\'orientation certifiés, de coachs professionnels expérimentés et d\'experts en développement de carrière. Chaque membre de notre équipe apporte une expertise unique et une passion pour aider les autres à réussir.'
-                : 'Our team consists of certified career counselors, experienced professional coaches, and career development experts. Each team member brings unique expertise and a passion for helping others succeed.'}
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {locale === 'fr'
-                ? 'Nous nous engageons à rester à la pointe des tendances du marché du travail et des meilleures pratiques en matière de développement professionnel pour offrir à nos clients un service de qualité supérieure.'
-                : 'We are committed to staying at the forefront of labor market trends and best practices in professional development to provide our clients with superior service.'}
-            </p>
-          </div>
+          )}
+
+          {/* Original Team Description (shown if no members) */}
+          {teamMembers.length === 0 && !loading && (
+            <div className="bg-white rounded-lg shadow-md p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <Award className="h-8 w-8 text-teal-600" />
+                <h2 className="text-3xl font-bold text-gray-900">
+                  {locale === 'fr' ? 'Notre Équipe' : 'Our Team'}
+                </h2>
+              </div>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                {locale === 'fr'
+                  ? 'Notre équipe est composée de conseillers d\'orientation certifiés, de coachs professionnels expérimentés et d\'experts en développement de carrière. Chaque membre de notre équipe apporte une expertise unique et une passion pour aider les autres à réussir.'
+                  : 'Our team consists of certified career counselors, experienced professional coaches, and career development experts. Each team member brings unique expertise and a passion for helping others succeed.'}
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {locale === 'fr'
+                  ? 'Nous nous engageons à rester à la pointe des tendances du marché du travail et des meilleures pratiques en matière de développement professionnel pour offrir à nos clients un service de qualité supérieure.'
+                  : 'We are committed to staying at the forefront of labor market trends and best practices in professional development to provide our clients with superior service.'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
