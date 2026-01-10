@@ -30,7 +30,7 @@ export async function GET(
             amount: true,
             currency: true,
             status: true,
-            method: true,
+            paymentMethod: true,
             transactionId: true,
           },
         },

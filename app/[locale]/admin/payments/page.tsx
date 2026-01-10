@@ -35,7 +35,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
         amount: true,
         currency: true,
         status: true,
-        method: true,
+        paymentMethod: true,
         transactionId: true,
         createdAt: true,
         updatedAt: true,
@@ -203,8 +203,8 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                         {payment.amount} TND
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.method || '')}`}>
-                          {payment.method?.replace('_', ' ') || 'N/A'}
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.paymentMethod || '')}`}>
+                          {payment.paymentMethod?.replace('_', ' ') || 'N/A'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

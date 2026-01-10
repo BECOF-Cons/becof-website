@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         amount: true,
         currency: true,
         status: true,
-        method: true,
+        paymentMethod: true,
         transactionId: true,
         createdAt: true,
         updatedAt: true,
@@ -78,8 +78,8 @@ export async function POST(req: NextRequest) {
         // Send payment receipt
         sendPaymentConfirmation({
           appointmentId: payment.appointmentId,
-          amount: parseFloat(payment.amount),
-          paymentMethod: payment.method || 'Unknown',
+          amount: parseFloat(payment.amount.toString()),
+          paymentMethod: payment.paymentMethod || 'Unknown',
           transactionId: transactionId,
           appointment: {
             clientName: payment.appointment.name,

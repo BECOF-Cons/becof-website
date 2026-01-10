@@ -44,8 +44,8 @@ export async function POST(req: NextRequest) {
       payment = await prisma.payment.update({
         where: { id: appointment.payment.id },
         data: {
-          amount: validatedData.amount.toString(),
-          method: validatedData.paymentMethod,
+          amount: validatedData.amount,
+          paymentMethod: validatedData.paymentMethod,
           status: 'PENDING',
         },
       });
@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
       // Create new payment record
       payment = await prisma.payment.create({
         data: {
-          userId: appointment.userId,
+          userId: appointment.userId || '',
           appointmentId: validatedData.appointmentId,
-          amount: validatedData.amount.toString(),
-          method: validatedData.paymentMethod,
+          amount: validatedData.amount,
+          paymentMethod: validatedData.paymentMethod,
           status: 'PENDING',
         },
       });
