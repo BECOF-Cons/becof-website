@@ -93,6 +93,32 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Debug logging
+    console.log('=== APPOINTMENT CREATE DEBUG ===');
+    console.log('Data to create:', {
+      userId: adminUser.id,
+      name: validatedData.name,
+      email: validatedData.email,
+      phone: validatedData.phone,
+      date: appointmentDate,
+      time: validatedData.time,
+      serviceType: mappedServiceType,
+      message: validatedData.message || '',
+      status: 'PENDING',
+    });
+
+    // Test raw query first
+    try {
+      const testQuery = await prisma.$queryRaw`
+        SELECT column_name FROM information_schema.columns 
+        WHERE table_name = 'Appointment' 
+        ORDER BY ordinal_position
+      `;
+      console.log('Database columns:', testQuery);
+    } catch (err) {
+      console.error('Raw query failed:', err);
+    }
+
     const appointment = await prisma.appointment.create({
       data: {
         userId: adminUser.id, // Placeholder - in production, this would be the client's user ID
