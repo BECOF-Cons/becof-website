@@ -75,7 +75,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
     totalRevenue: payments
       .filter((p) => p.appointment?.status === 'CONFIRMED')
       .reduce((sum, p) => {
-        const amount = parseFloat(p.amount) || 0;
+        const amount = p.amount || 0;
         return sum + amount;
       }, 0),
   };

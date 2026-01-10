@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
           const { sendBankTransferInstructions } = await import('@/lib/email');
           
           // Get price from payment amount
-          const price = parseFloat(payment.amount);
+          const price = payment.amount;
           
           sendBankTransferInstructions({
             id: appointment.id,

@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
         // Send payment receipt
         sendPaymentConfirmation({
           appointmentId: payment.appointmentId,
-          amount: parseFloat(payment.amount.toString()),
+          amount: payment.amount,
           paymentMethod: payment.paymentMethod || 'Unknown',
           transactionId: transactionId,
           appointment: {
