@@ -1,13 +1,12 @@
 #!/bin/bash
 set -e
 
-echo "🧹 Force clearing ALL Prisma caches..."
+echo "🧹 Force clearing Prisma client cache..."
 
-# Remove all Prisma generated files
+# Remove only the generated Prisma client (not engines or CLI)
 rm -rf node_modules/.prisma
-rm -rf node_modules/@prisma
+rm -rf node_modules/@prisma/client
 rm -rf .next/cache
-rm -rf .vercel
 
 # Prepare schema
 echo "🔧 Preparing schema..."
