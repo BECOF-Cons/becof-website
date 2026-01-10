@@ -149,7 +149,7 @@ model Appointment {
   phone         String
   date          DateTime
   time          String
-  service       String
+  serviceType   String
   message       String?
   googleEventId String?           // Google Calendar event ID
   status        AppointmentStatus @default(PENDING)

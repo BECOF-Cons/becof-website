@@ -207,7 +207,7 @@ export default function PaymentPage() {
                 <span className="text-gray-600">
                   {locale === 'fr' ? 'Service' : 'Service'}:
                 </span>
-                <span className="font-medium">{appointment.service}</span>
+                <span className="font-medium">{appointment.serviceType}</span>
               </div>
               <div className="border-t pt-2 mt-2 flex justify-between text-lg font-bold">
                 <span>{locale === 'fr' ? 'Total' : 'Total'}:</span>

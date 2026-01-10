@@ -47,7 +47,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
             phone: true,
             date: true,
             time: true,
-            service: true,
+            serviceType: true,
           status: true,
           user: {
             select: {

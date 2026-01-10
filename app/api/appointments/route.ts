@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
         phone: validatedData.phone,
         date: appointmentDate,
         time: validatedData.time,
-        service: mappedServiceType as any,
+        serviceType: mappedServiceType as any,
         message: validatedData.message || '',
         status: 'PENDING',
         payment: {
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
           clientEmail: validatedData.email,
           clientPhone: validatedData.phone,
           date: appointmentDate,
-          service: validatedData.service.toString(),
+          serviceType: mappedServiceType,
           notes: validatedData.message,
         }).catch((err) => console.error('Error sending admin notification (non-critical):', err));
       } else {

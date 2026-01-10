@@ -33,7 +33,7 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
       select: {
         id: true,
         userId: true,
-        service: true,
+        serviceType: true,
         name: true,
         email: true,
         phone: true,
@@ -202,7 +202,7 @@ export default async function AdminAppointmentsPage({ params }: { params: Promis
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-2 py-1 text-xs bg-gray-100 rounded">
-                        {appointment.service}
+                        {appointment.serviceType}
                       </span>
                     </td>
                     <td className="px-6 py-4">

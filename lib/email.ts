@@ -47,7 +47,7 @@ export async function sendAppointmentConfirmation(appointment: {
   clientName: string;
   clientEmail: string;
   date: Date;
-  service: string;
+  serviceType: string;
 }) {
   if (!isEmailConfigured()) {
     console.warn('⚠️ Email not configured. Skipping appointment confirmation email.');
@@ -98,7 +98,7 @@ export async function sendAppointmentConfirmation(appointment: {
             <div class="info-box">
               <h3 style="margin-top: 0; color: #14B8A6;">Détails du rendez-vous</h3>
               <p><strong>📅 Date :</strong> ${formattedDate}</p>
-              <p><strong>💼 Service :</strong> ${appointment.service}</p>
+              <p><strong>💼 Service :</strong> ${appointment.serviceType}</p>
               <p><strong>📍 Lieu :</strong> BECOF - Hammamet, Tunisie</p>
             </div>
 
@@ -140,7 +140,7 @@ export async function notifyAdminsOfAppointment(appointment: {
   clientEmail: string;
   clientPhone: string;
   date: Date;
-  service: string;
+  serviceType: string;
   notes?: string;
   message?: string;
 }) {
@@ -205,7 +205,7 @@ export async function notifyAdminsOfAppointment(appointment: {
                 <strong>📅 Date :</strong> ${formattedDate}
               </div>
               <div class="info-item">
-                <strong>💼 Service :</strong> ${appointment.service}
+                <strong>💼 Service :</strong> ${appointment.serviceType}
               </div>
               ${
                 appointment.notes || appointment.message
@@ -248,7 +248,7 @@ export async function sendPaymentConfirmation(payment: {
     clientName: string;
     clientEmail: string;
     date: Date;
-    service: string;
+    serviceType: string;
   };
 }) {
   if (!payment.appointment) return;
@@ -308,7 +308,7 @@ export async function sendPaymentConfirmation(payment: {
               ${payment.transactionId ? `<p><strong>ID Transaction :</strong> ${payment.transactionId}</p>` : ''}
               <hr style="border: 1px solid #e5e7eb; margin: 15px 0;">
               <p><strong>Rendez-vous :</strong> ${formattedDate}</p>
-              <p><strong>Service :</strong> ${payment.appointment.service}</p>
+              <p><strong>Service :</strong> ${payment.appointment.serviceType}</p>
             </div>
 
             <p>Votre rendez-vous est maintenant <strong>confirmé</strong>. Vous recevrez un rappel 24 heures avant.</p>
@@ -423,7 +423,7 @@ export async function sendCancellationNotification(appointment: {
   clientName: string;
   clientEmail: string;
   date: Date;
-  service: string;
+  serviceType: string;
 }) {
   if (!isEmailConfigured()) {
     console.warn('⚠️ Email not configured. Skipping cancellation notification.');
@@ -466,7 +466,7 @@ export async function sendCancellationNotification(appointment: {
           <div class="content">
             <p>Bonjour ${appointment.clientName},</p>
             
-            <p>Votre rendez-vous du <strong>${formattedDate}</strong> pour le service <strong>${appointment.service}</strong> a été annulé.</p>
+            <p>Votre rendez-vous du <strong>${formattedDate}</strong> pour le service <strong>${appointment.serviceType}</strong> a été annulé.</p>
 
             <p>Si vous souhaitez réserver un autre rendez-vous, n'hésitez pas à visiter notre site web.</p>
 
@@ -501,7 +501,7 @@ export async function sendBankTransferInstructions(appointment: {
   clientName: string;
   clientEmail: string;
   date: Date;
-  service: string;
+  serviceType: string;
   price: number;
 }) {
   if (!isEmailConfigured()) {
@@ -559,7 +559,7 @@ export async function sendBankTransferInstructions(appointment: {
             <div class="info-box">
               <h3 style="margin-top: 0; color: #14B8A6;">Détails du rendez-vous</h3>
               <p><strong>📅 Date :</strong> ${formattedDate}</p>
-              <p><strong>💼 Service :</strong> ${appointment.service}</p>
+              <p><strong>💼 Service :</strong> ${appointment.serviceType}</p>
               <p><strong>💰 Montant :</strong> ${appointment.price} TND</p>
             </div>
 

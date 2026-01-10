@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
             clientName: appointment.name,
             clientEmail: appointment.email,
             date: appointment.date,
-            service: appointment.service,
+            serviceType: appointment.serviceType,
             price: price,
           }).catch((err) => console.error('Error sending bank transfer instructions:', err));
         }
@@ -146,7 +146,7 @@ export async function GET(req: NextRequest) {
             name: true,
             email: true,
             date: true,
-            service: true,
+            serviceType: true,
           },
         },
       },

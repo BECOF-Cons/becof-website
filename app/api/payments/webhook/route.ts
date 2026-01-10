@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
             phone: true,
             date: true,
             time: true,
-            service: true,
+            serviceType: true,
             status: true,
           },
         },
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
             clientName: payment.appointment.name,
             clientEmail: payment.appointment.email,
             date: payment.appointment.date,
-            service: payment.appointment.service,
+            serviceType: payment.appointment.serviceType,
           },
         }).catch((err) => console.error('Error sending payment confirmation:', err));
 
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
           clientName: payment.appointment.name,
           clientEmail: payment.appointment.email,
           date: payment.appointment.date,
-          service: payment.appointment.service,
+          serviceType: payment.appointment.serviceType,
         }).catch((err) =>
           console.error('Error sending appointment confirmation:', err)
         );
