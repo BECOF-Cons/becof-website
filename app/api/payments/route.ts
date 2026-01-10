@@ -51,9 +51,18 @@ export async function POST(req: NextRequest) {
       });
     } else {
       // Create new payment record
+      // Get a valid userId - use appointment userId or find first admin
+      let paymentUserId = appointment.userId;
+      if (!paymentUserId) {
+        const adminUser = await prisma.user.findFirst({
+          where: { role: { in: ['ADMIN', 'SUPER_ADMIN'] } },
+        });
+        paymentUserId = adminUser?.id || '';
+      }
+
       payment = await prisma.payment.create({
         data: {
-          userId: appointment.userId || '',
+          userId: paymentUserId,
           appointmentId: validatedData.appointmentId,
           amount: validatedData.amount,
           paymentMethod: validatedData.paymentMethod,

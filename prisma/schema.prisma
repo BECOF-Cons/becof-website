@@ -199,6 +199,9 @@ enum PaymentMethod {
   BANK_TRANSFER
   CREDIT_CARD
   CASH
+  KONNECT
+  FLOUCI
+  D17
 }
 
 // Site Settings model
