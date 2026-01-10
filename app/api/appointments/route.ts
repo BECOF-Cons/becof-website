@@ -141,6 +141,8 @@ export async function POST(req: NextRequest) {
         amount: servicePrice.toString(),
         currency: 'TND',
         status: 'PENDING',
+        method: null,
+        transactionId: null,
       },
     });
 
