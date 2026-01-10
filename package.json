@@ -14,8 +14,7 @@
     "prisma:studio": "prisma studio",
     "prisma:seed": "tsx prisma/seed.ts",
     "seed:services": "tsx scripts/seed-services.ts",
-    "promote:superadmin": "tsx scripts/promote-superadmin.ts",
-    "postinstall": "node scripts/prepare-schema.js && prisma generate"
+    "promote:superadmin": "tsx scripts/promote-superadmin.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
