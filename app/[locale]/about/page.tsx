@@ -215,7 +215,7 @@ export default function AboutPage() {
                     return (
                       <div
                         key={member.id}
-                        className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2 w-full max-w-md"
+                        className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2 w-full sm:w-[calc(50%-1rem)] max-w-md"
                       >
                         {/* Decorative gradient background */}
                         <div 
