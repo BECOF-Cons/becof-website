@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bash scripts/clean-prisma.sh && next build",
+  "buildCommand": "bash scripts/force-regenerate-prisma.sh && next build",
   "installCommand": "npm install",
   "framework": "nextjs",
   "regions": ["cdg1"]
