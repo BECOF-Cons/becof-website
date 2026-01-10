@@ -93,28 +93,44 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Debug logging
+    console.log('=== APPOINTMENT CREATE DEBUG ===');
+    console.log('Data to create:', {
+      userId: adminUser.id,
+      name: validatedData.name,
+      email: validatedData.email,
+      phone: validatedData.phone,
+      date: appointmentDate,
+      time: validatedData.time,
+      serviceType: mappedServiceType,
+      message: validatedData.message || '',
+      status: 'PENDING',
+    });
+
     const appointment = await prisma.appointment.create({
       data: {
-        userId: adminUser.id, // Placeholder - in production, this would be the client's user ID
+        userId: adminUser.id,
         name: validatedData.name,
         email: validatedData.email,
         phone: validatedData.phone,
         date: appointmentDate,
         time: validatedData.time,
-        service: mappedServiceType as any,
+        serviceType: mappedServiceType as any,
         message: validatedData.message || '',
         status: 'PENDING',
-        payment: {
-          create: {
-            userId: adminUser.id,
-            amount: servicePrice.toString(),
-            currency: 'TND',
-            status: 'PENDING',
-          },
-        },
       },
-      include: {
-        payment: true,
+    });
+
+    // Create payment separately
+    const payment = await prisma.payment.create({
+      data: {
+        userId: adminUser.id,
+        appointmentId: appointment.id,
+        amount: servicePrice,
+        currency: 'TND',
+        paymentMethod: 'BANK_TRANSFER',
+        status: 'PENDING',
+        transactionId: null,
       },
     });
 
@@ -163,7 +179,7 @@ export async function POST(req: NextRequest) {
           clientEmail: validatedData.email,
           clientPhone: validatedData.phone,
           date: appointmentDate,
-          service: validatedData.service.toString(),
+          serviceType: mappedServiceType,
           notes: validatedData.message,
         }).catch((err) => console.error('Error sending admin notification (non-critical):', err));
       } else {

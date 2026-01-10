@@ -14,13 +14,13 @@
     "prisma:studio": "prisma studio",
     "prisma:seed": "tsx prisma/seed.ts",
     "seed:services": "tsx scripts/seed-services.ts",
-    "promote:superadmin": "tsx scripts/promote-superadmin.ts",
-    "postinstall": "node scripts/prepare-schema.js && prisma generate"
+    "promote:superadmin": "tsx scripts/promote-superadmin.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.19.1",
+    "@tailwindcss/postcss": "^4",
     "@tiptap/extension-code-block": "^3.14.0",
     "@tiptap/extension-color": "^3.14.0",
     "@tiptap/extension-highlight": "^3.14.0",
@@ -34,6 +34,10 @@
     "@tiptap/react": "^3.13.0",
     "@tiptap/starter-kit": "^3.13.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@uploadthing/react": "^7.3.3",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
@@ -49,19 +53,14 @@
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-hook-form": "^7.68.0",
+    "tailwindcss": "^4",
+    "typescript": "^5",
     "uploadthing": "^7.7.4",
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/nodemailer": "^7.0.4",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
-    "tailwindcss": "^4",
-    "tsx": "^4.21.0",
-    "typescript": "^5"
+    "tsx": "^4.21.0"
   }
 }

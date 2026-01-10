@@ -44,19 +44,28 @@ export async function POST(req: NextRequest) {
       payment = await prisma.payment.update({
         where: { id: appointment.payment.id },
         data: {
-          amount: validatedData.amount.toString(),
-          method: validatedData.paymentMethod,
+          amount: validatedData.amount,
+          paymentMethod: validatedData.paymentMethod,
           status: 'PENDING',
         },
       });
     } else {
       // Create new payment record
+      // Get a valid userId - use appointment userId or find first admin
+      let paymentUserId = appointment.userId;
+      if (!paymentUserId) {
+        const adminUser = await prisma.user.findFirst({
+          where: { role: { in: ['ADMIN', 'SUPER_ADMIN'] } },
+        });
+        paymentUserId = adminUser?.id || '';
+      }
+
       payment = await prisma.payment.create({
         data: {
-          userId: appointment.userId,
+          userId: paymentUserId,
           appointmentId: validatedData.appointmentId,
-          amount: validatedData.amount.toString(),
-          method: validatedData.paymentMethod,
+          amount: validatedData.amount,
+          paymentMethod: validatedData.paymentMethod,
           status: 'PENDING',
         },
       });
@@ -91,14 +100,14 @@ export async function POST(req: NextRequest) {
           const { sendBankTransferInstructions } = await import('@/lib/email');
           
           // Get price from payment amount
-          const price = parseFloat(payment.amount);
+          const price = payment.amount;
           
           sendBankTransferInstructions({
             id: appointment.id,
             clientName: appointment.name,
             clientEmail: appointment.email,
             date: appointment.date,
-            service: appointment.service,
+            serviceType: appointment.serviceType,
             price: price,
           }).catch((err) => console.error('Error sending bank transfer instructions:', err));
         }
@@ -146,7 +155,7 @@ export async function GET(req: NextRequest) {
             name: true,
             email: true,
             date: true,
-            service: true,
+            serviceType: true,
           },
         },
       },

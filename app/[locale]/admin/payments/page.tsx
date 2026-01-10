@@ -35,7 +35,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
         amount: true,
         currency: true,
         status: true,
-        method: true,
+        paymentMethod: true,
         transactionId: true,
         createdAt: true,
         updatedAt: true,
@@ -47,7 +47,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
             phone: true,
             date: true,
             time: true,
-            service: true,
+            serviceType: true,
           status: true,
           user: {
             select: {
@@ -75,7 +75,7 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
     totalRevenue: payments
       .filter((p) => p.appointment?.status === 'CONFIRMED')
       .reduce((sum, p) => {
-        const amount = parseFloat(p.amount) || 0;
+        const amount = p.amount || 0;
         return sum + amount;
       }, 0),
   };
@@ -203,8 +203,8 @@ export default async function AdminPaymentsPage({ params }: { params: Promise<{ 
                         {payment.amount} TND
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.method || '')}`}>
-                          {payment.method?.replace('_', ' ') || 'N/A'}
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPaymentMethodBadge(payment.paymentMethod || '')}`}>
+                          {payment.paymentMethod?.replace('_', ' ') || 'N/A'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

@@ -45,7 +45,7 @@ export default async function AdminPage({ params }: { params: Promise<{ locale: 
 
   // Calculate total revenue from confirmed payments
   const totalRevenue = payments.reduce((sum, payment) => {
-    const amount = parseFloat(payment.amount) || 0;
+    const amount = payment.amount || 0;
     return sum + amount;
   }, 0);
 

@@ -19,7 +19,7 @@ export async function GET(
         phone: true,
         date: true,
         time: true,
-        service: true,
+        serviceType: true,
         message: true,
         status: true,
         createdAt: true,
@@ -30,7 +30,7 @@ export async function GET(
             amount: true,
             currency: true,
             status: true,
-            method: true,
+            paymentMethod: true,
             transactionId: true,
           },
         },
@@ -161,7 +161,7 @@ export async function DELETE(
         clientName: appointment.name,
         clientEmail: appointment.email,
         date: appointment.date,
-        service: appointment.service,
+        serviceType: appointment.serviceType,
       }).catch((err) => console.error('Error sending cancellation email:', err));
     }
 
