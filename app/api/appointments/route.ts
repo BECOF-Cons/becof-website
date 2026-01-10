@@ -138,10 +138,10 @@ export async function POST(req: NextRequest) {
       data: {
         userId: adminUser.id,
         appointmentId: appointment.id,
-        amount: servicePrice.toString(),
+        amount: servicePrice,
         currency: 'TND',
+        paymentMethod: 'BANK_TRANSFER',
         status: 'PENDING',
-        method: null,
         transactionId: null,
       },
     });
