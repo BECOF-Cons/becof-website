@@ -35,6 +35,10 @@
     "@tiptap/react": "^3.13.0",
     "@tiptap/starter-kit": "^3.13.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@uploadthing/react": "^7.3.3",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
@@ -51,17 +55,13 @@
     "react-dom": "19.2.1",
     "react-hook-form": "^7.68.0",
     "tailwindcss": "^4",
+    "typescript": "^5",
     "uploadthing": "^7.7.4",
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/nodemailer": "^7.0.4",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
-    "tsx": "^4.21.0",
-    "typescript": "^5"
+    "tsx": "^4.21.0"
   }
 }
