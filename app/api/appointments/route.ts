@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
 
     const appointment = await prisma.appointment.create({
       data: {
-        userId: adminUser.id, // Placeholder - in production, this would be the client's user ID
+        userId: adminUser.id,
         name: validatedData.name,
         email: validatedData.email,
         phone: validatedData.phone,
@@ -130,17 +130,17 @@ export async function POST(req: NextRequest) {
         serviceType: mappedServiceType as any,
         message: validatedData.message || '',
         status: 'PENDING',
-        payment: {
-          create: {
-            userId: adminUser.id,
-            amount: servicePrice.toString(),
-            currency: 'TND',
-            status: 'PENDING',
-          },
-        },
       },
-      include: {
-        payment: true,
+    });
+
+    // Create payment separately
+    const payment = await prisma.payment.create({
+      data: {
+        userId: adminUser.id,
+        appointmentId: appointment.id,
+        amount: servicePrice.toString(),
+        currency: 'TND',
+        status: 'PENDING',
       },
     });
 
