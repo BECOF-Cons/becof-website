@@ -107,18 +107,6 @@ export async function POST(req: NextRequest) {
       status: 'PENDING',
     });
 
-    // Test raw query first
-    try {
-      const testQuery = await prisma.$queryRaw`
-        SELECT column_name FROM information_schema.columns 
-        WHERE table_name = 'Appointment' 
-        ORDER BY ordinal_position
-      `;
-      console.log('Database columns:', testQuery);
-    } catch (err) {
-      console.error('Raw query failed:', err);
-    }
-
     const appointment = await prisma.appointment.create({
       data: {
         userId: adminUser.id,
