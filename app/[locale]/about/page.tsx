@@ -204,77 +204,79 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {teamMembers.map((member, index) => {
-                  const name = locale === 'fr' ? member.nameFr : member.nameEn;
-                  const title = locale === 'fr' ? member.titleFr : member.titleEn;
-                  const bio = locale === 'fr' ? member.bioFr : member.bioEn;
-                  const imageUrl = convertGoogleDriveUrl(member.image);
+              <div className="max-w-5xl mx-auto">
+                <div className="flex flex-wrap justify-center gap-8">
+                  {teamMembers.map((member, index) => {
+                    const name = locale === 'fr' ? member.nameFr : member.nameEn;
+                    const title = locale === 'fr' ? member.titleFr : member.titleEn;
+                    const bio = locale === 'fr' ? member.bioFr : member.bioEn;
+                    const imageUrl = convertGoogleDriveUrl(member.image);
 
-                  return (
-                    <div
-                      key={member.id}
-                      className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
-                    >
-                      {/* Decorative gradient background */}
-                      <div 
-                        className="absolute top-0 left-0 w-full h-32 opacity-10"
-                        style={{background: `linear-gradient(135deg, ${index % 2 === 0 ? '#233691' : '#F9AA04'} 0%, ${index % 2 === 0 ? '#1a2870' : '#e69a03'} 100%)`}}
-                      />
-                      
-                      {/* Content */}
-                      <div className="relative p-6 text-center">
-                        {/* Image with animated border */}
-                        <div className="mb-4 inline-block">
-                          <div 
-                            className="p-1 rounded-full group-hover:scale-105 transition-transform duration-300"
-                            style={{background: `linear-gradient(135deg, ${index % 2 === 0 ? '#233691' : '#F9AA04'} 0%, ${index % 2 === 0 ? '#1a2870' : '#e69a03'} 100%)`}}
-                          >
-                            <div className="bg-white p-1 rounded-full">
-                              <img
-                                src={imageUrl}
-                                alt={name}
-                                className="w-32 h-32 rounded-full object-cover"
-                                referrerPolicy="no-referrer"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.style.display = 'none';
-                                  console.error('Failed to load image:', imageUrl);
-                                }}
-                              />
+                    return (
+                      <div
+                        key={member.id}
+                        className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2 w-full max-w-md"
+                      >
+                        {/* Decorative gradient background */}
+                        <div 
+                          className="absolute top-0 left-0 w-full h-32 opacity-10"
+                          style={{background: `linear-gradient(135deg, ${index % 2 === 0 ? '#233691' : '#F9AA04'} 0%, ${index % 2 === 0 ? '#1a2870' : '#e69a03'} 100%)`}}
+                        />
+                        
+                        {/* Content */}
+                        <div className="relative p-8 text-center">
+                          {/* Image with animated border */}
+                          <div className="mb-6 inline-block">
+                            <div 
+                              className="p-1 rounded-full group-hover:scale-105 transition-transform duration-300"
+                              style={{background: `linear-gradient(135deg, ${index % 2 === 0 ? '#233691' : '#F9AA04'} 0%, ${index % 2 === 0 ? '#1a2870' : '#e69a03'} 100%)`}}
+                            >
+                              <div className="bg-white p-1 rounded-full">
+                                <img
+                                  src={imageUrl}
+                                  alt={name}
+                                  className="w-40 h-40 rounded-full object-cover"
+                                  referrerPolicy="no-referrer"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.style.display = 'none';
+                                    console.error('Failed to load image:', imageUrl);
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        {/* Name */}
-                        <h3 
-                          className="text-xl font-bold mb-2"
-                          style={{color: index % 2 === 0 ? '#233691' : '#F9AA04'}}
-                        >
-                          {name}
-                        </h3>
+                          {/* Name */}
+                          <h3 
+                            className="text-2xl font-bold mb-2"
+                            style={{color: index % 2 === 0 ? '#233691' : '#F9AA04'}}
+                          >
+                            {name}
+                          </h3>
 
-                        {/* Title */}
-                        <p className="text-sm font-medium text-gray-600 mb-3">
-                          {title}
-                        </p>
-
-                        {/* Bio */}
-                        {bio && (
-                          <p className="text-sm text-gray-500 leading-relaxed">
-                            {bio}
+                          {/* Title */}
+                          <p className="text-base font-medium text-gray-600 mb-4">
+                            {title}
                           </p>
-                        )}
 
-                        {/* Decorative element */}
-                        <div 
-                          className="mt-4 h-1 w-16 mx-auto rounded-full"
-                          style={{backgroundColor: index % 2 === 0 ? '#233691' : '#F9AA04'}}
-                        />
+                          {/* Bio */}
+                          {bio && (
+                            <p className="text-sm text-gray-500 leading-relaxed">
+                              {bio}
+                            </p>
+                          )}
+
+                          {/* Decorative element */}
+                          <div 
+                            className="mt-6 h-1 w-16 mx-auto rounded-full"
+                            style={{backgroundColor: index % 2 === 0 ? '#233691' : '#F9AA04'}}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
