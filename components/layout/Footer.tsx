@@ -18,9 +18,9 @@ export default function Footer() {
   ];
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: '#' },
-    { name: 'Instagram', icon: Instagram, href: '#' },
-    { name: 'LinkedIn', icon: Linkedin, href: '#' },
+    { name: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/share/1CszQkN46L/?mibextid=wwXIfr' },
+    { name: 'Instagram', icon: Instagram, href: 'https://www.facebook.com/share/1CszQkN46L/?mibextid=wwXIfr' },
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://www.facebook.com/share/1CszQkN46L/?mibextid=wwXIfr' },
   ];
 
   return (
