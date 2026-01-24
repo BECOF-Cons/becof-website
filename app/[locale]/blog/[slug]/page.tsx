@@ -53,7 +53,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
+      <div className="bg-gradient-to-r from-[#2d5aa8] to-[#1e3a7a] text-white py-32 mt-24">
         <div className="container mx-auto px-4">
           <Link
             href={`/${locale}/blog`}

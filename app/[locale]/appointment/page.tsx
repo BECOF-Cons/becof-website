@@ -154,10 +154,10 @@ export default function AppointmentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-24">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 pt-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             {locale === 'fr' ? 'Réserver un rendez-vous' : 'Book an Appointment'}
           </h1>
