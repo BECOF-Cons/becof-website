@@ -70,7 +70,7 @@ export default async function ServicesPage({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="text-white py-20" style={{background: 'linear-gradient(135deg, #233691 0%, #1a2870 100%)'}}>
+      <div className="text-white py-32 mt-24" style={{background: 'linear-gradient(135deg, #2d5aa8 0%, #1e3a7a 100%)'}}>
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {locale === 'fr' ? 'Nos Services' : 'Our Services'}
@@ -121,7 +121,7 @@ export default async function ServicesPage({
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white py-16">
+      <div className="bg-gradient-to-br from-blue-700 to-blue-800 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
             {locale === 'fr' ? 'Prêt à commencer votre transformation?' : 'Ready to start your transformation?'}
