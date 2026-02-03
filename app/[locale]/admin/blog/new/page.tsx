@@ -50,7 +50,7 @@ export default async function NewBlogPostPage({ params }: { params: Promise<{ lo
 
         {/* Blog Post Form */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <BlogPostForm categories={categories} />
+          <BlogPostForm categories={categories} locale={locale} />
         </div>
       </div>
     </AdminLayoutWrapper>

@@ -78,6 +78,7 @@ export default async function EditBlogPostPage({
               categoryId: post.categoryId,
               published: post.published,
             }}
+            locale={locale}
           />
         </div>
       </div>

@@ -2,6 +2,9 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { Calendar, ArrowRight } from 'lucide-react';
 
+// Revalidate every 60 seconds so new blogs appear quickly
+export const revalidate = 60;
+
 interface BlogPageProps {
   params: Promise<{
     locale: string;
@@ -25,9 +28,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
         },
       },
     },
-    orderBy: {
-      publishedAt: 'desc',
-    },
+    orderBy: [
+      { publishedAt: 'desc' },
+      { createdAt: 'desc' }
+    ],
   });
 
   const categories = await prisma.blogCategory.findMany({
@@ -87,7 +91,12 @@ export default async function BlogPage({ params }: BlogPageProps) {
               const categoryName = post.category
                 ? (isFrench ? post.category.nameFr : post.category.nameEn)
                 : (isFrench ? 'Non catégorisé' : 'Uncategorized');
-              const slug = isFrench ? post.slugFr : post.slugEn;
+              // Use the appropriate slug, with fallback to the other language's slug if needed
+              const slug = isFrench ? (post.slugFr || post.slugEn) : (post.slugEn || post.slugFr);
+              
+              // Skip if no valid slug exists
+              if (!slug) return null;
+              
               const publishDate = post.publishedAt
                 ? new Date(post.publishedAt).toLocaleDateString(
                     locale === 'fr' ? 'fr-FR' : 'en-US',

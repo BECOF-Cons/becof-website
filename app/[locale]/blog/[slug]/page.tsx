@@ -14,8 +14,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { locale, slug } = await params;
   const isFrench = locale === 'fr';
 
-  const post = await prisma.blogPost.findUnique({
-    where: isFrench ? { slugFr: slug } : { slugEn: slug },
+  const post = await prisma.blogPost.findFirst({
+    where: {
+      OR: [
+        { slugFr: slug },
+        { slugEn: slug },
+      ],
+      published: true,
+    },
     include: {
       category: true,
       author: {
