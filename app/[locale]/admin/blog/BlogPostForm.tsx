@@ -25,14 +25,16 @@ interface BlogPostFormProps {
     categoryId: string | null;
     published: boolean;
   };
+  locale: string;
 }
 
-export default function BlogPostForm({ categories, initialData }: BlogPostFormProps) {
+export default function BlogPostForm({ categories, initialData, locale }: BlogPostFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [newCategoryEn, setNewCategoryEn] = useState('');
   const [newCategoryFr, setNewCategoryFr] = useState('');
+  const [showOtherLangContent, setShowOtherLangContent] = useState(false);
   const [formData, setFormData] = useState({
     titleEn: initialData?.titleEn || '',
     titleFr: initialData?.titleFr || '',
@@ -137,21 +139,16 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
     
     // Validate required fields with proper error messages
     const errors: string[] = [];
-    
-    if (!formData.titleEn || formData.titleEn.trim() === '') {
-      errors.push('English title is required');
+    // Only require the primary locale's title and content. Excerpts are optional.
+    const primaryLang = locale === 'fr' ? 'Fr' : 'En';
+    const secondaryLang = primaryLang === 'Fr' ? 'En' : 'Fr';
+
+    const primaryTitle = (formData as any)[`title${primaryLang}`];
+    const primaryContent = (formData as any)[`content${primaryLang}`];
+
+    if (!primaryTitle || primaryTitle.trim() === '') {
+      errors.push(`${primaryLang === 'Fr' ? 'French' : 'English'} title is required`);
     }
-    if (!formData.titleFr || formData.titleFr.trim() === '') {
-      errors.push('French title is required / Titre français requis');
-    }
-    if (!formData.excerptEn || formData.excerptEn.trim() === '') {
-      errors.push('English excerpt is required');
-    }
-    if (!formData.excerptFr || formData.excerptFr.trim() === '') {
-      errors.push('French excerpt is required / Extrait français requis');
-    }
-    
-    // Validate content fields - check for empty or whitespace-only HTML
     const isContentEmpty = (html: string) => {
       if (!html || html.trim() === '') return true;
       // Remove HTML tags and check if there's actual text content
@@ -159,11 +156,8 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
       return text.length === 0;
     };
     
-    if (isContentEmpty(formData.contentEn)) {
-      errors.push('English content is required');
-    }
-    if (isContentEmpty(formData.contentFr)) {
-      errors.push('French content is required / Contenu français requis');
+    if (isContentEmpty(primaryContent)) {
+      errors.push(`${primaryLang === 'Fr' ? 'French' : 'English'} content is required`);
     }
     
     if (errors.length > 0) {
@@ -171,13 +165,19 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
       return;
     }
     
-    // Ensure slugs are generated
-    const updatedFormData = { ...formData };
-    if (!updatedFormData.slugEn || updatedFormData.slugEn.trim() === '') {
-      updatedFormData.slugEn = generateSlug(updatedFormData.titleEn) || 'untitled-' + Date.now();
+    // Ensure slugs are generated. If a language title is missing, fall back to the primary title.
+    const updatedFormData = { ...formData } as any;
+    const primarySlug = generateSlug(primaryTitle) || `untitled-${Date.now()}`;
+    // Primary slug
+    if (!updatedFormData[`slug${primaryLang}`] || updatedFormData[`slug${primaryLang}`].trim() === '') {
+      updatedFormData[`slug${primaryLang}`] = primarySlug;
     }
-    if (!updatedFormData.slugFr || updatedFormData.slugFr.trim() === '') {
-      updatedFormData.slugFr = generateSlug(updatedFormData.titleFr) || 'sans-titre-' + Date.now();
+    // Secondary slug: if user provided its title, generate from it; otherwise reuse primary slug
+    const secondaryTitle = updatedFormData[`title${secondaryLang}`];
+    if (!updatedFormData[`slug${secondaryLang}`] || updatedFormData[`slug${secondaryLang}`].trim() === '') {
+      updatedFormData[`slug${secondaryLang}`] = secondaryTitle && secondaryTitle.trim() !== ''
+        ? generateSlug(secondaryTitle)
+        : primarySlug;
     }
     
     setLoading(true);
@@ -222,98 +222,142 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
 
   return (
     <form onSubmit={(e) => handleSubmit(e)} className="bg-white rounded-lg shadow-md p-6 space-y-6">
-      {/* English Title */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          English Title * <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
-        </label>
+      {/* Primary language fields (only required for primary locale) */}
+      {(() => {
+        const primary = locale === 'fr' ? 'Fr' : 'En';
+        const isFrench = locale === 'fr';
+        const primaryTitleLabel = isFrench ? 'Titre *' : 'English Title *';
+        const primaryExcerptLabel = isFrench ? 'Résumé' : 'English Excerpt';
+        const primaryContentLabel = isFrench ? 'Contenu *' : 'English Content *';
+        const arabicLabel = isFrench ? 'Arabe supporté' : 'Arabic supported';
+        const primaryPlaceholder = primary === 'Fr' ? 'Entrez le titre en français ou en arabe' : 'Enter title in English or Arabic';
+        const primaryExcerptPlaceholder = primary === 'Fr' ? 'Bref résumé en français ou en arabe' : 'Brief summary in English or Arabic';
+        const primaryContentPlaceholder = primary === 'Fr' ? 'Écrivez votre contenu en français...' : 'Write your content in English...';
+        const autoGenText = isFrench ? 'généré automatiquement à partir du titre' : 'auto-generated from title';
+
+        return (
+          <>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {primaryTitleLabel} <span className="text-xs font-normal text-gray-500">({arabicLabel} / عربي مدعوم)</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={(formData as any)[`title${primary}`]}
+                onChange={(e) => handleTitleChange(primary === 'En' ? 'en' : 'fr', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                placeholder={primaryPlaceholder}
+                dir="auto"
+              />
+              <p className="text-xs text-gray-500 mt-1">URL Slug: {(formData as any)[`slug${primary}`] || autoGenText}</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {primaryExcerptLabel} <span className="text-xs font-normal text-gray-500">({isFrench ? 'optionnel' : 'optional'})</span>
+              </label>
+              <textarea
+                value={(formData as any)[`excerpt${primary}`]}
+                onChange={(e) => setFormData({ ...formData, [("excerpt" + primary) as any]: e.target.value })}
+                rows={2}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                placeholder={primaryExcerptPlaceholder}
+                dir="auto"
+              />
+            </div>
+
+            <div>
+              <RichTextEditor
+                label={primaryContentLabel}
+                content={(formData as any)[`content${primary}`]}
+                onChange={(content) => setFormData({ ...formData, [("content" + primary) as any]: content })}
+                placeholder={primaryContentPlaceholder}
+                supportArabic={true}
+              />
+            </div>
+          </>
+        );
+      })()}
+
+      {/* Toggle to add the other language (e.g., 'Add English content' when primary is French) */}
+      <div className="flex items-center gap-2">
         <input
-          type="text"
-          required
-          value={formData.titleEn}
-          onChange={(e) => handleTitleChange('en', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Enter title in English or Arabic"
-          dir="auto"
+          id="toggleOtherLang"
+          type="checkbox"
+          checked={showOtherLangContent}
+          onChange={(e) => setShowOtherLangContent(e.target.checked)}
+          className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
         />
-        <p className="text-xs text-gray-500 mt-1">URL Slug: {formData.slugEn || 'auto-generated from title'}</p>
-      </div>
-
-      {/* French Title */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          French Title * (Titre en français) <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
+        <label htmlFor="toggleOtherLang" className="text-sm font-medium text-gray-700">
+          {locale === 'fr' ? 'Ajouter également le contenu en anglais' : 'Also add French content'}
         </label>
-        <input
-          type="text"
-          required
-          value={formData.titleFr}
-          onChange={(e) => handleTitleChange('fr', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Entrez le titre en français ou en arabe"
-          dir="auto"
-        />
-        <p className="text-xs text-gray-500 mt-1">URL Slug: {formData.slugFr || 'généré automatiquement'}</p>
       </div>
 
-      {/* English Excerpt */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          English Excerpt * <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
-        </label>
-        <textarea
-          required
-          value={formData.excerptEn}
-          onChange={(e) => setFormData({ ...formData, excerptEn: e.target.value })}
-          rows={2}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Brief summary in English or Arabic"
-          dir="auto"
-        />
-      </div>
+      {/* Secondary language fields (shown only when toggled) */}
+      {showOtherLangContent && (
+        <div className="space-y-4">
+          {(() => {
+            const secondary = locale === 'fr' ? 'En' : 'Fr';
+            const isFrench = locale === 'fr';
+            const secondaryTitleLabel = isFrench ? 'Titre en Anglais' : 'Titre en Français';
+            const secondaryExcerptLabel = isFrench ? 'Résumé en Anglais' : 'Résumé en Français';
+            const secondaryContentLabel = isFrench ? 'Contenu en Anglais' : 'Contenu en Français';
+            const secondaryPlaceholder = secondary === 'Fr' ? 'Entrez le titre en français ou en arabe' : 'Enter title in English or Arabic';
+            const secondaryExcerptPlaceholder = secondary === 'Fr' ? 'Bref résumé en français ou en arabe' : 'Brief summary in English or Arabic';
+            const secondaryContentPlaceholder = secondary === 'Fr' ? 'Écrivez votre contenu en français...' : 'Write your content in English...';
+            const autoGenText = isFrench ? 'généré automatiquement à partir du titre ou de la langue principale' : 'auto-generated from title or primary language';
 
-      {/* French Excerpt */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          French Excerpt * (Extrait en français) <span className="text-xs font-normal text-gray-500">(Arabic supported / عربي مدعوم)</span>
-        </label>
-        <textarea
-          required
-          value={formData.excerptFr}
-          onChange={(e) => setFormData({ ...formData, excerptFr: e.target.value })}
-          rows={2}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="Bref résumé en français ou en arabe"
-          dir="auto"
-        />
-      </div>
+            return (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {secondaryTitleLabel} <span className="text-xs font-normal text-gray-500">({isFrench ? 'optionnel' : 'optional'})</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={(formData as any)[`title${secondary}`]}
+                    onChange={(e) => handleTitleChange(secondary === 'En' ? 'en' : 'fr', e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder={secondaryPlaceholder}
+                    dir="auto"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">URL Slug: {(formData as any)[`slug${secondary}`] || autoGenText}</p>
+                </div>
 
-      {/* English Content */}
-      <div>
-        <RichTextEditor
-          label="English Content *"
-          content={formData.contentEn}
-          onChange={(content) => setFormData({ ...formData, contentEn: content })}
-          placeholder="Write your content in English..."
-          supportArabic={true}
-        />
-      </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {secondaryExcerptLabel} <span className="text-xs font-normal text-gray-500">({isFrench ? 'optionnel' : 'optional'})</span>
+                  </label>
+                  <textarea
+                    value={(formData as any)[`excerpt${secondary}`]}
+                    onChange={(e) => setFormData({ ...formData, [("excerpt" + secondary) as any]: e.target.value })}
+                    rows={2}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder={secondaryExcerptPlaceholder}
+                    dir="auto"
+                  />
+                </div>
 
-      {/* French Content */}
-      <div>
-        <RichTextEditor
-          label="French Content * (Contenu en français)"
-          content={formData.contentFr}
-          onChange={(content) => setFormData({ ...formData, contentFr: content })}
-          placeholder="Écrivez votre contenu en français..."
-          supportArabic={true}
-        />
-      </div>
+                <div>
+                  <RichTextEditor
+                    label={secondaryContentLabel}
+                    content={(formData as any)[`content${secondary}`]}
+                    onChange={(content) => setFormData({ ...formData, [("content" + secondary) as any]: content })}
+                    placeholder={secondaryContentPlaceholder}
+                    supportArabic={true}
+                  />
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      )}
 
       {/* Category */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Category (Catégorie)
+          {locale === 'fr' ? 'Catégorie' : 'Category'}
         </label>
         <div className="flex gap-2">
           <select
@@ -327,14 +371,14 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
             }}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#233691] focus:border-transparent"
           >
-            <option value="">Select a category / Sélectionner une catégorie</option>
+            <option value="">{locale === 'fr' ? 'Sélectionner une catégorie' : 'Select a category'}</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.nameEn} / {category.nameFr}
               </option>
             ))}
             <option value="__ADD_NEW__" className="font-semibold" style={{color: '#F9AA04'}}>
-              + Add New Category / Ajouter une nouvelle catégorie
+              {locale === 'fr' ? '+ Ajouter une nouvelle catégorie' : '+ Add New Category'}
             </option>
           </select>
         </div>
@@ -344,7 +388,7 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           <div className="mt-4 p-4 border-2 rounded-lg" style={{borderColor: '#F9AA04', backgroundColor: 'rgba(249, 170, 4, 0.05)'}}>
             <div className="flex items-center gap-2 mb-3">
               <Plus className="h-5 w-5" style={{color: '#F9AA04'}} />
-              <h4 className="font-semibold text-gray-900">Add New Category</h4>
+              <h4 className="font-semibold text-gray-900">{locale === 'fr' ? 'Ajouter une nouvelle catégorie' : 'Add New Category'}</h4>
             </div>
             <div className="space-y-3">
               <div>
@@ -401,7 +445,7 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
       {/* Cover Image */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Cover Image URL (Image de couverture)
+          {locale === 'fr' ? 'Image de couverture' : 'Cover Image URL'}
         </label>
         <input
           type="url"
@@ -429,7 +473,7 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
         />
         <label htmlFor="published" className="text-sm font-medium text-gray-700">
-          Publish immediately (Publier immédiatement)
+          {locale === 'fr' ? 'Publier immédiatement' : 'Publish immediately'}
         </label>
       </div>
 
@@ -441,7 +485,7 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <X size={20} />
-          Cancel / Annuler
+          {locale === 'fr' ? 'Annuler' : 'Cancel'}
         </button>
         
         {!initialData && (
@@ -452,7 +496,7 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
             className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
           >
             <Save size={20} />
-            Save as Draft / Enregistrer comme brouillon
+            {locale === 'fr' ? 'Enregistrer comme brouillon' : 'Save as Draft'}
           </button>
         )}
         
@@ -462,7 +506,7 @@ export default function BlogPostForm({ categories, initialData }: BlogPostFormPr
           className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
         >
           <Save size={20} />
-          {loading ? 'Saving...' : (initialData ? 'Update Post / Mettre à jour' : 'Create Post / Créer l\'article')}
+          {loading ? (locale === 'fr' ? 'Enregistrement...' : 'Saving...') : (initialData ? (locale === 'fr' ? 'Mettre à jour' : 'Update Post') : (locale === 'fr' ? 'Créer l\'article' : 'Create Post'))}
         </button>
       </div>
     </form>
