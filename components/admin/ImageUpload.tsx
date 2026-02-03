@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { UploadButton } from '@uploadthing/react';
 import type { OurFileRouter } from '@/app/api/uploadthing/core';
 import { ImageIcon, X, Upload, Link2 } from 'lucide-react';
@@ -27,6 +27,11 @@ const IMAGE_GUIDELINES = {
     urlLabel: 'Image URL',
     dragDrop: 'Drag and drop your image here or click to browse',
     uploading: 'Uploading...',
+    selectFile: 'Select a file',
+    uploadingFile: 'Uploading file...',
+    uploadError: 'Upload error',
+    invalidFile: 'Please select a valid image file',
+    dimensionsValue: '1200x630px or larger (16:9 aspect ratio recommended)',
   },
   fr: {
     title: 'Directives pour les images',
@@ -40,6 +45,11 @@ const IMAGE_GUIDELINES = {
     urlLabel: 'URL de l\'image',
     dragDrop: 'Faites glisser votre image ici ou cliquez pour parcourir',
     uploading: 'Téléchargement...',
+    selectFile: 'Sélectionner un fichier',
+    uploadingFile: 'Téléchargement du fichier...',
+    uploadError: 'Erreur de téléchargement',
+    invalidFile: 'Veuillez sélectionner un fichier image valide',
+    dimensionsValue: '1200x630px ou plus grand (ratio 16:9 recommandé)',
   },
 };
 
@@ -49,6 +59,8 @@ export default function ImageUpload({ value, onChange, onRemove, locale = 'en' }
   const [urlError, setUrlError] = useState('');
   const [isValidatingUrl, setIsValidatingUrl] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const t = IMAGE_GUIDELINES[locale as keyof typeof IMAGE_GUIDELINES] || IMAGE_GUIDELINES.en;
 
@@ -58,6 +70,70 @@ export default function ImageUpload({ value, onChange, onRemove, locale = 'en' }
       return true;
     } catch {
       return false;
+    }
+  };
+
+  const isValidImageFile = (file: File): boolean => {
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    return validTypes.includes(file.type);
+  };
+
+  const handleFileSelect = async (file: File) => {
+    if (!isValidImageFile(file)) {
+      alert(`${t.invalidFile}`);
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      alert(`${t.uploadError}: ${locale === 'fr' ? 'Fichier trop volumineux' : 'File is too large'}`);
+      return;
+    }
+
+    setUploading(true);
+    try {
+      // Convert file to base64 data URL for local preview/storage
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        onChange(result);
+        setUploading(false);
+      };
+      reader.onerror = () => {
+        alert(`${t.uploadError}: ${locale === 'fr' ? 'Impossible de lire le fichier' : 'Unable to read file'}`);
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      alert(`${t.uploadError}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setUploading(false);
+    }
+  };
+
+  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      handleFileSelect(files[0]);
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target?.files;
+    if (files && files.length > 0) {
+      handleFileSelect(files[0]);
     }
   };
 
@@ -103,7 +179,7 @@ export default function ImageUpload({ value, onChange, onRemove, locale = 'en' }
         <ul className="space-y-2 text-sm text-blue-800">
           <li><strong>{t.formats}:</strong> {SUPPORTED_FORMATS.join(', ')}</li>
           <li><strong>{t.size}:</strong> {MAX_FILE_SIZE_MB}MB</li>
-          <li><strong>{t.dimensions}:</strong> 1200x630px or larger (16:9 aspect ratio recommended)</li>
+          <li><strong>{t.dimensions}:</strong> {t.dimensionsValue}</li>
         </ul>
       </div>
 
@@ -164,29 +240,35 @@ export default function ImageUpload({ value, onChange, onRemove, locale = 'en' }
 
           {/* Local File Upload */}
           {uploadMethod === 'local' && (
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#F9AA04] transition-colors">
-              <ImageIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <UploadButton<OurFileRouter, 'imageUploader'>
-                endpoint="imageUploader"
-                onClientUploadComplete={(res) => {
-                  if (res?.[0]?.url) {
-                    onChange(res[0].url);
-                    setUploading(false);
-                  }
-                }}
-                onUploadError={(error: Error) => {
-                  alert(`${locale === 'fr' ? 'Erreur de téléchargement: ' : 'Upload error: '}${error.message}`);
-                  setUploading(false);
-                }}
-                onUploadBegin={() => setUploading(true)}
-                appearance={{
-                  button:
-                    'ut-ready:bg-[#F9AA04] ut-uploading:cursor-not-allowed ut-uploading:bg-[#e69a03] bg-[#F9AA04] text-sm font-medium hover:bg-[#f5a81f] transition-colors',
-                  allowedContent: 'text-xs text-gray-500',
-                }}
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleFileInputChange}
+                className="hidden"
               />
-              <p className="text-xs text-gray-500 mt-4">{t.dragDrop}</p>
-            </div>
+              <div
+                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
+                  dragActive
+                    ? 'border-[#F9AA04] bg-amber-50'
+                    : 'border-gray-300 hover:border-[#F9AA04]'
+                }`}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <ImageIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <p className="text-sm font-medium text-gray-700 mb-2">
+                  {uploading ? t.uploadingFile : t.dragDrop}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {locale === 'fr' ? 'ou' : 'or'} <span className="text-[#F9AA04] font-medium">{t.selectFile}</span>
+                </p>
+              </div>
+            </>
           )}
 
           {/* URL Input */}
