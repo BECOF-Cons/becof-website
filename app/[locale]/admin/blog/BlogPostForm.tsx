@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Save, X, Plus } from 'lucide-react';
 import RichTextEditor from '@/components/admin/RichTextEditor';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 interface BlogPostFormProps {
   categories: Array<{
@@ -445,22 +446,14 @@ export default function BlogPostForm({ categories, initialData, locale }: BlogPo
       {/* Cover Image */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          {locale === 'fr' ? 'Image de couverture' : 'Cover Image URL'}
+          {locale === 'fr' ? 'Image de couverture' : 'Cover Image'}
         </label>
-        <input
-          type="url"
+        <ImageUpload
           value={formData.coverImage}
-          onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          placeholder="https://example.com/image.jpg"
+          onChange={(url) => setFormData({ ...formData, coverImage: url })}
+          onRemove={() => setFormData({ ...formData, coverImage: '' })}
+          locale={locale}
         />
-        {formData.coverImage && (
-          <img
-            src={formData.coverImage}
-            alt="Preview"
-            className="mt-2 w-full h-48 object-cover rounded-lg"
-          />
-        )}
       </div>
 
       {/* Published Status */}
