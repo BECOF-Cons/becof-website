@@ -58,7 +58,7 @@ export default function Navbar() {
               <span className="text-2xl font-bold bg-gradient-to-r from-white to-[#F9AA04] bg-clip-text text-transparent group-hover:from-[#F9AA04] group-hover:to-white transition-all">
                 {tBrand('name')}
               </span>
-              <span className="text-xs font-light text-[#F9AA04] tracking-widest">BE FUTURE</span>
+              <span className="text-xs font-light text-[#F9AA04] tracking-widest">Éducation et Orientation</span>
             </div>
           </Link>
 
