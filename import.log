@@ -1,0 +1,1046 @@
+
+📚 Starting import from: offres de formations.xlsx
+
+✓ Excel file loaded. Sheets: Universites, Etablissements par Universite, Filières par etablissement
+
+1️⃣  Importing Universities...
+  Found 14 universities
+  ℹ️  University already exists: UNIVERSITE DE TUNIS
+  ℹ️  University already exists: UNIVERSITE DE MANOUBA
+  ℹ️  University already exists: UNIVERSITE DE TUNIS EL MANAR
+  ℹ️  University already exists: UNIVERSITE 7 NOVEMBRE CARTHAGE
+  ℹ️  University already exists: UNIVERSITE EZ-ZITOUNA
+  ℹ️  University already exists: UNIVERSITE DU SOUSSE
+  ℹ️  University already exists: UNIVERSITE DU SFAX
+  ℹ️  University already exists: UNIVERSITE DE JENDOUBA
+  ℹ️  University already exists: UNIVERSITE DE GABES
+  ℹ️  University already exists: DIRECTION GENERALE DES ETUDES TECHNOLOGIQUES
+  ℹ️  University already exists: UNIVERSITE DE MONASTIR
+  ℹ️  University already exists: UNIVERSITE DE KAIROUAN
+  ℹ️  University already exists: UNIVERSITE DE GAFSA
+  ℹ️  University already exists: UNIVERSITES ETRANGERES
+
+2️⃣  Importing Establishments...
+  Found 211 establishments
+  ℹ️  Establishment already exists: Institut Supérieur de Musique de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur des Affaires de Tunis (TBS)
+  ℹ️  Establishment already exists: Institut supérieur d'ingénierie numérique de Tunis
+  ℹ️  Establishment already exists: Institut Préparatoire aux Etudes d'Ingénieurs de Tunis
+  ℹ️  Establishment already exists: Institut Préparatoire aux Etudes Littéraires et Sciences Humaines de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur des Métiers du Patrimoine de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur d'Art  Dramatique de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur  des Etudes Appliquées en humanités de Zaghouan
+  ℹ️  Establishment already exists: Institut Supérieur des Beaux-Arts de Tunis
+  ℹ️  Establishment already exists: Ecole Supérieur des Sciences Economiques et Commerciales (ESSEC - Tunis)
+  ℹ️  Establishment already exists: Institut Supérieur de l'Animation pour la Jeunesse et la Culture de Bir El Bey
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Appliquées en humanités de Tunis
+  ℹ️  Establishment already exists: Faculté des Sciences Humaines et Sociales de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur de Gestion de Tunis (I.S.G. - Tunis)
+  ℹ️  Establishment already exists: Ecole Supérieure des Sciences et Technologies du design
+  ℹ️  Establishment already exists: Institut Supérieur de Comptabilité et d'Administration des Entreprises de Manouba (ISCAE)
+  ℹ️  Establishment already exists: Institut Supérieur de Sport et de l’Education Physique de Ksar Said
+  ℹ️  Establishment already exists: Institut Supérieur D’éducation Spécialisée
+  ℹ️  Establishment already exists: Ecole Supérieure de Commerce de Manouba (E S C)
+  ℹ️  Establishment already exists: Institut Supérieur de Biotechnologie de Sidi Thabet
+  ℹ️  Establishment already exists: Faculté des Lettres, des Arts et des Humanités de Manouba
+  ℹ️  Establishment already exists: Institut Supérieur des Arts du Multimédia de Manouba
+  ℹ️  Establishment already exists: Ecole Nationale d'Ingénieurs de Manouba
+  ℹ️  Establishment already exists: Institut Supérieur de Documentation
+  ℹ️  Establishment already exists: Institut de Presse et des Sciences de l'Information
+  ℹ️  Establishment already exists: Ecole Supérieure de L’Economie Numérique De Manouba
+  ℹ️  Establishment already exists: Institut Supérieur d’Informatique
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Biologiques Appliquées
+  ℹ️  Establishment already exists: Faculté de Droit et des Sciences Politiques de Tunis
+  ℹ️  Establishment already exists: Institut Préparatoire aux Etudes d’Ingénieurs El Manar
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Infirmières de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Humaines de Tunis
+  ℹ️  Establishment already exists: Faculté des Sciences de Tunis
+  ℹ️  Establishment already exists: Faculté de Médecine – Tunis
+  ℹ️  Establishment already exists: Faculté des Sciences Economiques et de Gestion de Tunis
+  ℹ️  Establishment already exists: Ecole Supérieure des Sciences et Techniques de la Santé de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur des Technologies Médicales  de Tunis
+  ℹ️  Establishment already exists: Institut supérieur des Sciences de la Mer de Bizerte
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Appliquées et de Technologie de Mateur
+  ℹ️  Establishment already exists: Institut Préparatoire aux Etudes d’Ingénieurs de Bizerte
+  ℹ️  Establishment already exists: Institut supérieur des études touristiques et hôtelières de Sidi Dhrif
+  ℹ️  Establishment already exists: Faculté des Sciences Economiques et de Gestion de Nabeul
+  ℹ️  Establishment already exists: Institut Supérieur de gestion de Bizerte
+  ℹ️  Establishment already exists: Institut Supérieur des Langues de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur des Beaux-Arts de Nabeul
+  ℹ️  Establishment already exists: Institut Supérieur des Langues  de Nabeul
+  ℹ️  Establishment already exists: Institut Supérieur Des Sciences et Technologie de l’Environnement de Bordj Cedria
+  ℹ️  Establishment already exists: Institut Supérieur  des Etudes Préparatoires en Biologie Géologie de la Soukra
+  ℹ️  Establishment already exists: Ecole Nationale d'Architecture et d'Urbanisme de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur des Cadres de l'Enfance de Carthage Dermech
+  ℹ️  Establishment already exists: Institut Supérieur des Technologies Informatiques et de Télécommunications de Borj Cédria
+  ℹ️  Establishment already exists: Faculté des Sciences de Bizerte
+  ℹ️  Establishment already exists: Institut National des Sciences Appliquées et de Technologie de Tunis (INSAT)
+  ℹ️  Establishment already exists: Institut des Etudes Commerciales Hautes de Carthage (I H E C)
+  ℹ️  Establishment already exists: Institut Préparatoire  Aux Etudes d’Ingénieurs de Nabeul
+  ℹ️  Establishment already exists: Ecole Supérieure d'Agriculture de Mograne
+  ℹ️  Establishment already exists: Faculté des Sciences Juridiques, Politiques et Sociales de Tunis
+  ℹ️  Establishment already exists: Institut Préparatoire aux Etudes Scientifiques  et Techniques
+  ℹ️  Establishment already exists: Institut National du Travail et des Etudes Sociales de Tunis (INTES)
+  ℹ️  Establishment already exists: Ecole Supérieure d'Agriculture de Mateur
+  ℹ️  Establishment already exists: Institut Supérieur Des technologies de l’environnement du Bâtiment et d'Urbanisme
+  ℹ️  Establishment already exists: Ecole Supérieur  des Industries Alimentaires de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur Des Sciences Islamiques de Kairouan
+  ℹ️  Establishment already exists: Institut Supérieur de Théologie de Tunis
+  ℹ️  Establishment already exists: Institut Supérieur de la Civilisation Islamique de Tunis
+  ℹ️  Establishment already exists: Faculté de Droit et des Sciences Politiques de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur des Beaux-Arts de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur de Finance et de Fiscalité de Sousse
+  ℹ️  Establishment already exists: Institut supérieur du transport et de la logistique à Sousse
+  ℹ️  Establishment already exists: Ecole Supérieure des  Sciences et Techniques de la Santé de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur des  Sciences Appliquées et de Technologie de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur d'Informatique et des Technologies de communications de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur Agronomique de Chott-Meriem
+  ℹ️  Establishment already exists: Faculté de Sciences Economiques et de Gestion de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Infirmières de Sousse
+  ℹ️  Establishment already exists: Ecole Supérieure des Sciences et Technologies de Hammam Sousse
+  ℹ️  Establishment already exists: Faculté de Médecine de Sousse
+  ℹ️  Establishment already exists: Faculté des Lettres et des Sciences Humaines de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur de Gestion de Sousse (ISG)
+  ℹ️  Establishment already exists: Institut des Etudes Commerciales Hautes de Sousse IHEC de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur de Musique de Sousse
+  ℹ️  Establishment already exists: Faculté de Médecine de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur de Musique de Sfax
+  ℹ️  Establishment already exists: Faculté des Lettres et des Sciences Humaines de Sfax
+  ℹ️  Establishment already exists: Faculté des Sciences de Sfax
+  ℹ️  Establishment already exists: Faculté de Droit de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur d'Administration des Affaires de Sfax
+  ℹ️  Establishment already exists: Institut Préparatoire aux Etudes d’ingénieurs de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur d’Informatique et de Multimédia à Sfax
+  ℹ️  Establishment already exists: Ecole Supérieure de Commerce de Sfax
+  ℹ️  Establishment already exists: Ecole Supérieure des Sciences et Techniques de la Santé de Sfax
+  ℹ️  Establishment already exists: Faculté des Sciences Economiques et de Gestion de Sfax
+  ℹ️  Establishment already exists: Ecole Nationale d’Electronique et de Communication de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur de Biotechnologie de Sfax
+  ℹ️  Establishment already exists: Institut des Hautes Etudes Commerciales de Sfax IHEC sfax
+  ℹ️  Establishment already exists: Institut Supérieur de Sport et de l’Education Physique de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur de Gestion Industrielle de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur  des Sciences Infirmières de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur des Arts et Métiers de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur d’Informatique du Kef
+  ℹ️  Establishment already exists: Institut Supérieur de Biotechnologie de Béja
+  ℹ️  Establishment already exists: Faculté des Sciences Juridiques, Economiques et de Gestion de Jendouba
+  ℹ️  Establishment already exists: Institut Supérieur de Sport et de l’Education Physique du Kef
+  ℹ️  Establishment already exists: Institut Supérieur des Arts et Métiers de Siliana
+  ℹ️  Establishment already exists: Institut Supérieur des Langues Appliquées et d'Informatique de Béja
+  ℹ️  Establishment already exists: Institut Supérieur de Musique et du Théâtre Du Kef
+  ℹ️  Establishment already exists: Ecole Supérieure des Ingénieurs de Medjez El Bab
+  ℹ️  Establishment already exists: Institut Supérieur des études Appliquées en Humanités du Kef
+  ℹ️  Establishment already exists: Institut Sylvo-Pastoral de Tabarka
+  ℹ️  Establishment already exists: Ecole Supérieure d'Agriculture du Kef
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Humaines de Jendouba
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Infirmières du KEF
+  ℹ️  Establishment already exists: Institut Supérieur de Technologie et Sciences du Kef
+  ℹ️  Establishment already exists: Institut Supérieur de Biologie
+Appliquée de Médenine
+  ℹ️  Establishment already exists: Institut Supérieur des Arts
+et métiers de Tataouine
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences et
+Techniques des Eaux de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur des Systèmes
+industriels de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur des
+Sciences Appliquées et de
+Technologie de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur
+d’Informatique de Médenine
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes
+juridiques de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur des Langues
+de Gabès
+  ℹ️  Establishment already exists: Institut Préparatoire aux Etudes d’Ingénieurs de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur de
+Gestion de Gabès ISG
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences
+Infirmières de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur des Arts et
+Métiers de Gabès
+  ℹ️  Establishment already exists: Faculté des Sciences de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur des Sciences Humaines de
+Médenine
+  ℹ️  Establishment already exists: Institut Supérieur
+d'Informatique et du
+Multimédia de Gabès
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Gabes
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Gafsa
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Sfax
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Sousse
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Nabeul
+  ℹ️  Establishment already exists: Institut Supérieur des EtudesTechnologiques de Mednine
+  ℹ️  Establishment already exists: Institut Supérieur des EtudesTechnologiques de Bizerte
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Ksar-Helal
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Jerba
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Rades
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Mahdia
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Klibia
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Jendouba
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Zaghouan
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Charguia
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques en Communication  deTunis
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Tataouin
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Seliana
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Sidi Bouzid
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Kebili
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Kairouan
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Kasserine
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Beja
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques de Tozeur
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes Technologiques du Kef
+  ℹ️  Establishment already exists: Institut Préparatoire aux
+Etudes d’ingénieurs de
+Monastir
+  ℹ️  Establishment already exists: Faculté des Sciences de Monastir
+  ℹ️  Establishment already exists: Faculté de Médecine de
+Monastir
+  ℹ️  Establishment already exists: Faculté de Médecine
+Dentaire de Monastir
+  ℹ️  Establishment already exists: Faculté de Pharmacie
+de Monastir
+  ℹ️  Establishment already exists: Institut Supérieur
+d'Informatique et de
+Mathématiques de
+Monastir
+  ℹ️  Establishment already exists: Institut Supérieur de la mode
+de Monastir
+  ℹ️  Establishment already exists: Institut Supérieur de
+Biotechnologie de
+Monastir
+  ℹ️  Establishment already exists: Ecole Supérieure des
+Sciences et
+Techniques de la
+Santé de Monastir
+  ℹ️  Establishment already exists: Institut Supérieur des Etudes
+Appliquées en Humanités de
+Mahdia
+  ℹ️  Establishment already exists: Institut Supérieur des
+Sciences Appliquées et
+de Technologie de
+Mahdia
+  ℹ️  Establishment already exists: Faculté des Sciences
+Economiques et de
+Gestion de Mahdia
+  ℹ️  Establishment already exists: Institut Supérieur
+d’Informatique de Mahdia
+  ℹ️  Establishment already exists: Institut Supérieur des Arts et
+Métiers de Mahdia
+  ℹ️  Establishment already exists: Institut Supérieur des Langues de
+Moknine
+  ℹ️  Establishment already exists: Institut Supérieur
+des Arts et
+Métiers de SidiBouzid
+  ℹ️  Establishment already exists: Faculté des Sciences et
+Technique de Sidi Bouzid
+  ℹ️  Establishment already exists: Institut
+Supérieur des
+Etudes
+appliquées en
+Humanités de
+Sbeïtla
+  ℹ️  Establishment already exists: Institut
+Supérieur
+d'Informatique
+et de Gestion
+de Kairouan
+  ℹ️  Establishment already exists: Institut
+Supérieur des
+Mathématiques
+Appliquées et
+d’Informatique
+de Kairouan
+  ℹ️  Establishment already exists: Institut
+Préparatoire
+aux Etudes
+d’Ingénieurs de
+Kairouan
+  ℹ️  Establishment already exists: Institut
+Supérieur des
+Arts et Métiers
+de Kairouan
+  ℹ️  Establishment already exists: Institut Supérieur
+des Sciences
+Appliquées et de
+Technologie de
+Kasserine
+  ℹ️  Establishment already exists: Institut
+Supérieur des
+Sciences
+Juridiques et
+Politiques de
+Kairouan
+  ℹ️  Establishment already exists: Institut Supérieur
+des Sciences
+Appliquées et
+Technologie de
+Kairouan
+  ℹ️  Establishment already exists: Faculté des Lettres et des
+Sciences Humaines de
+Kairouan
+  ℹ️  Establishment already exists: Institut Supérieur
+des Arts et Métiers
+de Kasserine
+  ℹ️  Establishment already exists: ECOLE SUPERIEURE DES SCIENCES ET TECHNIQUES DE LA SANTE A GAFSA
+  ℹ️  Establishment already exists: Institut Préparatoire
+aux Etudes
+d’Ingénieurs de Gafsa
+  ℹ️  Establishment already exists: Faculté des Sciences de Gafsa
+  ℹ️  Establishment already exists: Institut Supérieur des
+Sports et de
+l’éducation Physique
+de Gafsa
+  ℹ️  Establishment already exists: Institut Supérieur
+des Sciences Sociale et de l'éducation de Gafsa
+  ℹ️  Establishment already exists: Institut Supérieur
+Des études
+Appliquées En
+Humanité de Tozeur
+  ℹ️  Establishment already exists: Institut Supérieur des
+Arts et Métiers de
+Gafsa
+  ℹ️  Establishment already exists: Institut Superieur des Sciences Appliquees et Technologie de Gafsa
+  ℹ️  Establishment already exists: Institut Supérieur des
+Etudes Appliquées en
+Humanités à Gafsa
+  ℹ️  Establishment already exists: Institut Supérieur
+d’administration des
+Entreprises de Gafsa
+  ℹ️  Establishment already exists: E.N.S.T.A.B
+  ℹ️  Establishment already exists: Univ. Hiedelberg en Allemagne
+  ℹ️  Establishment already exists: Univ. Hanovre en Allemagne
+  ℹ️  Establishment already exists: Etablissements en France
+  ℹ️  Establishment already exists: E.N.I.Sousse
+  ℹ️  Establishment already exists: E.N.I Gafsa
+  ℹ️  Establishment already exists: E.N.S
+  ℹ️  Establishment already exists: E.S.A.C.GAMMARTH
+  ℹ️  Establishment already exists: ENIB
+  ℹ️  Establishment already exists: E.N.I.TUNIS
+  ℹ️  Establishment already exists: E.N.S.I.T
+  ℹ️  Establishment already exists: E.N.S.I.
+  ℹ️  Establishment already exists: E.P.T
+  ℹ️  Establishment already exists: I.N.A.TUNISIE
+  ℹ️  Establishment already exists: ENICarthage
+  ℹ️  Establishment already exists: E.N.I.M
+  ℹ️  Establishment already exists: E.N.MED.V
+  ℹ️  Establishment already exists: SUPCOM
+  ℹ️  Establishment already exists: E.N.I.G.
+  ℹ️  Establishment already exists: E.N.I.SFAX
+  ℹ️  Establishment already exists: E.S.S.A.I
+  Summary: Created 0, Skipped 0
+
+3️⃣  Importing Programs (Filières)...
+  Found 702 programs
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Espagnol
+  ℹ️  Program already exists: Licence en  Italien
+  ℹ️  Program already exists: Licence en  Allemand
+  ℹ️  Program already exists: Licence en  Russe
+  ℹ️  Program already exists: Licence en  Chinois
+  ℹ️  Program already exists: Licence en Anthropologie
+  ℹ️  Program already exists: Licence en Langue des Signes
+  ℹ️  Program already exists: Licence en Sociologie
+  ℹ️  Program already exists: Licence en Psychologie
+  ℹ️  Program already exists: Licence en Philosophie
+  ℹ️  Program already exists: Licence en Histoire
+  ℹ️  Program already exists: Licence en Géographie
+  ℹ️  Program already exists: Licence en Science Islamique
+  ℹ️  Program already exists: Licence en Sciences Théologiques
+  ℹ️  Program already exists: Licence en Géomatique, Environnement et Aménagement
+  ℹ️  Program already exists: Licence en Géopolitique et Relations Internationales
+  ℹ️  Program already exists: Licence en Conservation - Restauration des Biens Culturels
+  ℹ️  Program already exists: Licence en Géomatique et Aménagement
+  ℹ️  Program already exists: Licence en Archéologie
+  ℹ️  Program already exists: Licence en Géomatique et Application
+  ℹ️  Program already exists: Prépa-Lettre Spécialité Arabe
+  ℹ️  Program already exists: Prépa-Lettre Spécialité Français
+  ℹ️  Program already exists: Prépa-Lettre Spécialité Anglais
+  ℹ️  Program already exists: Cycle Prépatoire Aux Sciences Humaines:Histoire
+  ℹ️  Program already exists: Cycle Prépatoire Aux Sciences Humaines: Géographie
+  ℹ️  Program already exists: Cycle Prépatoire Aux Sciences Humaines: Philosophie
+  ℹ️  Program already exists: Licence en Théâtre et Arts de la  Scéne
+  ℹ️  Program already exists: Licence  en Musique et Musicologie
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Architecture
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Urbanisme et Aménagement
+  ℹ️  Program already exists: Licence en Arts du Patrimoine Islamique
+  ℹ️  Program already exists: Licence en Cinéma et Audiovisuel
+  ℹ️  Program already exists: Licence en Droit
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Droit Social
+  ℹ️  Program already exists: Licence  en Sciences du Travail
+  ℹ️  Program already exists: Licence en Service Social
+  ℹ️  Program already exists: Licence en Gestion des Technologies de l'Information et de Télécommunication
+  ℹ️  Program already exists: Licence en Gestion Electronique de l'Information et des Documents
+  ℹ️  Program already exists: Licence en Documentation, Bibliothéconomie  et Archivistique
+  ℹ️  Program already exists: Bachelor of Business Administartion
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Médiation et Animation
+  ℹ️  Program already exists: Licence en Science et Techniques des Activités Physiques et Sportives
+  ℹ️  Program already exists: Licence en Tourisme
+  ℹ️  Program already exists: Licence en Hôtellerie
+  ℹ️  Program already exists: Licence en Sciences de l'Education
+  ℹ️  Program already exists: Licence en Education Spécialisée
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique- Chimie
+  ℹ️  Program already exists: Licence en Physique
+  ℹ️  Program already exists: Licence en Physique et Energie
+  ℹ️  Program already exists: Licence en Mathématiques Appliquées
+  ℹ️  Program already exists: Licence en Mathématiques
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Licence en Sciences de la Terre
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Licence en Sciences  de la Vie et de la Terre
+  ℹ️  Program already exists: Licence en Chimie – Sciences de  Vivant
+  ℹ️  Program already exists: Cycle Préparatoire Intégré 
+en Génie Biomédicale
+  ℹ️  Program already exists: Cycle Préparatoire Intégré en Génie Biomédicale
+  ℹ️  Program already exists: Cycle Préparatoire Intégré 
+en Génie des Biotechnologies de la Santé
+  ℹ️  Program already exists: Cycle Préparatoire Intégré en Génie des Biotechnologies de la Santé
+  ℹ️  Program already exists: Cycle Préparatoire Intégré
+  ℹ️  Program already exists: Cycle Préparatoire Intégré: Math-Physique-Informatique
+  ℹ️  Program already exists: Cycle Préparatoire Intégré: Chimie-Biologie Appliquée
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Cycle Préparatoire Technologique
+  ℹ️  Program already exists: Licence en Biotechnologie Médicale
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Santé et Sécurité au Travail
+  ℹ️  Program already exists: Licence en Intervention Sociale
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Sciences et Technologies de l’Information et de la Communication
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Génie Energétique
+  ℹ️  Program already exists: Licence en Journalisme
+  ℹ️  Program already exists: Licence en Communication
+  ℹ️  Program already exists: Licence  en Art et Médiations
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Médecine
+  ℹ️  Program already exists: Licence en Anesthésie Réanimation
+  ℹ️  Program already exists: Licence en Imagerie Médicale et Radiothérapie
+  ℹ️  Program already exists: Licence en Hygiène Sécurité et Environnement
+  ℹ️  Program already exists: Licence en Biologie Médicale
+  ℹ️  Program already exists: Licence en Physiothérapie
+  ℹ️  Program already exists: Licence en Orthophonie
+  ℹ️  Program already exists: Licence en Appareillage Orthopédique
+  ℹ️  Program already exists: Licence en Nutrition Humaine
+  ℹ️  Program already exists: Licence en Ergothérapie
+  ℹ️  Program already exists: Licence en Instrumentation Opératoire
+  ℹ️  Program already exists: Licence en Audioprothèse
+  ℹ️  Program already exists: Licence en Puériculture
+  ℹ️  Program already exists: Licence en Génie Biomédicale
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Feminin
+  ℹ️  Program already exists: Licence en Sciences Maïeutiques-Sage Femme
+  ℹ️  Program already exists: Cycle Préparatoire Biologie-Géologie
+  ℹ️  Program already exists: Licence en Industrie Alimentaire
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Espagnol
+  ℹ️  Program already exists: Licence en  Italien
+  ℹ️  Program already exists: Licence en  Allemand
+  ℹ️  Program already exists: Licence en Sociologie
+  ℹ️  Program already exists: Licence en Psychologie
+  ℹ️  Program already exists: Licence en Philosophie
+  ℹ️  Program already exists: Licence en Histoire
+  ℹ️  Program already exists: Licence en Géographie
+  ℹ️  Program already exists: Prépa-Lettre Spécialité Arabe
+  ℹ️  Program already exists: Prépa-Lettre Spécialité Français
+  ℹ️  Program already exists: Prépa-Lettre Spécialité Anglais
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Droit
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique:Physique - chimie
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique- Chimie
+  ℹ️  Program already exists: Licence en Mathématiques Appliquées
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Cycle Préparatoire Intégré
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Cycle Préparatoire Intégré : Math-Physique-Chimie
+  ℹ️  Program already exists: Cycle Préparatoire Intégré: Math-Physique-Informatique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Physiothérapie
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Homme
+  ℹ️  Program already exists: Cycle Préparatoire Biologie-Géologie
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Espagnol
+  ℹ️  Program already exists: Licence en  Italien
+  ℹ️  Program already exists: Licence en  Allemand
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Cycle Préparatoire Biologie-Géologie
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Sciences de la Terre
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique- Chimie
+  ℹ️  Program already exists: Licence en Physique
+  ℹ️  Program already exists: Licence en Physique et Energie
+  ℹ️  Program already exists: Licence en Mathématiques
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Licence en Sciences de la Terre
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Licence en Sciences  de la Vie et de la Terre
+  ℹ️  Program already exists: Cycle Préparatoire Intégré
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Génie Energétique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Cycle Préparatoire Biologie-Géologie
+  ℹ️  Program already exists: Licence en Agronomie
+  ℹ️  Program already exists: Licence en Sciences de  la Mer
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Génie des Procédés
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Agronomie
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en  Italien
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Cycle Préparatoire Technologique
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie des Procédés
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie des Procédés
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Anthropologie
+  ℹ️  Program already exists: Licence en Histoire
+  ℹ️  Program already exists: Licence en Géographie
+  ℹ️  Program already exists: Licence en Conservation - Restauration des Biens Culturels
+  ℹ️  Program already exists: Licence  en Musique et Musicologie
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence Ingénierie et Techniques du Son
+  ℹ️  Program already exists: Licence en Droit
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique et Energie
+  ℹ️  Program already exists: Licence en Mathématiques
+  ℹ️  Program already exists: Cycle Préparatoire Intégré (Scientifique)
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Technologie et  Ingénierie du Transport
+  ℹ️  Program already exists: Licence en Génie Energétique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Electromécanique
+  ℹ️  Program already exists: Licence en Génie Logistique
+  ℹ️  Program already exists: Licence en Science du Transport
+  ℹ️  Program already exists: Médecine
+  ℹ️  Program already exists: Licence en Podologie et Pédicurie
+  ℹ️  Program already exists: Licence en Instrumentation Opératoire
+  ℹ️  Program already exists: Licence en Puériculture
+  ℹ️  Program already exists: Licence en Urgence et Réanimation
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Feminin
+  ℹ️  Program already exists: Licence en Agronomie
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Homme
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Espagnol
+  ℹ️  Program already exists: Licence en  Italien
+  ℹ️  Program already exists: Licence en  Allemand
+  ℹ️  Program already exists: Licence en Traduction
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique- Chimie
+  ℹ️  Program already exists: Licence en Physique
+  ℹ️  Program already exists: Licence en Physique et Energie
+  ℹ️  Program already exists: Licence en Mathématiques Appliquées
+  ℹ️  Program already exists: Licence en Mathématiques
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Cycle Préparatoire Intégré
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Cycle Préparatoire Technologique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Mesures  et Instrumentations
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Textile
+  ℹ️  Program already exists: Licence en Génie des Procédés
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Médecine
+  ℹ️  Program already exists: Pharmacie
+  ℹ️  Program already exists: Médecine Dentaire
+  ℹ️  Program already exists: Licence en Anesthésie Réanimation
+  ℹ️  Program already exists: Licence en Imagerie Médicale et Radiothérapie
+  ℹ️  Program already exists: Licence en Biologie Médicale
+  ℹ️  Program already exists: Licence en Physiothérapie
+  ℹ️  Program already exists: Licence en Prothèse Dentaire
+  ℹ️  Program already exists: Licence en Sciences Maïeutiques-Sage Femme
+  ℹ️  Program already exists: Licence en Mathématiques Appliquées
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Génie Textile
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique:Mathématiques - Physique
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Physique des Matériaux
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Espagnol
+  ℹ️  Program already exists: Licence en  Italien
+  ℹ️  Program already exists: Licence en Sociologie
+  ℹ️  Program already exists: Licence en Philosophie
+  ℹ️  Program already exists: Licence en Histoire
+  ℹ️  Program already exists: Licence en Géographie
+  ℹ️  Program already exists: Licence en Traduction
+  ℹ️  Program already exists: Licence en Conservation des Biens Culturels
+  ℹ️  Program already exists: Licence  en Musique et Musicologie
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Ingénierie du Son et Nouvelles Technologies
+  ℹ️  Program already exists: Licence en Cinéma et Audiovisuel
+  ℹ️  Program already exists: Licence en Droit
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Science et Techniques des Activités Physiques et Sportives
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique- Chimie
+  ℹ️  Program already exists: Licence en Physique
+  ℹ️  Program already exists: Licence en Physique et Energie
+  ℹ️  Program already exists: Licence en Mathématiques Appliquées
+  ℹ️  Program already exists: Licence en Mathématiques
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Licence en Sciences de la Terre
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Licence en Sciences  de la Vie et de la Terre
+  ℹ️  Program already exists: Cycle Préparatoire Intégré
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Cycle Préparatoire Technologique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Mesures  et Instrumentations
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Ingénierie des Procédés Industrielles
+  ℹ️  Program already exists: Licence en Génie Industrielle
+  ℹ️  Program already exists: Licence en Génie des Procédés
+  ℹ️  Program already exists: Licence  en Art et Médiations
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Génie Logistique
+  ℹ️  Program already exists: Licence en Science du Transport
+  ℹ️  Program already exists: Médecine
+  ℹ️  Program already exists: Licence en Anesthésie Réanimation
+  ℹ️  Program already exists: Licence en Imagerie Médicale et Radiothérapie
+  ℹ️  Program already exists: Licence en Biologie Médicale
+  ℹ️  Program already exists: Licence en Physiothérapie
+  ℹ️  Program already exists: Licence en Optique et Lunetterie
+  ℹ️  Program already exists: Licence en Instrumentation Opératoire
+  ℹ️  Program already exists: Licence en Génie Biomédicale
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Feminin
+  ℹ️  Program already exists: Licence en Sciences Maïeutiques-Sage Femme
+  ℹ️  Program already exists: Cycle Préparatoire Biologie-Géologie
+  ℹ️  Program already exists: Licence en Sciences et Technologies Alimentaires
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Cycle Préparatoire Intégré
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Homme
+  ℹ️  Program already exists: Cycle Préparatoire Biologie-Géologie
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Espagnol
+  ℹ️  Program already exists: Licence en  Italien
+  ℹ️  Program already exists: Licence en  Allemand
+  ℹ️  Program already exists: Licence en Conservation - Restauration des Biens Culturels
+  ℹ️  Program already exists: Licence  en Musique et Musicologie
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Droit
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique
+  ℹ️  Program already exists: Licence en Mathématiques
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Licence en Sciences de la Terre
+  ℹ️  Program already exists: Licence en Sciences  de la Vie et de la Terre
+  ℹ️  Program already exists: Cycle Préparatoire Intégré
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Cycle Préparatoire Technologique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Mesures  et Instrumentations
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Sciences et Technologies de l’Information et de la Communication
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Ingénierie des Procédés Industrielles
+  ℹ️  Program already exists: Licence en Génie des Procédés
+  ℹ️  Program already exists: Licence en Génie Energétique
+  ℹ️  Program already exists: Licence  en Art et Médiations
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Feminin
+  ℹ️  Program already exists: Cycle Préparatoire Biologie-Géologie
+  ℹ️  Program already exists: Licence en Sciences de la Terre
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Homme
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en  Allemand
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Anthropologie
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Thermique et Energie Renouvelable
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Sociologie
+  ℹ️  Program already exists: Licence en Géomatique et Application
+  ℹ️  Program already exists: Licence  en Musique et Musicologie
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Science et Techniques des Activités Physiques et Sportives
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Chimie
+  ℹ️  Program already exists: Licence en Physique
+  ℹ️  Program already exists: Licence en Physique et Energie
+  ℹ️  Program already exists: Licence en Mathématiques Appliquées
+  ℹ️  Program already exists: Licence en Mathématiques
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Licence en Sciences de la Terre
+  ℹ️  Program already exists: Licence en Sciences  de la Vie et de la Terre
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Cycle Préparatoire Technologique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Génie Energétique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Anesthésie Réanimation
+  ℹ️  Program already exists: Licence en Imagerie Médicale et Radiothérapie
+  ℹ️  Program already exists: Licence en Biologie Médicale
+  ℹ️  Program already exists: Licence en Urgence et Réanimation
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Arabe
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Philosophie
+  ℹ️  Program already exists: Licence en Science Islamique
+  ℹ️  Program already exists: Licence en Traduction
+  ℹ️  Program already exists: Licence en Archéologie
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Droit
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Mathématiques Appliquées
+  ℹ️  Program already exists: Cycle Préparatoire Scientifique
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Cycle Préparatoire Technologique
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Génie Energétique
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Animation Touristique
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Electronique Electrotechnique et Automatisme
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Produit
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Physique- Chimie
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Technologies de l'Information et de la Communication
+  ℹ️  Program already exists: Licence en Génie des Procédés
+  ℹ️  Program already exists: Licence en Technologies Agroalimentaires et Environnement
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Histoire
+  ℹ️  Program already exists: Licence en Géographie de l'Environnement
+  ℹ️  Program already exists: Licence en Droit
+  ℹ️  Program already exists: Licence en Informatique de Gestion
+  ℹ️  Program already exists: Licence en Sciences Economiques
+  ℹ️  Program already exists: Licence en Sciences de Gestion
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Agronomie
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Français
+  ℹ️  Program already exists: Licence en Théâtre et Arts de la  Scéne
+  ℹ️  Program already exists: Licence  en Musique et Musicologie
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Science et Techniques des Activités Physiques et Sportives
+  ℹ️  Program already exists: Licence en Education et Enseignement
+  ℹ️  Program already exists: Cycle Préparatoire Intégré en Génie Biologique et Biomédicale
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Ingénierie des Systèmes Informatiques
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Feminin
+  ℹ️  Program already exists: Licence en Agronomie
+  ℹ️  Program already exists: Licence en  Sciences Infirmières-Homme
+  ℹ️  Program already exists: Licence en Anglais
+  ℹ️  Program already exists: Licence en Hydromécanique
+  ℹ️  Program already exists: Licence en Sciences du Vivant
+  ℹ️  Program already exists: Licence en Sciences du Vivant  et Environnement
+  ℹ️  Program already exists: Licence en Sciences de l'Informatique
+  ℹ️  Program already exists: Licence en Biotechnologie
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: Licence en Sciences et Technologies Alimentaires
+  ℹ️  Program already exists: Licence  en Arts Plastiques
+  ℹ️  Program already exists: Licence en Design Espace
+  ℹ️  Program already exists: Licence en Design Image
+  ℹ️  Program already exists: Licence en Management
+  ℹ️  Program already exists: Licence en Comptabilité et Finance
+  ℹ️  Program already exists: Licence en Commerce et Distribution
+  ℹ️  Program already exists: Licence en Technologies Informatiques
+  ℹ️  Program already exists: Licence en Génie Civil
+  ℹ️  Program already exists: Licence en Génie Mécanique
+  ℹ️  Program already exists: Licence en Génie Electrique
+  ℹ️  Program already exists: MPSI - IPEST
+  ℹ️  Program already exists: PCSI - IPEST
+  ℹ️  Program already exists: MPSI France-Garçon
+  ℹ️  Program already exists: PCSI France-Garçon
+  ℹ️  Program already exists: MPSI France-Fille
+  ℹ️  Program already exists: PCSI France-Fille
+  ℹ️  Program already exists: Licence en lettres modernes
+  ℹ️  Program already exists: Licence en sociologie
+  ℹ️  Program already exists: Bachelor-Master:Génie - Hanovre Allemagne
+  ℹ️  Program already exists: Bachelor-Master - Heidelberg Allemagne
+  ℹ️  Program already exists: Bachelor-Master:Génie - Heidelberg Allemagne
+  Summary: Created 0, Skipped 0
+
+📊 Import Summary:
+  ✅ Universities imported
+  ✅ Establishments imported
+  ✅ Programs imported
+
+✨ Import completed successfully!
