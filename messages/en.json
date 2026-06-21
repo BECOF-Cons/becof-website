@@ -6,6 +6,7 @@
   "nav": {
     "home": "Home",
     "blog": "Blog",
+    "formations": "Formations",
     "services": "Services",
     "about": "About",
     "contact": "Contact",
@@ -141,7 +142,8 @@
       "payments": "Payments",
       "servicePricing": "Service Pricing",
       "adminManagement": "Admin Management",
-      "settings": "Settings"
+      "settings": "Settings",
+      "formations": "Training Offers"
     },
     "welcome": "Welcome back",
     "signOut": "Sign Out",
@@ -330,6 +332,39 @@
         "notConfigured": "Not Connected",
         "setupInstructions": "Setup Instructions"
       }
+    }
+  },
+  "formations": {
+    "title": "Training Offers",
+    "subtitle": "Explore universities, establishments and degree programs available in Tunisia",
+    "search": "Search university, establishment or program...",
+    "noResults": "No results found for your search.",
+    "universities": "Universities",
+    "establishments": "Establishments",
+    "filieres": "Programs",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "admin": {
+      "title": "Training Offers",
+      "subtitle": "Manage universities, establishments and programs",
+      "importExcel": "Import Excel",
+      "importing": "Importing...",
+      "importSuccess": "Import successful",
+      "importError": "Import error",
+      "addUniversity": "Add university",
+      "addEstablishment": "Add establishment",
+      "addFiliere": "Add program",
+      "editUniversity": "Edit university",
+      "editEstablishment": "Edit establishment",
+      "editFiliere": "Edit program",
+      "deleteConfirm": "Are you sure you want to delete this item?",
+      "nameFr": "Name (French)",
+      "nameAr": "Name (Arabic)",
+      "university": "University",
+      "save": "Save",
+      "cancel": "Cancel",
+      "active": "Active",
+      "inactive": "Inactive"
     }
   }
 }

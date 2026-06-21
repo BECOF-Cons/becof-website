@@ -6,6 +6,7 @@
   "nav": {
     "home": "Accueil",
     "blog": "Blog",
+    "formations": "Formations",
     "services": "Services",
     "about": "À Propos",
     "contact": "Contact",
@@ -141,7 +142,8 @@
       "payments": "Paiements",
       "servicePricing": "Tarification des services",
       "adminManagement": "Gestion des admins",
-      "settings": "Paramètres"
+      "settings": "Paramètres",
+      "formations": "Offres de Formations"
     },
     "welcome": "Bienvenue",
     "signOut": "Déconnexion",
@@ -330,6 +332,39 @@
         "notConfigured": "Non connecté",
         "setupInstructions": "Instructions de configuration"
       }
+    }
+  },
+  "formations": {
+    "title": "Offres de Formations",
+    "subtitle": "Explorez les universités, établissements et filières disponibles en Tunisie",
+    "search": "Rechercher une université, établissement ou filière...",
+    "noResults": "Aucun résultat trouvé pour votre recherche.",
+    "universities": "Universités",
+    "establishments": "Établissements",
+    "filieres": "Filières",
+    "expandAll": "Tout développer",
+    "collapseAll": "Tout réduire",
+    "admin": {
+      "title": "Offres de Formations",
+      "subtitle": "Gérez les universités, établissements et filières",
+      "importExcel": "Importer Excel",
+      "importing": "Importation...",
+      "importSuccess": "Importation réussie",
+      "importError": "Erreur lors de l'importation",
+      "addUniversity": "Ajouter une université",
+      "addEstablishment": "Ajouter un établissement",
+      "addFiliere": "Ajouter une filière",
+      "editUniversity": "Modifier l'université",
+      "editEstablishment": "Modifier l'établissement",
+      "editFiliere": "Modifier la filière",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+      "nameFr": "Nom (Français)",
+      "nameAr": "Nom (Arabe)",
+      "university": "Université",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "active": "Actif",
+      "inactive": "Inactif"
     }
   }
 }

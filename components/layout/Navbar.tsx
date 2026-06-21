@@ -17,6 +17,7 @@ export default function Navbar() {
   const navigation = [
     { name: t('home'), href: `/${locale}` },
     { name: t('blog'), href: `/${locale}/blog` },
+    { name: t('formations'), href: `/${locale}/formations` },
     { name: t('services'), href: `/${locale}/services` },
     { name: t('about'), href: `/${locale}/about` },
     { name: t('contact'), href: `/${locale}/contact` },

@@ -224,6 +224,46 @@ model AdminInvitation {
   updatedAt DateTime @updatedAt
 }
 
+// Formations (Arborescence: University → Establishment → Filière)
+model University {
+  id             String          @id @default(cuid())
+  nameFr         String
+  nameAr         String?
+  slug           String          @unique
+  active         Boolean         @default(true)
+  displayOrder   Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  establishments Establishment[]
+}
+
+model Establishment {
+  id           String    @id @default(cuid())
+  nameFr       String
+  nameAr       String?
+  slug         String    @unique
+  universityId String
+  active       Boolean   @default(true)
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  filieres     Filiere[]
+}
+
+model Filiere {
+  id              String        @id @default(cuid())
+  nameFr          String
+  nameAr          String?
+  slug            String        @unique
+  establishmentId String
+  active          Boolean       @default(true)
+  displayOrder    Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+}
+
 // Team Member model
 model TeamMember {
   id            String   @id @default(cuid())
