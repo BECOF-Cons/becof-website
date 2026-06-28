@@ -22,8 +22,18 @@ export async function GET(
         serviceType: true,
         message: true,
         status: true,
+        isOnline: true,
+        cancelToken: true,
         createdAt: true,
         updatedAt: true,
+        consultant: {
+          select: {
+            id: true,
+            displayName: true,
+            titleFr: true,
+            photoUrl: true,
+          },
+        },
         payment: {
           select: {
             id: true,
@@ -73,10 +83,14 @@ export async function PATCH(
     }
 
     const body = await req.json();
-    const { status, notes, adminNotes } = body;
+    const { status, notes, adminNotes, confirmPayment } = body;
 
     const existingAppointment = await prisma.appointment.findUnique({
       where: { id },
+      include: {
+        consultant: { select: { displayName: true } },
+        payment: { select: { id: true, status: true } },
+      },
     });
 
     if (!existingAppointment) {
@@ -94,6 +108,42 @@ export async function PATCH(
         ...(adminNotes && { adminNotes }),
       },
     });
+
+    // Admin explicitly confirms payment received → mark payment COMPLETED + send email
+    if (confirmPayment && existingAppointment.payment?.id && existingAppointment.payment.status !== 'COMPLETED') {
+      await prisma.payment.update({
+        where: { id: existingAppointment.payment.id },
+        data: { status: 'COMPLETED' },
+      });
+
+      if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {
+        const { sendAppointmentConfirmation, notifyAdminsOfAppointment } = await import('@/lib/email');
+        const baseUrl = process.env.NEXTAUTH_URL || 'https://becof-website.vercel.app';
+        const cancelUrl = existingAppointment.cancelToken
+          ? `${baseUrl}/fr/appointment/cancel?token=${existingAppointment.cancelToken}`
+          : undefined;
+
+        sendAppointmentConfirmation({
+          clientName: existingAppointment.name,
+          clientEmail: existingAppointment.email,
+          date: existingAppointment.date,
+          serviceType: existingAppointment.serviceType,
+          consultantName: existingAppointment.consultant?.displayName,
+          cancelUrl,
+        }).catch((err) => console.error('Error sending confirmation email:', err));
+
+        notifyAdminsOfAppointment({
+          id: existingAppointment.id,
+          clientName: existingAppointment.name,
+          clientEmail: existingAppointment.email,
+          clientPhone: existingAppointment.phone,
+          date: existingAppointment.date,
+          serviceType: existingAppointment.serviceType,
+          notes: existingAppointment.message ?? undefined,
+          consultantName: existingAppointment.consultant?.displayName,
+        }).catch((err) => console.error('Error sending admin notification:', err));
+      }
+    }
 
     // Update Google Calendar event if date changed
     if (body.date && existingAppointment.googleEventId) {

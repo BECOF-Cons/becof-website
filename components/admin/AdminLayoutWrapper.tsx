@@ -16,6 +16,8 @@ import {
   DollarSign,
   Users,
   GraduationCap,
+  Clock,
+  UserCheck,
 } from 'lucide-react';
 import LanguageSwitcher from './LanguageSwitcher';
 
@@ -51,6 +53,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
     { name: translations.nav.formations ?? 'Formations', href: `/${locale}/admin/formations`, icon: GraduationCap },
     { name: locale === 'fr' ? 'Équipe' : 'Team', href: `/${locale}/admin/team`, icon: Users },
     { name: translations.nav.appointments, href: `/${locale}/admin/appointments`, icon: Calendar },
+    { name: locale === 'fr' ? 'Mes disponibilités' : 'My Availability', href: `/${locale}/admin/availability`, icon: Clock },
     { name: translations.nav.payments, href: `/${locale}/admin/payments`, icon: CreditCard },
     { name: translations.nav.servicePricing, href: `/${locale}/admin/pricing`, icon: DollarSign },
     { name: translations.nav.settings, href: `/${locale}/admin/settings`, icon: Settings },
@@ -60,6 +63,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
   if (isSuperAdmin) {
     navigation.splice(6, 0, { name: translations.nav.adminManagement, href: `/${locale}/admin/users`, icon: Users });
+    navigation.splice(7, 0, { name: locale === 'fr' ? 'Consultants' : 'Consultants', href: `/${locale}/admin/consultants`, icon: UserCheck });
   }
 
   // Get page title from pathname if not provided
