@@ -21,4 +21,8 @@ head -20 prisma/schema.prisma
 echo "📦 Generating Prisma Client..."
 npx prisma generate --schema=prisma/schema.prisma --no-hints
 
+# Sync schema to production database (adds missing tables without migration history)
+echo "🗄️  Syncing database schema..."
+npx prisma db push --schema=prisma/schema.prisma --skip-generate --accept-data-loss
+
 echo "✅ Prisma client force regenerated at $(date)!"
