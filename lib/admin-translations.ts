@@ -12,6 +12,7 @@ export async function getAdminTranslations(locale: string) {
       servicePricing: t('nav.servicePricing'),
       adminManagement: t('nav.adminManagement'),
       settings: t('nav.settings'),
+      formations: t('nav.formations'),
     },
     welcome: t('welcome'),
     signOut: t('signOut'),

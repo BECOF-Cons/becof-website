@@ -15,6 +15,7 @@ import {
   X,
   DollarSign,
   Users,
+  GraduationCap,
 } from 'lucide-react';
 import LanguageSwitcher from './LanguageSwitcher';
 
@@ -32,6 +33,7 @@ interface AdminLayoutWrapperProps {
       servicePricing: string;
       adminManagement: string;
       settings: string;
+      formations?: string;
     };
     welcome: string;
     signOut: string;
@@ -46,6 +48,7 @@ export default function AdminLayoutWrapper({ children, user, title, locale, tran
   const navigation = [
     { name: translations.nav.dashboard, href: `/${locale}/admin`, icon: LayoutDashboard },
     { name: translations.nav.blogPosts, href: `/${locale}/admin/blog`, icon: FileText },
+    { name: translations.nav.formations ?? 'Formations', href: `/${locale}/admin/formations`, icon: GraduationCap },
     { name: locale === 'fr' ? 'Équipe' : 'Team', href: `/${locale}/admin/team`, icon: Users },
     { name: translations.nav.appointments, href: `/${locale}/admin/appointments`, icon: Calendar },
     { name: translations.nav.payments, href: `/${locale}/admin/payments`, icon: CreditCard },
