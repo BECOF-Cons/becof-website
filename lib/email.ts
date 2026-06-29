@@ -48,6 +48,8 @@ export async function sendAppointmentConfirmation(appointment: {
   clientEmail: string;
   date: Date;
   serviceType: string;
+  consultantName?: string;
+  cancelUrl?: string;
 }) {
   if (!isEmailConfigured()) {
     console.warn('⚠️ Email not configured. Skipping appointment confirmation email.');
@@ -143,6 +145,7 @@ export async function notifyAdminsOfAppointment(appointment: {
   serviceType: string;
   notes?: string;
   message?: string;
+  consultantName?: string;
 }) {
   if (!isEmailConfigured()) {
     console.warn('⚠️ Email not configured. Skipping admin notification email.');

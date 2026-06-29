@@ -2,41 +2,43 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { CheckCircle, Loader2 } from 'lucide-react';
 
-export function ConfirmPaymentButton({ appointmentId, currentStatus }: { appointmentId: string; currentStatus: string }) {
+export function ConfirmPaymentButton({ appointmentId, paymentStatus }: { appointmentId: string; paymentStatus: string | null }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const confirmPayment = async () => {
-    if (!confirm('Confirm this payment and appointment?')) return;
-    
+    if (!confirm('Confirmer le paiement reçu ? Un email de confirmation sera envoyé au client.')) return;
+
     setLoading(true);
     try {
       const response = await fetch(`/api/appointments/${appointmentId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'CONFIRMED' }),
+        body: JSON.stringify({ confirmPayment: true }),
       });
 
       if (!response.ok) throw new Error('Failed to confirm');
-      
+
       router.refresh();
-    } catch (error) {
-      alert('Error confirming payment');
+    } catch {
+      alert('Erreur lors de la confirmation du paiement');
     } finally {
       setLoading(false);
     }
   };
 
-  if (currentStatus !== 'PENDING') return null;
+  if (paymentStatus !== 'PENDING') return null;
 
   return (
     <button
       onClick={confirmPayment}
       disabled={loading}
-      className="text-xs px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+      className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 font-medium"
     >
-      {loading ? 'Confirming...' : 'Confirm Payment'}
+      {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <CheckCircle className="h-3 w-3" />}
+      {loading ? 'Confirmation...' : 'Confirmer le paiement'}
     </button>
   );
 }

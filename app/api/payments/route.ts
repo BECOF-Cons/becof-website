@@ -116,6 +116,12 @@ export async function POST(req: NextRequest) {
         break;
     }
 
+    // Appointment is now confirmed (slot reserved, payment pending verification)
+    await prisma.appointment.update({
+      where: { id: validatedData.appointmentId },
+      data: { status: 'CONFIRMED' },
+    });
+
     return NextResponse.json(
       {
         message: 'Payment initiated successfully',

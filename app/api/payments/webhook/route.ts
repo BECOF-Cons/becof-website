@@ -41,6 +41,9 @@ export async function POST(req: NextRequest) {
             time: true,
             serviceType: true,
             status: true,
+            cancelToken: true,
+            message: true,
+            consultant: { select: { displayName: true } },
           },
         },
       },
@@ -69,36 +72,7 @@ export async function POST(req: NextRequest) {
         data: { status: 'CONFIRMED' },
       });
 
-      // Send payment confirmation email
-      if (process.env.SMTP_USER && process.env.SMTP_PASSWORD && payment.appointment) {
-        const { sendPaymentConfirmation, sendAppointmentConfirmation } = await import(
-          '@/lib/email'
-        );
-
-        // Send payment receipt
-        sendPaymentConfirmation({
-          appointmentId: payment.appointmentId,
-          amount: payment.amount,
-          paymentMethod: payment.paymentMethod || 'Unknown',
-          transactionId: transactionId,
-          appointment: {
-            clientName: payment.appointment.name,
-            clientEmail: payment.appointment.email,
-            date: payment.appointment.date,
-            serviceType: payment.appointment.serviceType,
-          },
-        }).catch((err) => console.error('Error sending payment confirmation:', err));
-
-        // Send appointment confirmation
-        sendAppointmentConfirmation({
-          clientName: payment.appointment.name,
-          clientEmail: payment.appointment.email,
-          date: payment.appointment.date,
-          serviceType: payment.appointment.serviceType,
-        }).catch((err) =>
-          console.error('Error sending appointment confirmation:', err)
-        );
-      }
+      // Emails are sent when admin manually confirms via the dashboard (PATCH /api/appointments/[id])
 
       console.log('Payment successful, appointment confirmed:', payment.appointmentId);
     }
