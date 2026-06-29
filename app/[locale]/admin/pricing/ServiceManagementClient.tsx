@@ -36,6 +36,7 @@ interface Service {
   icon?: string | null;
   active: boolean;
   displayOrder: number;
+  durationMinutes: number;
 }
 
 interface ServiceManagementClientProps {
@@ -146,6 +147,7 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
       icon: formData.get('icon') as string,
       active: formData.get('active') === 'true',
       displayOrder: parseInt(formData.get('displayOrder') as string) || 0,
+      durationMinutes: parseInt(formData.get('durationMinutes') as string) || 60,
     };
 
     try {
@@ -329,14 +331,30 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                       </label>
                       <input
                         type="number"
-                        value={editForm.displayOrder || 0}
-                        onChange={(e) => setEditForm({ ...editForm, displayOrder: parseInt(e.target.value) })}
+                        value={editForm.displayOrder ?? ''}
+                        onChange={(e) => setEditForm({ ...editForm, displayOrder: e.target.value === '' ? undefined : Number(e.target.value) })}
                         className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         min="1"
+                        placeholder="1"
                       />
                       <p className="text-xs text-gray-500 mt-1">
                         Enter the position where this service should appear (currently at position {index + 1})
                       </p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Durée (minutes)
+                      </label>
+                      <input
+                        type="number"
+                        value={editForm.durationMinutes ?? ''}
+                        onChange={(e) => setEditForm({ ...editForm, durationMinutes: e.target.value === '' ? undefined : Number(e.target.value) })}
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        min="15"
+                        step="15"
+                        placeholder="60"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Durée du rendez-vous en minutes</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -401,10 +419,14 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                         <p>{service.descriptionEn}</p>
                         <p>{service.descriptionFr}</p>
                       </div>
-                      <div className="flex items-center gap-4 mt-3">
+                      <div className="flex items-center gap-4 mt-3 flex-wrap">
                         <div className="flex items-center gap-2 text-blue-700">
                           <DollarSign className="h-5 w-5" />
                           <span className="font-semibold">{service.price} TND</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                          <Calendar className="h-4 w-4 text-gray-400" />
+                          <span>{service.durationMinutes ?? 60} min</span>
                         </div>
                         <span className="text-sm text-gray-600">
                           Position: {index + 1}
@@ -560,18 +582,34 @@ export default function ServiceManagementClient({ initialServices }: ServiceMana
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Status
-                </label>
-                <select
-                  name="active"
-                  defaultValue="true"
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Durée (minutes)
+                  </label>
+                  <input
+                    type="number"
+                    name="durationMinutes"
+                    defaultValue={60}
+                    min="15"
+                    step="15"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Durée du rendez-vous (ex: 30, 60, 90)</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Status
+                  </label>
+                  <select
+                    name="active"
+                    defaultValue="true"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                  </select>
+                </div>
               </div>
 
               <div className="flex gap-3 justify-end pt-4 border-t">
