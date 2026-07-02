@@ -333,8 +333,11 @@ export default function AppointmentPage() {
               {/* Time slots */}
               {selectedDate && (
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">
+                  <p className="text-sm font-medium text-gray-700 mb-1">
                     {isFr ? 'Créneaux disponibles' : 'Available slots'} — {new Date(selectedDate + 'T12:00:00').toLocaleDateString(isFr ? 'fr-FR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+                  </p>
+                  <p className="text-xs text-gray-400 mb-2">
+                    🕐 {isFr ? 'Tous les horaires sont affichés en heure de Tunis (GMT+1).' : 'All times shown in Tunis time (GMT+1).'}
                   </p>
                   {loadingSlots ? (
                     <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-gray-400" /></div>

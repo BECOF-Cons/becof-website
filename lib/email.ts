@@ -1,427 +1,377 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { prisma } from './prisma';
 
-// Check if email is configured
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 function isEmailConfigured(): boolean {
-  return !!(process.env.SMTP_USER && process.env.SMTP_PASSWORD);
+  return !!process.env.RESEND_API_KEY;
 }
 
-// Create transporter only if configured
-function createTransporter() {
-  if (!isEmailConfigured()) {
-    return null;
-  }
-  
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
+const FROM = process.env.EMAIL_FROM || 'BECOF Conseil <info@becofconseil.com>';
+const REPLY_TO = process.env.EMAIL_REPLY_TO || 'becofconseil@gmail.com';
+const BASE_URL = process.env.NEXTAUTH_URL || 'https://www.becofconseil.com';
+
+// ─── Google Calendar URL (click-to-add button in email) ───────────────────────
+function buildGoogleCalendarUrl(params: {
+  title: string;
+  date: Date;
+  time: string;
+  durationMinutes: number;
+  description: string;
+  location: string;
+}): string {
+  const dateStr = new Date(params.date).toISOString().split('T')[0];
+  const [h, m] = params.time.split(':').map(Number);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const startStr = `${dateStr.replace(/-/g, '')}T${pad(h)}${pad(m)}00`;
+  const totalEnd = h * 60 + m + params.durationMinutes;
+  const endStr = `${dateStr.replace(/-/g, '')}T${pad(Math.floor(totalEnd / 60) % 24)}${pad(totalEnd % 60)}00`;
+  const qs = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: params.title,
+    dates: `${startStr}/${endStr}`,
+    details: params.description,
+    location: params.location,
   });
+  return `https://calendar.google.com/calendar/render?${qs}`;
 }
 
-// Get admin emails
-async function getAdminEmails(): Promise<string[]> {
+// ─── ICS attachment (works with Apple Calendar, Outlook, all apps) ────────────
+function buildIcsContent(params: {
+  uid: string;
+  title: string;
+  description: string;
+  date: Date;
+  time: string;
+  durationMinutes: number;
+  attendeeEmails: string[];
+  meetingLink?: string;
+}): string {
+  const [h, m] = params.time.split(':').map(Number);
+  const dateStr = new Date(params.date).toISOString().split('T')[0];
+  // Tunisia is UTC+1; convert to UTC for ICS
+  const startUTC = new Date(`${dateStr}T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00+01:00`);
+  const endUTC = new Date(startUTC.getTime() + params.durationMinutes * 60 * 1000);
+  const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  const now = fmt(new Date());
+
+  const desc = [
+    params.meetingLink ? `Lien de réunion: ${params.meetingLink}` : '',
+    params.description,
+  ].filter(Boolean).join('\\n\\n');
+
+  const attendees = params.attendeeEmails
+    .map((e) => `ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;RSVP=TRUE:mailto:${e}`)
+    .join('\r\n');
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//BECOF Conseil//FR',
+    'CALSCALE:GREGORIAN',
+    'METHOD:REQUEST',
+    'BEGIN:VEVENT',
+    `UID:${params.uid}@becofconseil.com`,
+    `DTSTAMP:${now}`,
+    `DTSTART:${fmt(startUTC)}`,
+    `DTEND:${fmt(endUTC)}`,
+    `SUMMARY:${params.title}`,
+    `DESCRIPTION:${desc}`,
+    `LOCATION:${params.meetingLink ?? 'En ligne'}`,
+    `ORGANIZER;CN=BECOF Conseil:mailto:info@becofconseil.com`,
+    attendees,
+    'STATUS:CONFIRMED',
+    'SEQUENCE:0',
+    'BEGIN:VALARM',
+    'TRIGGER:-PT30M',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Rappel — Rendez-vous BECOF Conseil',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+}
+
+async function getServiceDuration(serviceType: string): Promise<number> {
   try {
-    const admins = await prisma.user.findMany({
-      where: { 
-        role: {
-          in: ['ADMIN', 'SUPER_ADMIN']
-        }
-      },
-      select: { email: true },
+    const service = await prisma.service.findFirst({
+      where: { serviceType },
+      select: { durationMinutes: true },
     });
-    return admins.map((admin) => admin.email);
-  } catch (error) {
-    console.error('Error fetching admin emails:', error);
-    // Fallback to env variable
-    return process.env.ADMIN_EMAIL ? [process.env.ADMIN_EMAIL] : [];
+    return service?.durationMinutes ?? 60;
+  } catch {
+    return 60;
   }
 }
 
-// Send appointment confirmation to client
+// ─── Shared email styles ──────────────────────────────────────────────────────
+const STYLES = `
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f3f4f6; color: #1f2937; }
+  .outer { padding: 32px 16px; }
+  .wrap { max-width: 600px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #1a2870 0%, #233691 100%); color: white; padding: 36px 32px; text-align: center; border-radius: 16px 16px 0 0; border-bottom: 4px solid #F9AA04; }
+  .header-logo { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #F9AA04; margin-bottom: 8px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .header p { font-size: 14px; opacity: 0.85; }
+  .body { background: #ffffff; padding: 36px 32px; border-radius: 0 0 16px 16px; }
+  .greeting { font-size: 16px; color: #374151; margin-bottom: 16px; }
+  .lead { font-size: 14px; color: #6b7280; margin-bottom: 24px; line-height: 1.6; }
+  .card { background: #f9fafb; border-radius: 12px; padding: 20px 24px; margin: 20px 0; border: 1px solid #e5e7eb; border-left: 4px solid #F9AA04; }
+  .card-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #233691; margin-bottom: 14px; }
+  .info-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { color: #9ca3af; min-width: 90px; flex-shrink: 0; }
+  .info-value { color: #1f2937; font-weight: 500; }
+  .meet-box { background: linear-gradient(135deg, #eef1fb, #f5f7fd); border: 1.5px solid #a9b6e0; border-radius: 12px; padding: 20px 24px; margin: 20px 0; text-align: center; }
+  .meet-box p { font-size: 12px; color: #233691; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .meet-link { display: inline-block; background: #1a2870; color: white !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.3px; }
+  .actions { text-align: center; margin: 28px 0 20px; }
+  .btn-cal { display: inline-block; background: #4285F4; color: white !important; text-decoration: none; padding: 13px 28px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+  .secondary-links { text-align: center; margin-top: 12px; font-size: 13px; color: #9ca3af; }
+  .secondary-links a { color: #233691; text-decoration: underline; }
+  .ics-note { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 13px; color: #233691; text-align: center; }
+  .divider { height: 1px; background: #e5e7eb; margin: 24px 0; }
+  .footer { text-align: center; padding-top: 4px; }
+  .footer p { font-size: 12px; color: #9ca3af; line-height: 1.8; }
+  .footer a { color: #233691; text-decoration: none; }
+  .outer-footer { text-align: center; margin-top: 20px; font-size: 11px; color: #d1d5db; }
+`;
+
+// ─── Client confirmation email ────────────────────────────────────────────────
 export async function sendAppointmentConfirmation(appointment: {
   clientName: string;
   clientEmail: string;
   date: Date;
+  time: string;
   serviceType: string;
+  durationMinutes?: number;
   consultantName?: string;
+  consultantEmail?: string;
   cancelUrl?: string;
+  modifyUrl?: string;
+  meetingLink?: string;
+  appointmentId?: string;
 }) {
   if (!isEmailConfigured()) {
-    console.warn('⚠️ Email not configured. Skipping appointment confirmation email.');
+    console.warn('⚠️ RESEND_API_KEY not set. Skipping confirmation email.');
     return;
   }
 
-  const transporter = createTransporter();
-  if (!transporter) return;
+  const duration = appointment.durationMinutes ?? await getServiceDuration(appointment.serviceType);
 
-  const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  const formattedDate = new Date(appointment.date).toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
-    to: appointment.clientEmail,
-    subject: 'Confirmation de rendez-vous - BECOF',
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #14B8A6, #9333EA); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-          .info-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #14B8A6; }
-          .button { display: inline-block; background: #14B8A6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-          .footer { text-align: center; color: #666; font-size: 14px; margin-top: 30px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>BECOF</h1>
-            <p>Confirmation de Rendez-vous</p>
-          </div>
-          <div class="content">
-            <p>Bonjour ${appointment.clientName},</p>
-            <p>Votre rendez-vous a été confirmé avec succès !</p>
-            
-            <div class="info-box">
-              <h3 style="margin-top: 0; color: #14B8A6;">Détails du rendez-vous</h3>
-              <p><strong>📅 Date :</strong> ${formattedDate}</p>
-              <p><strong>💼 Service :</strong> ${appointment.serviceType}</p>
-              <p><strong>📍 Lieu :</strong> BECOF - Hammamet, Tunisie</p>
-            </div>
+  const calUrl = buildGoogleCalendarUrl({
+    title: `Rendez-vous BECOF Conseil — ${appointment.serviceType}`,
+    date: appointment.date,
+    time: appointment.time,
+    durationMinutes: duration,
+    description: [
+      appointment.meetingLink ? `🔗 Lien de réunion: ${appointment.meetingLink}` : '',
+      `Consultant: ${appointment.consultantName ?? 'BECOF Conseil'}`,
+      `Service: ${appointment.serviceType}`,
+    ].filter(Boolean).join('\n'),
+    location: appointment.meetingLink ?? 'En ligne',
+  });
 
-            <p>Un événement Google Calendar a été créé et envoyé à votre adresse email. Vous recevrez une invitation que vous pourrez ajouter à votre calendrier.</p>
+  const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${STYLES}</style></head><body>
+  <div class="outer">
+    <div class="wrap">
+      <div class="header">
+        <div class="header-logo">BECOF Conseil</div>
+        <h1>Rendez-vous confirmé ✅</h1>
+        <p>Votre paiement a été reçu et votre rendez-vous est confirmé.</p>
+      </div>
+      <div class="body">
+        <p class="greeting">Bonjour <strong>${appointment.clientName}</strong>,</p>
+        <p class="lead">Nous avons le plaisir de confirmer votre rendez-vous. Retrouvez tous les détails ci-dessous.</p>
 
-            <p><strong>Important :</strong></p>
-            <ul>
-              <li>Veuillez arriver 5 minutes avant l'heure du rendez-vous</li>
-              <li>Apportez vos documents académiques (relevés de notes, diplôme du baccalauréat)</li>
-              <li>Préparez vos questions sur l'orientation</li>
-            </ul>
-
-            <div class="footer">
-              <p>Pour toute question, contactez-nous :</p>
-              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
-              <p style="margin-top: 20px; font-size: 12px; color: #999;">
-                © 2025 BECOF - Orientation Consulting
-              </p>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-title">📋 Détails du rendez-vous</div>
+          <div class="info-row"><span class="info-label">📅 Date</span><span class="info-value">${formattedDate}</span></div>
+          <div class="info-row"><span class="info-label">🕐 Heure</span><span class="info-value">${appointment.time} <span style="color:#9ca3af;font-weight:400;">(${duration} min — heure de Tunis, GMT+1)</span></span></div>
+          <div class="info-row"><span class="info-label">💼 Service</span><span class="info-value">${appointment.serviceType}</span></div>
+          ${appointment.consultantName ? `<div class="info-row"><span class="info-label">👤 Consultant</span><span class="info-value">${appointment.consultantName}</span></div>` : ''}
+          <div class="info-row"><span class="info-label">📍 Format</span><span class="info-value">Consultation en ligne</span></div>
         </div>
-      </body>
-      </html>
-    `,
-  };
+
+        ${appointment.meetingLink ? `
+        <div class="meet-box">
+          <p>🎥 Lien de votre réunion en ligne</p>
+          <a href="${appointment.meetingLink}" class="meet-link">Rejoindre la réunion</a>
+          <div style="margin-top:10px;font-size:12px;color:#6b7280;">Copiez ce lien : <span style="font-family:monospace;font-size:11px;">${appointment.meetingLink}</span></div>
+        </div>` : `
+        <div class="card" style="background:#fefce8;border-color:#fde68a;">
+          <div class="card-title" style="color:#d97706;">📍 Lien de réunion</div>
+          <p style="font-size:14px;color:#92400e;">Votre consultant vous enverra le lien de connexion avant le rendez-vous.</p>
+        </div>`}
+
+        <div class="actions">
+          <a href="${calUrl}" class="btn-cal">📅 Ajouter à Google Agenda</a>
+        </div>
+
+        ${appointment.meetingLink ? `
+        <div class="ics-note">
+          📅 Une invitation d'agenda vous a également été envoyée séparément — acceptez-la pour ajouter automatiquement le rendez-vous à votre calendrier (à l'heure de votre fuseau horaire).
+        </div>` : ''}
+
+        ${appointment.modifyUrl ? `
+        <div class="secondary-links">
+          <a href="${appointment.modifyUrl}">✏️ Modifier mon rendez-vous</a>
+        </div>
+        <p style="font-size:11px;color:#d1d5db;text-align:center;margin-top:6px;">Modification possible jusqu'à 24h avant le rendez-vous.</p>` : ''}
+
+        <div class="divider"></div>
+        <div class="footer">
+          <p>Une question ? Répondez à cet email ou contactez-nous :</p>
+          <p><a href="mailto:becofconseil@gmail.com">becofconseil@gmail.com</a> &nbsp;·&nbsp; +216 53 216 700</p>
+          <p style="margin-top:12px;">© 2026 BECOF Conseil — Orientation &amp; Accompagnement</p>
+        </div>
+      </div>
+    </div>
+    <div class="outer-footer">Vous recevez cet email car vous avez réservé un rendez-vous sur becofconseil.com</div>
+  </div>
+  </body></html>`;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Appointment confirmation sent to:', appointment.clientEmail);
+    await resend.emails.send({
+      from: FROM,
+      to: appointment.clientEmail,
+      replyTo: REPLY_TO,
+      subject: `✅ Rendez-vous confirmé — ${formattedDate} à ${appointment.time}`,
+      html,
+    });
+    console.log('✅ Confirmation sent to client:', appointment.clientEmail);
   } catch (error) {
-    console.error('Error sending appointment confirmation:', error);
+    console.error('Error sending client confirmation:', error);
   }
 }
 
-// Notify admins of new appointment
-export async function notifyAdminsOfAppointment(appointment: {
-  id: string;
+// ─── Consultant notification email ────────────────────────────────────────────
+export async function notifyConsultantOfAppointment(appointment: {
+  consultantName: string;
+  consultantEmail: string;
   clientName: string;
   clientEmail: string;
   clientPhone: string;
   date: Date;
+  time: string;
   serviceType: string;
-  notes?: string;
+  durationMinutes?: number;
   message?: string;
-  consultantName?: string;
+  meetingLink?: string;
+  appointmentId?: string;
 }) {
   if (!isEmailConfigured()) {
-    console.warn('⚠️ Email not configured. Skipping admin notification email.');
+    console.warn('⚠️ RESEND_API_KEY not set. Skipping consultant notification.');
     return;
   }
 
-  const transporter = createTransporter();
-  if (!transporter) return;
+  const duration = appointment.durationMinutes ?? await getServiceDuration(appointment.serviceType);
 
-  const adminEmails = await getAdminEmails();
-  if (adminEmails.length === 0) return;
-
-  const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  const formattedDate = new Date(appointment.date).toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
-    to: adminEmails,
-    subject: `Nouveau rendez-vous - ${appointment.clientName}`,
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #14B8A6, #9333EA); color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
-          .info-grid { display: grid; gap: 15px; }
-          .info-item { background: white; padding: 15px; border-radius: 6px; border-left: 3px solid #14B8A6; }
-          .button { display: inline-block; background: #14B8A6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h2>🔔 Nouveau Rendez-vous</h2>
-          </div>
-          <div class="content">
-            <p><strong>Un nouveau rendez-vous a été réservé !</strong></p>
-            
-            <div class="info-grid">
-              <div class="info-item">
-                <strong>👤 Client :</strong> ${appointment.clientName}
-              </div>
-              <div class="info-item">
-                <strong>📧 Email :</strong> ${appointment.clientEmail}
-              </div>
-              <div class="info-item">
-                <strong>📞 Téléphone :</strong> ${appointment.clientPhone}
-              </div>
-              <div class="info-item">
-                <strong>📅 Date :</strong> ${formattedDate}
-              </div>
-              <div class="info-item">
-                <strong>💼 Service :</strong> ${appointment.serviceType}
-              </div>
-              ${
-                appointment.notes || appointment.message
-                  ? `
-              <div class="info-item">
-                <strong>📝 Notes :</strong> ${appointment.notes || appointment.message}
-              </div>
-              `
-                  : ''
-              }
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-              <a href="${process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/admin/appointments" class="button">
-                Voir dans le dashboard
-              </a>
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>
-    `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log('Admin notification sent for appointment:', appointment.id);
-  } catch (error) {
-    console.error('Error sending admin notification:', error);
-  }
-}
-
-// Send payment confirmation
-export async function sendPaymentConfirmation(payment: {
-  appointmentId: string;
-  amount: number;
-  paymentMethod: string;
-  transactionId?: string | null;
-  appointment?: {
-    clientName: string;
-    clientEmail: string;
-    date: Date;
-    serviceType: string;
-  };
-}) {
-  if (!payment.appointment) return;
-
-  if (!isEmailConfigured()) {
-    console.warn('⚠️ Email not configured. Skipping payment confirmation email.');
-    return;
-  }
-
-  const transporter = createTransporter();
-  if (!transporter) return;
-
-  const formattedDate = new Date(payment.appointment.date).toLocaleString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  const calUrl = buildGoogleCalendarUrl({
+    title: `RDV BECOF — ${appointment.clientName} — ${appointment.serviceType}`,
+    date: appointment.date,
+    time: appointment.time,
+    durationMinutes: duration,
+    description: [
+      appointment.meetingLink ? `🔗 Lien de réunion: ${appointment.meetingLink}` : '',
+      `Client: ${appointment.clientName}`,
+      `Email: ${appointment.clientEmail}`,
+      `Tél: ${appointment.clientPhone}`,
+      `Service: ${appointment.serviceType}`,
+      appointment.message ? `Message: ${appointment.message}` : '',
+    ].filter(Boolean).join('\n'),
+    location: appointment.meetingLink ?? 'En ligne',
   });
 
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
-    to: payment.appointment.clientEmail,
-    subject: 'Confirmation de paiement - BECOF',
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #14B8A6, #9333EA); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-          .success-badge { background: #10B981; color: white; padding: 10px 20px; border-radius: 20px; display: inline-block; margin: 20px 0; }
-          .receipt { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #14B8A6; }
-          .total { font-size: 24px; color: #14B8A6; font-weight: bold; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>✅ Paiement Confirmé</h1>
-          </div>
-          <div class="content">
-            <p>Bonjour ${payment.appointment.clientName},</p>
-            
-            <div class="success-badge">
-              ✓ Paiement réussi
-            </div>
+  const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${STYLES}</style></head><body>
+  <div class="outer">
+    <div class="wrap">
+      <div class="header">
+        <div class="header-logo">BECOF Conseil</div>
+        <h1>Nouveau rendez-vous 🔔</h1>
+        <p>Un rendez-vous a été confirmé et assigné à vous.</p>
+      </div>
+      <div class="body">
+        <p class="greeting">Bonjour <strong>${appointment.consultantName}</strong>,</p>
+        <p class="lead">Un nouveau rendez-vous vous a été assigné. Le paiement a été reçu et confirmé.</p>
 
-            <div class="receipt">
-              <h3 style="margin-top: 0; color: #14B8A6;">Reçu de paiement</h3>
-              <p><strong>Montant payé :</strong> <span class="total">${payment.amount} TND</span></p>
-              <p><strong>Méthode :</strong> ${payment.paymentMethod}</p>
-              ${payment.transactionId ? `<p><strong>ID Transaction :</strong> ${payment.transactionId}</p>` : ''}
-              <hr style="border: 1px solid #e5e7eb; margin: 15px 0;">
-              <p><strong>Rendez-vous :</strong> ${formattedDate}</p>
-              <p><strong>Service :</strong> ${payment.appointment.serviceType}</p>
-            </div>
-
-            <p>Votre rendez-vous est maintenant <strong>confirmé</strong>. Vous recevrez un rappel 24 heures avant.</p>
-
-            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #FEF3C7; border-radius: 8px;">
-              <p style="margin: 0;"><strong>💡 Conseil :</strong> Ajoutez l'événement Google Calendar à votre agenda pour ne pas l'oublier !</p>
-            </div>
-
-            <div style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
-              <p>Besoin d'aide ? Contactez-nous :</p>
-              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-title">👤 Informations client</div>
+          <div class="info-row"><span class="info-label">Nom</span><span class="info-value">${appointment.clientName}</span></div>
+          <div class="info-row"><span class="info-label">Email</span><span class="info-value"><a href="mailto:${appointment.clientEmail}" style="color:#233691;">${appointment.clientEmail}</a></span></div>
+          <div class="info-row"><span class="info-label">Téléphone</span><span class="info-value"><a href="tel:${appointment.clientPhone}" style="color:#233691;">${appointment.clientPhone}</a></span></div>
+          ${appointment.message ? `<div class="info-row"><span class="info-label">Message</span><span class="info-value" style="font-style:italic;color:#6b7280;">"${appointment.message}"</span></div>` : ''}
         </div>
-      </body>
-      </html>
-    `,
-  };
+
+        <div class="card">
+          <div class="card-title">📋 Détails du rendez-vous</div>
+          <div class="info-row"><span class="info-label">📅 Date</span><span class="info-value">${formattedDate}</span></div>
+          <div class="info-row"><span class="info-label">🕐 Heure</span><span class="info-value">${appointment.time} <span style="color:#9ca3af;font-weight:400;">(${duration} min — heure de Tunis, GMT+1)</span></span></div>
+          <div class="info-row"><span class="info-label">💼 Service</span><span class="info-value">${appointment.serviceType}</span></div>
+          <div class="info-row"><span class="info-label">📍 Format</span><span class="info-value">En ligne</span></div>
+        </div>
+
+        ${appointment.meetingLink ? `
+        <div class="meet-box">
+          <p>🎥 Lien de réunion</p>
+          <a href="${appointment.meetingLink}" class="meet-link">Rejoindre la réunion</a>
+          <div style="margin-top:10px;font-size:12px;color:#6b7280;font-family:monospace;">${appointment.meetingLink}</div>
+        </div>` : `
+        <div style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:12px;padding:20px 24px;margin:20px 0;">
+          <p style="font-size:13px;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">⚠️ Action requise — Lien de réunion à créer</p>
+          <p style="font-size:14px;color:#9a3412;line-height:1.6;margin-bottom:14px;">Le lien Google Meet n'a pas pu être généré automatiquement. Merci de créer le lien et de l'envoyer au client :</p>
+          <ol style="font-size:14px;color:#9a3412;line-height:2;padding-left:20px;margin:0;">
+            <li>Ouvrez <a href="https://calendar.google.com" style="color:#c2410c;font-weight:600;">Google Agenda</a></li>
+            <li>Créez un événement le <strong>${formattedDate} à ${appointment.time}</strong></li>
+            <li>Cliquez sur <strong>« Ajouter Google Meet »</strong></li>
+            <li>Copiez le lien et envoyez-le à <a href="mailto:${appointment.clientEmail}" style="color:#c2410c;font-weight:600;">${appointment.clientEmail}</a> — il suffit de <strong>répondre à cet email</strong></li>
+          </ol>
+        </div>`}
+
+        <div class="actions">
+          <a href="${calUrl}" class="btn-cal">📅 Ajouter à Google Agenda</a>
+        </div>
+
+        ${appointment.meetingLink ? `
+        <div class="ics-note">
+          📅 Une invitation d'agenda vous a également été envoyée séparément — acceptez-la pour ajouter automatiquement le rendez-vous à votre calendrier (à l'heure de votre fuseau horaire).
+        </div>` : ''}
+
+        <div class="divider"></div>
+        <div class="footer">
+          <p>© 2026 BECOF Conseil</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body></html>`;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Payment confirmation sent to:', payment.appointment.clientEmail);
+    await resend.emails.send({
+      from: FROM,
+      to: appointment.consultantEmail,
+      replyTo: appointment.clientEmail,
+      subject: appointment.meetingLink
+        ? `🔔 Nouveau RDV — ${appointment.clientName} — ${formattedDate} à ${appointment.time}`
+        : `⚠️ Action requise — Nouveau RDV — ${appointment.clientName} — ${formattedDate} à ${appointment.time}`,
+      html,
+    });
+    console.log('✅ Consultant notification sent to:', appointment.consultantEmail);
   } catch (error) {
-    console.error('Error sending payment confirmation:', error);
+    console.error('Error sending consultant notification:', error);
   }
 }
 
-// Send contact form notification to admins
-export async function notifyAdminsContactForm(contact: {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}) {
-  if (!isEmailConfigured()) {
-    console.warn('⚠️ Email not configured. Skipping contact form notification.');
-    return;
-  }
-
-  const transporter = createTransporter();
-  if (!transporter) return;
-
-  const adminEmails = await getAdminEmails();
-  
-  // Add helmiboussetta11@gmail.com if not already in admin list
-  const recipients = [...adminEmails];
-  const helmiEmail = 'helmiboussetta11@gmail.com';
-  if (!recipients.includes(helmiEmail)) {
-    recipients.push(helmiEmail);
-  }
-  
-  // Also add becofconseil@gmail.com if not in list
-  const becofEmail = 'becofconseil@gmail.com';
-  if (!recipients.includes(becofEmail)) {
-    recipients.push(becofEmail);
-  }
-  
-  if (recipients.length === 0) return;
-
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
-    to: recipients,
-    replyTo: contact.email,
-    subject: `Nouveau message - ${contact.subject}`,
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #14B8A6; color: white; padding: 20px; border-radius: 8px 8px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
-          .message-box { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #14B8A6; margin: 20px 0; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h2>📬 Nouveau Message de Contact</h2>
-          </div>
-          <div class="content">
-            <p><strong>De :</strong> ${contact.name} (${contact.email})</p>
-            <p><strong>Sujet :</strong> ${contact.subject}</p>
-            
-            <div class="message-box">
-              <h3 style="margin-top: 0;">Message :</h3>
-              <p style="white-space: pre-wrap;">${contact.message}</p>
-            </div>
-
-            <p style="color: #666; font-size: 14px;">
-              💡 Vous pouvez répondre directement en cliquant sur "Répondre" dans votre client email.
-            </p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log('Contact form notification sent to admins');
-  } catch (error) {
-    console.error('Error sending contact form notification:', error);
-  }
-}
-
-// Send cancellation notification
+// ─── Cancellation email ───────────────────────────────────────────────────────
 export async function sendCancellationNotification(appointment: {
   clientName: string;
   clientEmail: string;
@@ -429,202 +379,114 @@ export async function sendCancellationNotification(appointment: {
   serviceType: string;
 }) {
   if (!isEmailConfigured()) {
-    console.warn('⚠️ Email not configured. Skipping cancellation notification.');
+    console.warn('⚠️ RESEND_API_KEY not set. Skipping cancellation email.');
     return;
   }
 
-  const transporter = createTransporter();
-  if (!transporter) return;
-
-  const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  const formattedDate = new Date(appointment.date).toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
-    to: appointment.clientEmail,
-    subject: 'Annulation de rendez-vous - BECOF',
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #EF4444; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>Rendez-vous Annulé</h1>
-          </div>
-          <div class="content">
-            <p>Bonjour ${appointment.clientName},</p>
-            
-            <p>Votre rendez-vous du <strong>${formattedDate}</strong> pour le service <strong>${appointment.serviceType}</strong> a été annulé.</p>
-
-            <p>Si vous souhaitez réserver un autre rendez-vous, n'hésitez pas à visiter notre site web.</p>
-
-            <div style="text-align: center; margin-top: 30px;">
-              <a href="${process.env.NEXTAUTH_URL}/appointment" style="display: inline-block; background: #14B8A6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px;">
-                Réserver un nouveau rendez-vous
-              </a>
-            </div>
-
-            <div style="text-align: center; color: #666; font-size: 14px; margin-top: 30px;">
-              <p>Pour toute question :</p>
-              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
-            </div>
-          </div>
+  const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><style>${STYLES}</style></head><body>
+  <div class="outer">
+    <div class="wrap">
+      <div class="header" style="background:#ef4444;">
+        <div class="header-logo">BECOF Conseil</div>
+        <h1>Rendez-vous annulé</h1>
+        <p>Votre rendez-vous a bien été annulé.</p>
+      </div>
+      <div class="body">
+        <p class="greeting">Bonjour <strong>${appointment.clientName}</strong>,</p>
+        <p class="lead">Votre rendez-vous du <strong>${formattedDate}</strong> pour le service <strong>${appointment.serviceType}</strong> a bien été annulé.</p>
+        <p class="lead">Si vous souhaitez fixer un nouveau rendez-vous, nous sommes disponibles :</p>
+        <div class="actions">
+          <a href="${BASE_URL}/fr/appointment" style="display:inline-block;background:#1a2870;color:white;text-decoration:none;padding:13px 28px;border-radius:8px;font-weight:600;font-size:14px;">Réserver un nouveau rendez-vous</a>
         </div>
-      </body>
-      </html>
-    `,
-  };
+        <div class="divider"></div>
+        <div class="footer">
+          <p><a href="mailto:becofconseil@gmail.com">becofconseil@gmail.com</a> &nbsp;·&nbsp; +216 53 216 700</p>
+          <p style="margin-top:8px;">© 2026 BECOF Conseil</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body></html>`;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Cancellation notification sent to:', appointment.clientEmail);
+    await resend.emails.send({
+      from: FROM,
+      to: appointment.clientEmail,
+      replyTo: REPLY_TO,
+      subject: 'Annulation de votre rendez-vous — BECOF Conseil',
+      html,
+    });
+    console.log('✅ Cancellation email sent to:', appointment.clientEmail);
   } catch (error) {
-    console.error('Error sending cancellation notification:', error);
+    console.error('Error sending cancellation email:', error);
   }
 }
 
-// Send bank transfer instructions to client
-export async function sendBankTransferInstructions(appointment: {
-  id: string;
-  clientName: string;
-  clientEmail: string;
-  date: Date;
-  serviceType: string;
-  price: number;
+// ─── Contact form notification ────────────────────────────────────────────────
+export async function notifyAdminsContactForm(contact: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
 }) {
   if (!isEmailConfigured()) {
-    console.warn('⚠️ Email not configured. Skipping bank transfer instructions.');
+    console.warn('⚠️ RESEND_API_KEY not set. Skipping contact form notification.');
     return;
   }
 
-  const transporter = createTransporter();
-  if (!transporter) return;
-
-  const formattedDate = new Date(appointment.date).toLocaleString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
-  const referenceNumber = appointment.id.slice(-8).toUpperCase();
-
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
-    to: appointment.clientEmail,
-    subject: 'Instructions de paiement - Rendez-vous BECOF',
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #14B8A6, #9333EA); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-          .info-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #14B8A6; }
-          .payment-box { background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #f59e0b; }
-          .reference { background: #14B8A6; color: white; padding: 15px; border-radius: 6px; text-align: center; font-size: 18px; font-weight: bold; margin: 20px 0; }
-          .steps { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
-          .step { padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
-          .step:last-child { border-bottom: none; }
-          .footer { text-align: center; color: #666; font-size: 14px; margin-top: 30px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>BECOF</h1>
-            <p>Instructions de Paiement</p>
-          </div>
-          <div class="content">
-            <p>Bonjour ${appointment.clientName},</p>
-            <p>Merci d'avoir réservé un rendez-vous avec BECOF ! Votre demande a été enregistrée.</p>
-            
-            <div class="info-box">
-              <h3 style="margin-top: 0; color: #14B8A6;">Détails du rendez-vous</h3>
-              <p><strong>📅 Date :</strong> ${formattedDate}</p>
-              <p><strong>💼 Service :</strong> ${appointment.serviceType}</p>
-              <p><strong>💰 Montant :</strong> ${appointment.price} TND</p>
-            </div>
-
-            <div class="payment-box">
-              <h3 style="margin-top: 0; color: #f59e0b;">⚠️ Instructions de virement bancaire</h3>
-              <p><strong>Banque :</strong> BIAT</p>
-              <p><strong>RIB :</strong> 08 000 0000000000000 00</p>
-              <p><strong>Titulaire :</strong> BECOF</p>
-              
-              <div class="reference">
-                RÉFÉRENCE À INCLURE:<br>
-                ${appointment.clientName} - ${referenceNumber}
-              </div>
-              
-              <p style="font-size: 14px; color: #92400e;">
-                ⚠️ Important : Veuillez inclure cette référence exacte lors de votre virement pour faciliter l'identification de votre paiement.
-              </p>
-            </div>
-
-            <div class="steps">
-              <h3 style="margin-top: 0; color: #14B8A6;">📋 Prochaines étapes</h3>
-              <div class="step">
-                <strong>1.</strong> Effectuez le virement bancaire de ${appointment.price} TND avec la référence ci-dessus
-              </div>
-              <div class="step">
-                <strong>2.</strong> Prenez une capture d'écran de la preuve de paiement (reçu bancaire)
-              </div>
-              <div class="step">
-                <strong>3.</strong> Envoyez la capture d'écran à <strong>becofconseil@gmail.com</strong> avec la référence <strong>${referenceNumber}</strong>
-              </div>
-              <div class="step">
-                <strong>4.</strong> Votre rendez-vous sera confirmé dans les 24 heures après vérification
-              </div>
-            </div>
-
-            <p style="background: #dbeafe; padding: 15px; border-radius: 6px; border-left: 4px solid #3b82f6;">
-              💡 <strong>Conseil :</strong> Pour une confirmation plus rapide, envoyez votre preuve de paiement dès que possible après le virement.
-            </p>
-
-            <div class="footer">
-              <p>Pour toute question, contactez-nous :</p>
-              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
-              <p style="margin-top: 20px; font-size: 12px; color: #999;">
-                © 2025 BECOF - Orientation Consulting
-              </p>
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>
-    `,
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Bank transfer instructions sent to:', appointment.clientEmail);
+    const admins = await prisma.user.findMany({
+      where: { role: { in: ['ADMIN', 'SUPER_ADMIN'] } },
+      select: { email: true },
+    });
+    const recipients = [...new Set([...admins.map((a) => a.email), 'becofconseil@gmail.com'])];
+    if (recipients.length === 0) return;
+
+    const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><style>${STYLES}</style></head><body>
+    <div class="outer">
+      <div class="wrap">
+        <div class="header">
+          <div class="header-logo">BECOF Conseil</div>
+          <h1>Nouveau message 📬</h1>
+          <p>Un visiteur vous a envoyé un message via le site.</p>
+        </div>
+        <div class="body">
+          <div class="card">
+            <div class="card-title">Expéditeur</div>
+            <div class="info-row"><span class="info-label">Nom</span><span class="info-value">${contact.name}</span></div>
+            <div class="info-row"><span class="info-label">Email</span><span class="info-value"><a href="mailto:${contact.email}" style="color:#233691;">${contact.email}</a></span></div>
+            <div class="info-row"><span class="info-label">Sujet</span><span class="info-value">${contact.subject}</span></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Message</div>
+            <p style="font-size:14px;color:#374151;line-height:1.7;white-space:pre-wrap;">${contact.message}</p>
+          </div>
+          <p style="font-size:13px;color:#9ca3af;text-align:center;">💡 Cliquez sur <strong>Répondre</strong> pour répondre directement à ${contact.name}.</p>
+          <div class="divider"></div>
+          <div class="footer"><p>© 2026 BECOF Conseil</p></div>
+        </div>
+      </div>
+    </div>
+    </body></html>`;
+
+    await resend.emails.send({
+      from: FROM,
+      to: recipients,
+      replyTo: contact.email,
+      subject: `📬 Message de ${contact.name} — ${contact.subject}`,
+      html,
+    });
+    console.log('✅ Contact form notification sent');
   } catch (error) {
-    console.error('Error sending bank transfer instructions:', error);
+    console.error('Error sending contact form notification:', error);
   }
 }
 
-// Send admin invitation email
+// ─── Admin invitation email ───────────────────────────────────────────────────
 export async function sendAdminInvitation(invitation: {
   email: string;
   role: string;
@@ -632,96 +494,90 @@ export async function sendAdminInvitation(invitation: {
   invitedBy: string;
 }) {
   if (!isEmailConfigured()) {
-    console.warn('⚠️ Email not configured. Skipping admin invitation email.');
-    throw new Error('Email is not configured. Please set SMTP environment variables to send invitations.');
+    throw new Error('Email is not configured. Please set RESEND_API_KEY environment variable.');
   }
 
-  const transporter = createTransporter();
-  if (!transporter) {
-    throw new Error('Email transporter could not be created.');
-  }
+  const setupUrl = `${BASE_URL}/admin/setup?token=${invitation.token}`;
+  const roleDisplay = invitation.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Consultant / Admin';
+  const roleDesc = invitation.role === 'SUPER_ADMIN'
+    ? 'Vous aurez accès complet à la gestion de la plateforme, des consultants et des rendez-vous.'
+    : 'Vous pourrez gérer vos rendez-vous, définir vos disponibilités et accéder au tableau de bord.';
 
-  const setupUrl = `${process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/admin/setup?token=${invitation.token}`;
-  
-  const roleDisplay = invitation.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin';
+  const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${STYLES}
+    .invite-badge { display:inline-block; background: linear-gradient(135deg,#1a2870,#233691); color:white; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:6px 16px; border-radius:20px; margin-bottom:20px; }
+    .setup-btn { display:inline-block; background: linear-gradient(135deg,#1a2870,#233691); color:white !important; text-decoration:none; padding:15px 36px; border-radius:10px; font-weight:700; font-size:15px; letter-spacing:0.3px; }
+    .url-box { background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:10px 14px; font-size:11px; font-family:monospace; color:#6b7280; word-break:break-all; margin-top:12px; }
+    .warning-box { background:#fefce8; border:1px solid #fde68a; border-radius:10px; padding:14px 18px; margin:20px 0; }
+    .warning-box p { font-size:13px; color:#92400e; line-height:1.6; }
+  </style></head><body>
+  <div class="outer">
+    <div class="wrap">
+      <div class="header">
+        <div class="header-logo">BECOF Conseil</div>
+        <h1>Vous êtes invité(e) 🎉</h1>
+        <p>Rejoignez l'équipe BECOF Conseil</p>
+      </div>
+      <div class="body">
+        <p class="greeting">Bonjour,</p>
+        <p class="lead"><strong>${invitation.invitedBy}</strong> vous a invité(e) à rejoindre la plateforme BECOF Conseil.</p>
 
-  const mailOptions = {
-    from: process.env.EMAIL_FROM || 'BECOF <noreply@becof.tn>',
-    to: invitation.email,
-    subject: 'Invitation to join BECOF Admin Team',
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #14B8A6, #9333EA); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-          .info-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #14B8A6; }
-          .button { display: inline-block; background: #14B8A6; color: white !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-          .footer { text-align: center; color: #666; font-size: 14px; margin-top: 30px; }
-          .warning { background: #fef3c7; padding: 15px; border-radius: 6px; border-left: 4px solid #f59e0b; margin: 20px 0; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>BECOF</h1>
-            <p>Admin Team Invitation</p>
-          </div>
-          <div class="content">
-            <p>Hello,</p>
-            <p>You have been invited by <strong>${invitation.invitedBy}</strong> to join the BECOF admin team as a <strong>${roleDisplay}</strong>.</p>
-            
-            <div class="info-box">
-              <h3 style="margin-top: 0; color: #14B8A6;">Your Role</h3>
-              <p><strong>📧 Email:</strong> ${invitation.email}</p>
-              <p><strong>👤 Role:</strong> ${roleDisplay}</p>
-              ${invitation.role === 'SUPER_ADMIN' 
-                ? '<p style="color: #9333EA;"><strong>Super Admins</strong> have full access to manage all aspects including other admins.</p>'
-                : '<p><strong>Admins</strong> can manage appointments, blog posts, payments, and service pricing.</p>'
-              }
-            </div>
-
-            <p>To complete your registration, please click the button below to set up your account:</p>
-
-            <center>
-              <a href="${setupUrl}" class="button" style="color: white;">Complete Setup</a>
-            </center>
-
-            <div class="warning">
-              <strong>⚠️ Important:</strong>
-              <ul style="margin: 10px 0;">
-                <li>This invitation link will expire in 7 days</li>
-                <li>You'll need to create a secure password (minimum 8 characters)</li>
-                <li>If you didn't expect this invitation, please ignore this email</li>
-              </ul>
-            </div>
-
-            <p>If the button doesn't work, copy and paste this link into your browser:</p>
-            <p style="word-break: break-all; font-size: 12px; color: #666;">${setupUrl}</p>
-
-            <div class="footer">
-              <p>For support, contact us:</p>
-              <p>📧 becofconseil@gmail.com | 📞 +216 53 216 700</p>
-              <p style="margin-top: 20px; font-size: 12px; color: #999;">
-                © 2025 BECOF - Orientation Consulting
-              </p>
-            </div>
-          </div>
+        <div style="text-align:center;margin:24px 0;">
+          <div class="invite-badge">${roleDisplay}</div>
         </div>
-      </body>
-      </html>
-    `,
-  };
+
+        <div class="card">
+          <div class="card-title">Votre accès</div>
+          <div class="info-row"><span class="info-label">Email</span><span class="info-value">${invitation.email}</span></div>
+          <div class="info-row"><span class="info-label">Rôle</span><span class="info-value">${roleDisplay}</span></div>
+          <div class="info-row"><span class="info-label">Accès</span><span class="info-value" style="color:#6b7280;font-weight:400;">${roleDesc}</span></div>
+        </div>
+
+        <p style="font-size:14px;color:#374151;text-align:center;margin:24px 0;">Cliquez ci-dessous pour créer votre mot de passe et accéder à votre tableau de bord :</p>
+
+        <div class="actions">
+          <a href="${setupUrl}" class="setup-btn">Configurer mon compte →</a>
+        </div>
+
+        <div class="url-box">🔗 ${setupUrl}</div>
+
+        <div class="warning-box">
+          <p>⚠️ <strong>Important :</strong> Ce lien est personnel et expire dans <strong>7 jours</strong>. Ne le partagez avec personne. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
+        </div>
+
+        <div class="divider"></div>
+        <div class="footer">
+          <p>Des questions ? <a href="mailto:becofconseil@gmail.com">becofconseil@gmail.com</a></p>
+          <p style="margin-top:8px;">© 2026 BECOF Conseil — Orientation &amp; Accompagnement</p>
+        </div>
+      </div>
+    </div>
+    <div class="outer-footer">Vous recevez cet email car vous avez été invité(e) à rejoindre becofconseil.com</div>
+  </div>
+  </body></html>`;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Admin invitation sent to:', invitation.email);
+    await resend.emails.send({
+      from: FROM,
+      to: invitation.email,
+      subject: `🎉 Invitation — Rejoignez l'équipe BECOF Conseil`,
+      html,
+    });
+    console.log('✅ Admin invitation sent to:', invitation.email);
   } catch (error) {
     console.error('Error sending admin invitation:', error);
     throw error;
   }
+}
+
+// ─── Kept for compatibility (no-ops) ─────────────────────────────────────────
+export async function notifyAdminsOfAppointment(_: any) {
+  // Removed: notifications go to the assigned consultant only (notifyConsultantOfAppointment)
+}
+
+export async function sendPaymentConfirmation(_: any) {
+  // No-op: merged into sendAppointmentConfirmation
+}
+
+export async function sendBankTransferInstructions(_: any) {
+  // No-op: payment method not yet implemented
 }
