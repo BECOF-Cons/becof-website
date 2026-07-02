@@ -88,7 +88,12 @@ export async function PATCH(
     const existingAppointment = await prisma.appointment.findUnique({
       where: { id },
       include: {
-        consultant: { select: { displayName: true } },
+        consultant: {
+          select: {
+            displayName: true,
+            user: { select: { email: true } },
+          },
+        },
         payment: { select: { id: true, status: true } },
       },
     });
@@ -109,39 +114,111 @@ export async function PATCH(
       },
     });
 
-    // Admin explicitly confirms payment received → mark payment COMPLETED + send email
+    // Admin explicitly confirms payment received → mark payment COMPLETED + send emails
     if (confirmPayment && existingAppointment.payment?.id && existingAppointment.payment.status !== 'COMPLETED') {
       await prisma.payment.update({
         where: { id: existingAppointment.payment.id },
         data: { status: 'COMPLETED' },
       });
 
-      if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {
-        const { sendAppointmentConfirmation, notifyAdminsOfAppointment } = await import('@/lib/email');
-        const baseUrl = process.env.NEXTAUTH_URL || 'https://becof-website.vercel.app';
+      // 1. Try Google Calendar API to create event + get Meet link
+      let meetingLink: string | null = existingAppointment.meetingLink ?? null;
+      let googleEventId: string | null = existingAppointment.googleEventId ?? null;
+
+      if (!meetingLink) {
+        if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_REFRESH_TOKEN) {
+          try {
+            const { createCalendarEvent } = await import('@/lib/google-calendar');
+            const [h, m] = existingAppointment.time.split(':').map(Number);
+            const startTime = new Date(existingAppointment.date);
+            startTime.setHours(h, m, 0, 0);
+            const endTime = new Date(startTime);
+
+            // Get service duration
+            const svc = await prisma.service.findFirst({
+              where: { serviceType: existingAppointment.serviceType },
+              select: { durationMinutes: true },
+            });
+            endTime.setMinutes(endTime.getMinutes() + (svc?.durationMinutes ?? 60));
+
+            const consultantEmail = (existingAppointment.consultant as any)?.user?.email;
+            const attendees = [
+              { email: existingAppointment.email, name: existingAppointment.name },
+              ...(consultantEmail ? [{ email: consultantEmail, name: existingAppointment.consultant?.displayName ?? '' }] : []),
+            ];
+
+            const result = await createCalendarEvent({
+              summary: `Rendez-vous BECOF — ${existingAppointment.serviceType}`,
+              description: `Client: ${existingAppointment.name}\nConsultant: ${existingAppointment.consultant?.displayName ?? ''}`,
+              startTime,
+              endTime,
+              attendees,
+            });
+
+            if (result.meetLink) meetingLink = result.meetLink;
+            if (result.eventId) googleEventId = result.eventId;
+          } catch (err) {
+            console.error('Google Calendar event creation failed:', err);
+          }
+        }
+
+        // 2. No fallback — if Google Calendar API not configured, meetingLink stays null.
+        //    The email will display "consultant will send the link before the appointment."
+
+        // 3. Save meeting link + google event id to DB
+        if (meetingLink || googleEventId) {
+          await prisma.appointment.update({
+            where: { id },
+            data: {
+              ...(meetingLink ? { meetingLink } : {}),
+              ...(googleEventId ? { googleEventId } : {}),
+            },
+          });
+        }
+      }
+
+      // 4. Send emails (client + consultant only — not all admins)
+      if (process.env.RESEND_API_KEY) {
+        const { sendAppointmentConfirmation, notifyConsultantOfAppointment } = await import('@/lib/email');
+        const baseUrl = process.env.NEXTAUTH_URL || 'https://www.becofconseil.com';
         const cancelUrl = existingAppointment.cancelToken
           ? `${baseUrl}/fr/appointment/cancel?token=${existingAppointment.cancelToken}`
           : undefined;
+        const modifyUrl = existingAppointment.cancelToken
+          ? `${baseUrl}/fr/appointment/modify?token=${existingAppointment.cancelToken}`
+          : undefined;
+
+        const consultantEmail = (existingAppointment.consultant as any)?.user?.email;
 
         sendAppointmentConfirmation({
           clientName: existingAppointment.name,
           clientEmail: existingAppointment.email,
           date: existingAppointment.date,
+          time: existingAppointment.time,
           serviceType: existingAppointment.serviceType,
           consultantName: existingAppointment.consultant?.displayName,
+          consultantEmail: consultantEmail ?? undefined,
           cancelUrl,
-        }).catch((err) => console.error('Error sending confirmation email:', err));
+          modifyUrl,
+          meetingLink: meetingLink ?? undefined,
+          appointmentId: existingAppointment.id,
+        }).catch((err) => console.error('Error sending client confirmation:', err));
 
-        notifyAdminsOfAppointment({
-          id: existingAppointment.id,
-          clientName: existingAppointment.name,
-          clientEmail: existingAppointment.email,
-          clientPhone: existingAppointment.phone,
-          date: existingAppointment.date,
-          serviceType: existingAppointment.serviceType,
-          notes: existingAppointment.message ?? undefined,
-          consultantName: existingAppointment.consultant?.displayName,
-        }).catch((err) => console.error('Error sending admin notification:', err));
+        if (consultantEmail && existingAppointment.consultant?.displayName) {
+          notifyConsultantOfAppointment({
+            consultantName: existingAppointment.consultant.displayName,
+            consultantEmail,
+            clientName: existingAppointment.name,
+            clientEmail: existingAppointment.email,
+            clientPhone: existingAppointment.phone,
+            date: existingAppointment.date,
+            time: existingAppointment.time,
+            serviceType: existingAppointment.serviceType,
+            message: existingAppointment.message ?? undefined,
+            meetingLink: meetingLink ?? undefined,
+            appointmentId: existingAppointment.id,
+          }).catch((err) => console.error('Error sending consultant notification:', err));
+        }
       }
     }
 
@@ -205,7 +282,7 @@ export async function DELETE(
     }
 
     // Send cancellation notification
-    if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {
+    if (process.env.RESEND_API_KEY) {
       const { sendCancellationNotification } = await import('@/lib/email');
       sendCancellationNotification({
         clientName: appointment.name,

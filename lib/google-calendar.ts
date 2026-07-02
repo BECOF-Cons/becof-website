@@ -32,14 +32,18 @@ export interface CalendarEvent {
   description: string;
   startTime: Date;
   endTime: Date;
-  attendeeEmail: string;
-  attendeeName: string;
+  attendees: Array<{ email: string; name: string }>;
 }
 
-export async function createCalendarEvent(event: CalendarEvent): Promise<string | null> {
+export interface CreatedCalendarEvent {
+  eventId: string | null;
+  meetLink: string | null;
+}
+
+export async function createCalendarEvent(event: CalendarEvent): Promise<CreatedCalendarEvent> {
   if (!isGoogleCalendarConfigured() || !calendar) {
     console.log('Google Calendar not configured, skipping event creation');
-    return null;
+    return { eventId: null, meetLink: null };
   }
 
   try {
@@ -56,18 +60,16 @@ export async function createCalendarEvent(event: CalendarEvent): Promise<string 
           dateTime: event.endTime.toISOString(),
           timeZone: 'Africa/Tunis',
         },
-        attendees: [
-          {
-            email: event.attendeeEmail,
-            displayName: event.attendeeName,
-            responseStatus: 'needsAction',
-          },
-        ],
+        attendees: event.attendees.map((a) => ({
+          email: a.email,
+          displayName: a.name,
+          responseStatus: 'needsAction',
+        })),
         reminders: {
           useDefault: false,
           overrides: [
-            { method: 'email', minutes: 24 * 60 }, // 1 day before
-            { method: 'popup', minutes: 60 }, // 1 hour before
+            { method: 'email', minutes: 24 * 60 },
+            { method: 'popup', minutes: 60 },
           ],
         },
         conferenceData: {
@@ -78,14 +80,18 @@ export async function createCalendarEvent(event: CalendarEvent): Promise<string 
         },
       },
       conferenceDataVersion: 1,
-      sendUpdates: 'all', // Send email invites
+      sendUpdates: 'none', // We send our own styled emails via Resend
     });
 
-    console.log('Calendar event created:', response.data.id);
-    return response.data.id || null;
+    const eventId = response.data.id ?? null;
+    const entryPoints: any[] = response.data.conferenceData?.entryPoints ?? [];
+    const meetLink = entryPoints.find((e: any) => e.entryPointType === 'video')?.uri ?? null;
+
+    console.log('✅ Calendar event created:', eventId, '| Meet link:', meetLink);
+    return { eventId, meetLink };
   } catch (error) {
     console.error('Error creating calendar event:', error);
-    return null;
+    return { eventId: null, meetLink: null };
   }
 }
 
