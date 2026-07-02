@@ -80,7 +80,7 @@ export async function createCalendarEvent(event: CalendarEvent): Promise<Created
         },
       },
       conferenceDataVersion: 1,
-      sendUpdates: 'none', // We send our own styled emails via Resend
+      sendUpdates: 'all', // Google sends each attendee ONE native calendar invite (correct per-timezone). Our Resend email is the branded confirmation.
     });
 
     const eventId = response.data.id ?? null;

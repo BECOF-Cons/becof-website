@@ -129,17 +129,21 @@ export async function PATCH(
         if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_REFRESH_TOKEN) {
           try {
             const { createCalendarEvent } = await import('@/lib/google-calendar');
-            const [h, m] = existingAppointment.time.split(':').map(Number);
-            const startTime = new Date(existingAppointment.date);
-            startTime.setHours(h, m, 0, 0);
-            const endTime = new Date(startTime);
 
             // Get service duration
             const svc = await prisma.service.findFirst({
               where: { serviceType: existingAppointment.serviceType },
               select: { durationMinutes: true },
             });
-            endTime.setMinutes(endTime.getMinutes() + (svc?.durationMinutes ?? 60));
+            const durationMin = svc?.durationMinutes ?? 60;
+
+            // Anchor the slot to Tunisia time (UTC+1) so it resolves to ONE
+            // absolute instant, regardless of where the server runs. Each
+            // attendee's calendar then renders it in their own local timezone.
+            const dateStr = new Date(existingAppointment.date).toISOString().split('T')[0];
+            const [hh, mm] = existingAppointment.time.split(':');
+            const startTime = new Date(`${dateStr}T${hh.padStart(2, '0')}:${mm.padStart(2, '0')}:00+01:00`);
+            const endTime = new Date(startTime.getTime() + durationMin * 60 * 1000);
 
             const consultantEmail = (existingAppointment.consultant as any)?.user?.email;
             const attendees = [

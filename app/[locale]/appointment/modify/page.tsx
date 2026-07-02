@@ -273,12 +273,15 @@ export default function ModifyAppointmentPage() {
         {/* Time slots */}
         {selectedDate && (
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-6">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-1">
               <Clock className="h-4 w-4 text-teal-500" />
               <h3 className="font-semibold text-gray-900 text-sm">
                 {isFr ? 'Créneaux disponibles' : 'Available slots'}
               </h3>
             </div>
+            <p className="text-xs text-gray-400 mb-3">
+              🕐 {isFr ? 'Tous les horaires sont affichés en heure de Tunis (GMT+1).' : 'All times shown in Tunis time (GMT+1).'}
+            </p>
             {loadingSlots ? (
               <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-teal-500" /></div>
             ) : availableSlots.length === 0 ? (

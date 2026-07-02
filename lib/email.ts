@@ -177,20 +177,6 @@ export async function sendAppointmentConfirmation(appointment: {
     location: appointment.meetingLink ?? 'En ligne',
   });
 
-  const icsAttendees = [appointment.clientEmail];
-  if (appointment.consultantEmail) icsAttendees.push(appointment.consultantEmail);
-
-  const icsContent = buildIcsContent({
-    uid: appointment.appointmentId ?? appointment.clientEmail.replace('@', '-'),
-    title: `Rendez-vous BECOF Conseil — ${appointment.serviceType}`,
-    description: `Consultant: ${appointment.consultantName ?? 'BECOF Conseil'}\nService: ${appointment.serviceType}`,
-    date: appointment.date,
-    time: appointment.time,
-    durationMinutes: duration,
-    attendeeEmails: icsAttendees,
-    meetingLink: appointment.meetingLink,
-  });
-
   const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${STYLES}</style></head><body>
   <div class="outer">
     <div class="wrap">
@@ -227,9 +213,10 @@ export async function sendAppointmentConfirmation(appointment: {
           <a href="${calUrl}" class="btn-cal">📅 Ajouter à Google Agenda</a>
         </div>
 
+        ${appointment.meetingLink ? `
         <div class="ics-note">
-          📎 Un fichier <strong>.ics</strong> est joint à cet email — ouvrez-le pour ajouter l'événement à n'importe quel calendrier (Outlook, Apple Calendar…)
-        </div>
+          📅 Une invitation d'agenda vous a également été envoyée séparément — acceptez-la pour ajouter automatiquement le rendez-vous à votre calendrier (à l'heure de votre fuseau horaire).
+        </div>` : ''}
 
         ${appointment.modifyUrl ? `
         <div class="secondary-links">
@@ -256,10 +243,6 @@ export async function sendAppointmentConfirmation(appointment: {
       replyTo: REPLY_TO,
       subject: `✅ Rendez-vous confirmé — ${formattedDate} à ${appointment.time}`,
       html,
-      attachments: [{
-        filename: 'rendez-vous-becof.ics',
-        content: Buffer.from(icsContent).toString('base64'),
-      }],
     });
     console.log('✅ Confirmation sent to client:', appointment.clientEmail);
   } catch (error) {
@@ -307,17 +290,6 @@ export async function notifyConsultantOfAppointment(appointment: {
       appointment.message ? `Message: ${appointment.message}` : '',
     ].filter(Boolean).join('\n'),
     location: appointment.meetingLink ?? 'En ligne',
-  });
-
-  const icsContent = buildIcsContent({
-    uid: appointment.appointmentId ?? `${appointment.clientEmail}-${appointment.time}`.replace('@', '-'),
-    title: `RDV BECOF — ${appointment.clientName} — ${appointment.serviceType}`,
-    description: `Client: ${appointment.clientName}\nEmail: ${appointment.clientEmail}\nTél: ${appointment.clientPhone}\nService: ${appointment.serviceType}`,
-    date: appointment.date,
-    time: appointment.time,
-    durationMinutes: duration,
-    attendeeEmails: [appointment.consultantEmail, appointment.clientEmail],
-    meetingLink: appointment.meetingLink,
   });
 
   const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${STYLES}</style></head><body>
@@ -369,9 +341,10 @@ export async function notifyConsultantOfAppointment(appointment: {
           <a href="${calUrl}" class="btn-cal">📅 Ajouter à Google Agenda</a>
         </div>
 
+        ${appointment.meetingLink ? `
         <div class="ics-note">
-          📎 Un fichier <strong>.ics</strong> est joint — ouvrez-le pour ajouter l'événement à votre calendrier.
-        </div>
+          📅 Une invitation d'agenda vous a également été envoyée séparément — acceptez-la pour ajouter automatiquement le rendez-vous à votre calendrier (à l'heure de votre fuseau horaire).
+        </div>` : ''}
 
         <div class="divider"></div>
         <div class="footer">
@@ -391,10 +364,6 @@ export async function notifyConsultantOfAppointment(appointment: {
         ? `🔔 Nouveau RDV — ${appointment.clientName} — ${formattedDate} à ${appointment.time}`
         : `⚠️ Action requise — Nouveau RDV — ${appointment.clientName} — ${formattedDate} à ${appointment.time}`,
       html,
-      attachments: [{
-        filename: 'rendez-vous-becof.ics',
-        content: Buffer.from(icsContent).toString('base64'),
-      }],
     });
     console.log('✅ Consultant notification sent to:', appointment.consultantEmail);
   } catch (error) {
