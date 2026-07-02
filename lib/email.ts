@@ -192,7 +192,7 @@ export async function sendAppointmentConfirmation(appointment: {
         <div class="card">
           <div class="card-title">📋 Détails du rendez-vous</div>
           <div class="info-row"><span class="info-label">📅 Date</span><span class="info-value">${formattedDate}</span></div>
-          <div class="info-row"><span class="info-label">🕐 Heure</span><span class="info-value">${appointment.time} <span style="color:#9ca3af;font-weight:400;">(${duration} min)</span></span></div>
+          <div class="info-row"><span class="info-label">🕐 Heure</span><span class="info-value">${appointment.time} <span style="color:#9ca3af;font-weight:400;">(${duration} min — heure de Tunis, GMT+1)</span></span></div>
           <div class="info-row"><span class="info-label">💼 Service</span><span class="info-value">${appointment.serviceType}</span></div>
           ${appointment.consultantName ? `<div class="info-row"><span class="info-label">👤 Consultant</span><span class="info-value">${appointment.consultantName}</span></div>` : ''}
           <div class="info-row"><span class="info-label">📍 Format</span><span class="info-value">Consultation en ligne</span></div>
@@ -315,7 +315,7 @@ export async function notifyConsultantOfAppointment(appointment: {
         <div class="card">
           <div class="card-title">📋 Détails du rendez-vous</div>
           <div class="info-row"><span class="info-label">📅 Date</span><span class="info-value">${formattedDate}</span></div>
-          <div class="info-row"><span class="info-label">🕐 Heure</span><span class="info-value">${appointment.time} <span style="color:#9ca3af;font-weight:400;">(${duration} min)</span></span></div>
+          <div class="info-row"><span class="info-label">🕐 Heure</span><span class="info-value">${appointment.time} <span style="color:#9ca3af;font-weight:400;">(${duration} min — heure de Tunis, GMT+1)</span></span></div>
           <div class="info-row"><span class="info-label">💼 Service</span><span class="info-value">${appointment.serviceType}</span></div>
           <div class="info-row"><span class="info-label">📍 Format</span><span class="info-value">En ligne</span></div>
         </div>
