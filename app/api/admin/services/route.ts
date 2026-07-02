@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { nameEn, nameFr, descriptionEn, descriptionFr, price, serviceType, active, displayOrder } = body;
+    const { nameEn, nameFr, descriptionEn, descriptionFr, price, serviceType, active, displayOrder, durationMinutes } = body;
 
     // Validate required fields
     if (!nameEn || !nameFr || !descriptionEn || !descriptionFr || !price || !serviceType) {
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       });
 
       let targetPosition = displayOrder && displayOrder > 0 ? displayOrder : allServices.length + 1;
-      
+
       // Cap the target position to max existing + 1
       if (targetPosition > allServices.length + 1) {
         targetPosition = allServices.length + 1;
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
           serviceType,
           active: active ?? true,
           displayOrder: 9999, // Temporary high value
+          durationMinutes: durationMinutes ? parseInt(String(durationMinutes)) : 60,
         },
       });
 
@@ -109,7 +110,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, nameEn, nameFr, descriptionEn, descriptionFr, price, active, displayOrder } = body;
+    const { id, nameEn, nameFr, descriptionEn, descriptionFr, price, active, displayOrder, durationMinutes } = body;
 
     if (!id) {
       return NextResponse.json({ error: 'Service ID is required' }, { status: 400 });
@@ -124,6 +125,7 @@ export async function PUT(request: NextRequest) {
       if (descriptionFr !== undefined) updateFields.descriptionFr = descriptionFr;
       if (price !== undefined) updateFields.price = price;
       if (typeof active === 'boolean') updateFields.active = active;
+      if (durationMinutes !== undefined) updateFields.durationMinutes = parseInt(String(durationMinutes));
 
       // Update non-position fields first
       if (Object.keys(updateFields).length > 0) {
