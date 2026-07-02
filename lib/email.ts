@@ -355,7 +355,17 @@ export async function notifyConsultantOfAppointment(appointment: {
           <p>🎥 Lien de réunion</p>
           <a href="${appointment.meetingLink}" class="meet-link">Rejoindre la réunion</a>
           <div style="margin-top:10px;font-size:12px;color:#6b7280;font-family:monospace;">${appointment.meetingLink}</div>
-        </div>` : ''}
+        </div>` : `
+        <div style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:12px;padding:20px 24px;margin:20px 0;">
+          <p style="font-size:13px;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">⚠️ Action requise — Lien de réunion à créer</p>
+          <p style="font-size:14px;color:#9a3412;line-height:1.6;margin-bottom:14px;">Le lien Google Meet n'a pas pu être généré automatiquement. Merci de créer le lien et de l'envoyer au client :</p>
+          <ol style="font-size:14px;color:#9a3412;line-height:2;padding-left:20px;margin:0;">
+            <li>Ouvrez <a href="https://calendar.google.com" style="color:#c2410c;font-weight:600;">Google Agenda</a></li>
+            <li>Créez un événement le <strong>${formattedDate} à ${appointment.time}</strong></li>
+            <li>Cliquez sur <strong>« Ajouter Google Meet »</strong></li>
+            <li>Copiez le lien et envoyez-le à <a href="mailto:${appointment.clientEmail}" style="color:#c2410c;font-weight:600;">${appointment.clientEmail}</a> — il suffit de <strong>répondre à cet email</strong></li>
+          </ol>
+        </div>`}
 
         <div class="actions">
           <a href="${calUrl}" class="btn-cal">📅 Ajouter à Google Agenda</a>
@@ -379,7 +389,9 @@ export async function notifyConsultantOfAppointment(appointment: {
       from: FROM,
       to: appointment.consultantEmail,
       replyTo: appointment.clientEmail,
-      subject: `🔔 Nouveau RDV — ${appointment.clientName} — ${formattedDate} à ${appointment.time}`,
+      subject: appointment.meetingLink
+        ? `🔔 Nouveau RDV — ${appointment.clientName} — ${formattedDate} à ${appointment.time}`
+        : `⚠️ Action requise — Nouveau RDV — ${appointment.clientName} — ${formattedDate} à ${appointment.time}`,
       html,
       attachments: [{
         filename: 'rendez-vous-becof.ics',
