@@ -62,7 +62,22 @@ export async function getAvailableSlots(
   });
 
   const bookedTimes = new Set(booked.map((a) => a.time));
-  return allSlots.filter((s) => !bookedTimes.has(s));
+  let slots = allSlots.filter((s) => !bookedTimes.has(s));
+
+  // If the selected date is today (Tunisia time), hide slots that are in the
+  // past or start within the next hour (1h same-day booking buffer).
+  const nowTunis = new Date(new Date().toLocaleString('en-US', { timeZone: 'Africa/Tunis' }));
+  const todayTunisStr = `${nowTunis.getFullYear()}-${String(nowTunis.getMonth() + 1).padStart(2, '0')}-${String(nowTunis.getDate()).padStart(2, '0')}`;
+
+  if (dateStr === todayTunisStr) {
+    const cutoffMinutes = nowTunis.getHours() * 60 + nowTunis.getMinutes() + 60; // now + 1h buffer
+    slots = slots.filter((s) => {
+      const [h, m] = s.split(':').map(Number);
+      return h * 60 + m >= cutoffMinutes;
+    });
+  }
+
+  return slots;
 }
 
 export async function getAvailableDaysInMonth(

@@ -110,31 +110,31 @@ const STYLES = `
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f3f4f6; color: #1f2937; }
   .outer { padding: 32px 16px; }
   .wrap { max-width: 600px; margin: 0 auto; }
-  .header { background: linear-gradient(135deg, #14B8A6 0%, #9333EA 100%); color: white; padding: 36px 32px; text-align: center; border-radius: 16px 16px 0 0; }
-  .header-logo { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; margin-bottom: 8px; }
+  .header { background: linear-gradient(135deg, #1a2870 0%, #233691 100%); color: white; padding: 36px 32px; text-align: center; border-radius: 16px 16px 0 0; border-bottom: 4px solid #F9AA04; }
+  .header-logo { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #F9AA04; margin-bottom: 8px; }
   .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
   .header p { font-size: 14px; opacity: 0.85; }
   .body { background: #ffffff; padding: 36px 32px; border-radius: 0 0 16px 16px; }
   .greeting { font-size: 16px; color: #374151; margin-bottom: 16px; }
   .lead { font-size: 14px; color: #6b7280; margin-bottom: 24px; line-height: 1.6; }
-  .card { background: #f9fafb; border-radius: 12px; padding: 20px 24px; margin: 20px 0; border: 1px solid #e5e7eb; }
-  .card-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #14B8A6; margin-bottom: 14px; }
+  .card { background: #f9fafb; border-radius: 12px; padding: 20px 24px; margin: 20px 0; border: 1px solid #e5e7eb; border-left: 4px solid #F9AA04; }
+  .card-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #233691; margin-bottom: 14px; }
   .info-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
   .info-row:last-child { border-bottom: none; }
   .info-label { color: #9ca3af; min-width: 90px; flex-shrink: 0; }
   .info-value { color: #1f2937; font-weight: 500; }
-  .meet-box { background: linear-gradient(135deg, #ecfdf5, #f0fdf4); border: 1.5px solid #6ee7b7; border-radius: 12px; padding: 20px 24px; margin: 20px 0; text-align: center; }
-  .meet-box p { font-size: 12px; color: #059669; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-  .meet-link { display: inline-block; background: #10b981; color: white !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.3px; }
+  .meet-box { background: linear-gradient(135deg, #eef1fb, #f5f7fd); border: 1.5px solid #a9b6e0; border-radius: 12px; padding: 20px 24px; margin: 20px 0; text-align: center; }
+  .meet-box p { font-size: 12px; color: #233691; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .meet-link { display: inline-block; background: #1a2870; color: white !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.3px; }
   .actions { text-align: center; margin: 28px 0 20px; }
   .btn-cal { display: inline-block; background: #4285F4; color: white !important; text-decoration: none; padding: 13px 28px; border-radius: 8px; font-weight: 600; font-size: 14px; }
   .secondary-links { text-align: center; margin-top: 12px; font-size: 13px; color: #9ca3af; }
-  .secondary-links a { color: #9ca3af; text-decoration: underline; }
-  .ics-note { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 13px; color: #1d4ed8; text-align: center; }
+  .secondary-links a { color: #233691; text-decoration: underline; }
+  .ics-note { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 13px; color: #233691; text-align: center; }
   .divider { height: 1px; background: #e5e7eb; margin: 24px 0; }
   .footer { text-align: center; padding-top: 4px; }
   .footer p { font-size: 12px; color: #9ca3af; line-height: 1.8; }
-  .footer a { color: #14B8A6; text-decoration: none; }
+  .footer a { color: #233691; text-decoration: none; }
   .outer-footer { text-align: center; margin-top: 20px; font-size: 11px; color: #d1d5db; }
 `;
 
@@ -231,13 +231,11 @@ export async function sendAppointmentConfirmation(appointment: {
           📎 Un fichier <strong>.ics</strong> est joint à cet email — ouvrez-le pour ajouter l'événement à n'importe quel calendrier (Outlook, Apple Calendar…)
         </div>
 
-        ${(appointment.modifyUrl || appointment.cancelUrl) ? `
+        ${appointment.modifyUrl ? `
         <div class="secondary-links">
-          ${appointment.modifyUrl ? `<a href="${appointment.modifyUrl}">✏️ Modifier</a>` : ''}
-          ${appointment.modifyUrl && appointment.cancelUrl ? ' &nbsp;·&nbsp; ' : ''}
-          ${appointment.cancelUrl ? `<a href="${appointment.cancelUrl}">❌ Annuler</a>` : ''}
+          <a href="${appointment.modifyUrl}">✏️ Modifier mon rendez-vous</a>
         </div>
-        <p style="font-size:11px;color:#d1d5db;text-align:center;margin-top:6px;">Modifications et annulations possibles jusqu'à 24h avant le rendez-vous.</p>` : ''}
+        <p style="font-size:11px;color:#d1d5db;text-align:center;margin-top:6px;">Modification possible jusqu'à 24h avant le rendez-vous.</p>` : ''}
 
         <div class="divider"></div>
         <div class="footer">
@@ -337,8 +335,8 @@ export async function notifyConsultantOfAppointment(appointment: {
         <div class="card">
           <div class="card-title">👤 Informations client</div>
           <div class="info-row"><span class="info-label">Nom</span><span class="info-value">${appointment.clientName}</span></div>
-          <div class="info-row"><span class="info-label">Email</span><span class="info-value"><a href="mailto:${appointment.clientEmail}" style="color:#14B8A6;">${appointment.clientEmail}</a></span></div>
-          <div class="info-row"><span class="info-label">Téléphone</span><span class="info-value"><a href="tel:${appointment.clientPhone}" style="color:#14B8A6;">${appointment.clientPhone}</a></span></div>
+          <div class="info-row"><span class="info-label">Email</span><span class="info-value"><a href="mailto:${appointment.clientEmail}" style="color:#233691;">${appointment.clientEmail}</a></span></div>
+          <div class="info-row"><span class="info-label">Téléphone</span><span class="info-value"><a href="tel:${appointment.clientPhone}" style="color:#233691;">${appointment.clientPhone}</a></span></div>
           ${appointment.message ? `<div class="info-row"><span class="info-label">Message</span><span class="info-value" style="font-style:italic;color:#6b7280;">"${appointment.message}"</span></div>` : ''}
         </div>
 
@@ -433,7 +431,7 @@ export async function sendCancellationNotification(appointment: {
         <p class="lead">Votre rendez-vous du <strong>${formattedDate}</strong> pour le service <strong>${appointment.serviceType}</strong> a bien été annulé.</p>
         <p class="lead">Si vous souhaitez fixer un nouveau rendez-vous, nous sommes disponibles :</p>
         <div class="actions">
-          <a href="${BASE_URL}/fr/appointment" style="display:inline-block;background:#14B8A6;color:white;text-decoration:none;padding:13px 28px;border-radius:8px;font-weight:600;font-size:14px;">Réserver un nouveau rendez-vous</a>
+          <a href="${BASE_URL}/fr/appointment" style="display:inline-block;background:#1a2870;color:white;text-decoration:none;padding:13px 28px;border-radius:8px;font-weight:600;font-size:14px;">Réserver un nouveau rendez-vous</a>
         </div>
         <div class="divider"></div>
         <div class="footer">
@@ -491,7 +489,7 @@ export async function notifyAdminsContactForm(contact: {
           <div class="card">
             <div class="card-title">Expéditeur</div>
             <div class="info-row"><span class="info-label">Nom</span><span class="info-value">${contact.name}</span></div>
-            <div class="info-row"><span class="info-label">Email</span><span class="info-value"><a href="mailto:${contact.email}" style="color:#14B8A6;">${contact.email}</a></span></div>
+            <div class="info-row"><span class="info-label">Email</span><span class="info-value"><a href="mailto:${contact.email}" style="color:#233691;">${contact.email}</a></span></div>
             <div class="info-row"><span class="info-label">Sujet</span><span class="info-value">${contact.subject}</span></div>
           </div>
           <div class="card">
@@ -537,8 +535,8 @@ export async function sendAdminInvitation(invitation: {
     : 'Vous pourrez gérer vos rendez-vous, définir vos disponibilités et accéder au tableau de bord.';
 
   const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${STYLES}
-    .invite-badge { display:inline-block; background: linear-gradient(135deg,#14B8A6,#9333EA); color:white; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:6px 16px; border-radius:20px; margin-bottom:20px; }
-    .setup-btn { display:inline-block; background: linear-gradient(135deg,#14B8A6,#9333EA); color:white !important; text-decoration:none; padding:15px 36px; border-radius:10px; font-weight:700; font-size:15px; letter-spacing:0.3px; }
+    .invite-badge { display:inline-block; background: linear-gradient(135deg,#1a2870,#233691); color:white; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:6px 16px; border-radius:20px; margin-bottom:20px; }
+    .setup-btn { display:inline-block; background: linear-gradient(135deg,#1a2870,#233691); color:white !important; text-decoration:none; padding:15px 36px; border-radius:10px; font-weight:700; font-size:15px; letter-spacing:0.3px; }
     .url-box { background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:10px 14px; font-size:11px; font-family:monospace; color:#6b7280; word-break:break-all; margin-top:12px; }
     .warning-box { background:#fefce8; border:1px solid #fde68a; border-radius:10px; padding:14px 18px; margin:20px 0; }
     .warning-box p { font-size:13px; color:#92400e; line-height:1.6; }
